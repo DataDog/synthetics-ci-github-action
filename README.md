@@ -1,21 +1,41 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Datadog Synthetic CI Github Action
 
-# Create a JavaScript Action using TypeScript
+This Datadog Github Action allows you to trigger your Datadog Synthetics test suite using the [datadog-ci](https://github.com/DataDog/datadog-ci) tool.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Usage
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+### Prerequisite
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+### Setup
 
-## Create an action from this template
+```yaml
+jobs:
+  e2e_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Datadog Synthetics tests
+        uses: datadog/github-action-synthetics-ci@v1
+        with:
+          public_ids: <public_ids>
+          site: <site> # Optional
+        env:
+          DATADOG_API_KEY: <datadog-api-key>
+          DATADOG_APP_KEY: <datadog-app-key>
+```
 
-Click the `Use this Template` and provide the new repo details for your action
+### Inputs
 
-## Code in Main
+| Name              | Requirement | Default         | Description                                                                                                                                                                                                                                       |
+|-------------------|-------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `DATADOG_API_KEY` | _required_  | none            | Your Datadog API key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets).         |
+| `DATADOG_APP_KEY` | _required_  | none            | Your Datadog Application key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets). |
+| `public_ids`      | _required_  | none            | String of comma-separated Synthetics test public IDs you want to trigger.                                                                                                                                                                         |
+| `site`            | _optional_  | `datadoghq.com` | The Datadog site. Needs to be set to `datadoghq.eu` for Datadog EU users. Ex: `datadoghq.com` or `datadoghq.eu`                                                                                                                                   |
 
+
+## Contributing
+
+### Setup 
 > First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
 
 Install the dependencies  
@@ -40,37 +60,7 @@ $ npm test
 ...
 ```
 
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
+### Publishing to a distribution branch
 
 Actions are run from GitHub repos so we will checkin the packed dist folder. 
 
@@ -88,7 +78,7 @@ Your action is now published! :rocket:
 
 See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
 
-## Validate
+### Validating Action
 
 You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
 
@@ -100,6 +90,4 @@ with:
 
 See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
 
-## Usage:
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
