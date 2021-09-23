@@ -1,29 +1,46 @@
-import {wait} from '../src/wait'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
+import chalk from 'chalk'
 import {expect, test} from '@jest/globals'
+import {run} from '../src/main'
+import {runTests} from '../src/run-tests'
 
-test('throws invalid number', async () => {
-  const input = parseInt('foo', 10)
-  await expect(wait(input)).rejects.toThrow('milliseconds not a number')
+//set timeout long enough for tests to run
+jest.setTimeout(20000)
+
+jest.mock('@actions/core', () => {
+  const originalModule = jest.requireActual('@actions/core');
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    getInput: jest.fn((arg) => {
+      switch(arg){   
+        case 'apiKey': return "xxx";
+        case 'appKey': return "yyy";
+        case 'publicIds': return 'public_id1'; 
+    }
+    })
+  };
+});
+
+jest.mock('../src/run-tests')
+jest.mock('@datadog/datadog-ci/dist/commands/synthetics/run-test')
+const context = {stdout: process.stdout, stderr: process.stderr} as any
+
+test('Github Action calls runTests', async () => {
+  await run()
+  expect(runTests).toHaveBeenCalledWith('xxx', 'yyy',['public_id1'], context );
 })
 
-test('wait 500 ms', async () => {
-  const start = new Date()
-  await wait(500)
-  const end = new Date()
-  var delta = Math.abs(end.getTime() - start.getTime())
-  expect(delta).toBeGreaterThan(450)
-})
+test('Github Action runs from js file', async () => {
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = '500'
   const np = process.execPath
   const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  const options: cp.ExecFileSyncOptions = {
-    env: process.env
-  }
-  console.log(cp.execFileSync(np, [ip], options).toString())
+
+  const result = await new Promise<string>((resolve, reject) => cp.execFile(np, [ip], (error, stdout, stderr) => error ? reject(error) : resolve(stdout.toString())))
+  expect(result).toContain(`Missing ${chalk.red.bold('DATADOG_API_KEY')} in your environment.`)
+  
 })
+

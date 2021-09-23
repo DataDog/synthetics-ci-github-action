@@ -1,19 +1,23 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import { runTests } from './run-tests'
 
-async function run(): Promise<void> {
+
+export async function run(): Promise<void> {
+
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const apiKey = core.getInput('apiKey');
+    const appKey = core.getInput('appKey'); 
+    const publicIds = core.getInput('publicIds').split(",");
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const context = {stdout: process.stdout, stderr: process.stderr} as any
 
-    core.setOutput('time', new Date().toTimeString())
+    await runTests(apiKey,appKey,publicIds, context)
+  
   } catch (error) {
-    core.setFailed(error.message)
+    
   }
 }
 
-run()
+if (require.main === module){
+  run()
+}
