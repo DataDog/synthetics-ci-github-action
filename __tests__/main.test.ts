@@ -41,6 +41,29 @@ test('runTests called with minimum require params provided by Github Action', as
   expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config , apiKey:'xxx', appKey: 'yyy', publicIds: ['public_id1']})
 }) 
 
+test('Failing Synthetics tests make Github Action fail', async () => {
+  const setFailedMock = jest.spyOn(core, 'setFailed')
+  jest
+  .spyOn(runTests, 'executeTests')
+  .mockReturnValue(Promise.resolve({
+    summary: {criticalErrors: 0, passed: 5, failed: 2, skipped: 0, notFound: 1, timedOut: 3},
+  } as any))
+
+  await run()
+  expect(setFailedMock).toHaveBeenCalledWith('Datadog Synthetics tests failed : {criticalErrors: 0, passed: 5, failed: 2, skipped: 0, notFound: 1, timedOut: 3}')
+})
+
+test('Github Action does not fail if no failed Synthetics tests', async () => {
+  const setFailedMock = jest.spyOn(core, 'setFailed')
+  jest
+  .spyOn(runTests, 'executeTests')
+  .mockReturnValue(Promise.resolve({
+    summary: {criticalErrors: 0, passed: 5, failed: 0, skipped: 0, notFound: 0, timedOut: 0},
+  } as any))
+
+  await run()
+  expect(setFailedMock).not.toHaveBeenCalled()
+})
 
 test('Github Action runs from js file', async () => {
 
@@ -56,6 +79,8 @@ test('Github Action runs from js file', async () => {
     expect(error.code).toBe(1)
   }
 })
+
+
 
  
 
