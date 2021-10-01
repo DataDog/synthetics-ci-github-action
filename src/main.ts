@@ -40,12 +40,7 @@ const run = async (): Promise<void> => {
   const apiKey = core.getInput('apiKey')
   const appKey = core.getInput('appKey')
   const publicIds = core.getInput('publicIds')?.split(',')
-  const datadogSite = core.getInput('datadogSite')
-  const configPath = core.getInput('configPath')
-  const files = core.getInput('files')?.split(',')
-  const testSearchQuery = core.getInput('testSearchQuery')
-  const subdomain = core.getInput('subdomain')
-  const tunnel = core.getInput('tunnel') as unknown
+
 
   const context = {
     stdin: process.stdin,
@@ -61,13 +56,7 @@ const run = async (): Promise<void> => {
     removeUndefinedValues({
       apiKey: apiKey,
       appKey: appKey,
-      configPath: configPath,
-      datadogSite: datadogSite,
-      files: files,
-      publicIds: publicIds,
-      subdomain: subdomain,
-      testSearchQuery: testSearchQuery,
-      tunnel: tunnel,
+      publicIds: publicIds
     })
   )
 
