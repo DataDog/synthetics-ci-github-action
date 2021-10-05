@@ -12,11 +12,13 @@ import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 const run = async (): Promise<void> => {
   const context = {
-    stdin: process.stdin,
-    stdout: process.stdout,
-    stderr: process.stderr
-  } as BaseContext
-
+    context : {
+      stdin: process.stdin,
+      stdout: process.stdout,
+      stderr: process.stderr
+    } as BaseContext
+  }
+    
   const reporter = getReporter([new DefaultReporter(context as any)])
   const config = await resolveConfig()
 
