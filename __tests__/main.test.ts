@@ -9,20 +9,24 @@ import { Summary } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces
 
 const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
 const inputs = {
-  'INPUT_API_KEY': 'xxx', 
-  'INPUT_APP_KEY': 'yyy', 
-  'INPUT_PUBLIC_IDS' : 'public_id1'
+  apiKey: 'xxx',
+  appKey: 'yyy',
+  publicIds: ['public_id1']
 }
 
 describe('execute Github Action', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
-    process.env = {}
+    process.env = {
+      ...process.env,
+     'INPUT_API_KEY': inputs.apiKey,
+     'INPUT_APP_KEY': inputs.appKey,
+     'INPUT_PUBLIC_IDS': inputs.publicIds.join(', ')
+   }
     process.stdout.write = jest.fn()
-    process.env = {...inputs}
-
     const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
   })
+
   test('Github Action called with dummy parameter fails with core.setFailed', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
     await run()
@@ -35,12 +39,7 @@ describe('execute Github Action', () => {
     jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
 
     await run()
-    expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
-      ...config,
-      apiKey: 'xxx',
-      appKey: 'yyy',
-      publicIds: ['public_id1']
-    })
+    expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs})
   })
 
   test('Github Action fails if Synthetics tests fail ', async () => {
@@ -82,15 +81,18 @@ describe('execute Github Action', () => {
   })
 
   test('Github Action parses out publicIds string', async () => {
-    process.env = {...inputs,'INPUT_PUBLIC_IDS' : 'public_id1, public_id2, public_id3'}
+    const publicIds = ['public_id1', 'public_id2','public_id3']
+    process.env = {
+      ...process.env,
+     'INPUT_PUBLIC_IDS': publicIds.join(', ')
+    }
     jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
-
+    
     await run()
     expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
       ...config,
-      apiKey: 'xxx',
-      appKey: 'yyy',
-      publicIds: ['public_id1', 'public_id2', 'public_id3']
+      ...inputs,
+      publicIds
     })
 
   })
