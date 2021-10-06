@@ -8,6 +8,7 @@ export const config: SyntheticsCIConfig = {
   appKey: '',
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
+  failOnCriticalErrors: false,
   files: ['{,!(node_modules)/**/}*.synthetics.json'],
   global: {},
   locations: [],

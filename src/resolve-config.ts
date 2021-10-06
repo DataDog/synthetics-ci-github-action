@@ -8,6 +8,7 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
   appKey: '',
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
+  failOnCriticalErrors: false,
   files: ['{,!(node_modules)/**/}*.synthetics.json'],
   global: {},
   locations: [],
@@ -23,7 +24,8 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = core.getInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
+  const publicIds = core.getInput('public_ids') ? core.getInput('public_ids').split(',').map((publicId: string) => publicId.trim()) : undefined
+  const datadogSite = core.getInput('datadog_site') ? core.getInput('datadog_site') : undefined
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
 
@@ -33,7 +35,8 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
     removeUndefinedValues({
       apiKey: apiKey,
       appKey: appKey,
-      publicIds: publicIds
+      publicIds: publicIds,
+      datadogSite: datadogSite
     })
   )
 
