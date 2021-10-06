@@ -42,6 +42,20 @@ describe('execute Github Action', () => {
     expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs})
   })
 
+  test('Github Action throws if unable to parse config file ', async () => {
+    const configPath =  'foobar'
+    process.env = {
+      ...process.env,
+     'INPUT_CONFIG_PATH': configPath
+    }
+    const errorMock = jest.spyOn(core, 'error')
+    await run()
+    expect(errorMock).toHaveBeenCalledWith(
+      'Unable to parse config file! Please verify config path : foobar'
+    )
+    process.env = {}
+  })
+
   test('Github Action fails if Synthetics tests fail ', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
     jest.spyOn(runTests, 'executeTests').mockReturnValue(Promise.resolve({summary: {...emptySummary, failed:1}} as any))
