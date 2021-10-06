@@ -24,17 +24,18 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = core.getInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
-  const datadogSite = core.getInput('datadog_site') || undefined
-  const configPath = core.getInput('config_path')  ? core.getInput('config_path') : undefined
-  const files = core.getInput('files')? core.getInput('files').split(',') : undefined
-  const testSearchQuery = core.getInput('test_search_query') ? core.getInput('test_search_query') : undefined
-  const subdomain = core.getInput('subdomain') ? core.getInput('subdomain') : undefined
-  const tunnel = core.getInput('tunnel') ? core.getInput('tunnel') : undefined
+  const publicIds = getDefinedInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
+  const datadogSite = getDefinedInput('datadog_site')
+  const configPath = getDefinedInput('config_path')
+  const files = getDefinedInput('files')?.split(',').map((files: string) => files.trim()) 
+  const testSearchQuery = getDefinedInput('test_search_query')
+  const subdomain = getDefinedInput('subdomain')
+  const tunnel = getDefinedInput('tunnel')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
+  let fileConfig: SyntheticsCIConfig = {} as SyntheticsCIConfig
   try {
-    config = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
+    fileConfig = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
   } catch (error) {
       if (configPath) {
         core.error(`Unable to parse config file! Please verify config path : ${configPath}`)
@@ -43,7 +44,25 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
       }
   } 
 
-// GHA config > default config
+  
+  // file config > default config
+  config = deepExtend(
+    config,
+    removeUndefinedValues({
+    apiKey: fileConfig.apiKey,
+    appKey: fileConfig.appKey,
+    configPath: fileConfig.configPath,
+    datadogSite: fileConfig.datadogSite,
+    files: fileConfig.files,
+    publicIds: fileConfig.publicIds,
+    subdomain: fileConfig.subdomain,
+    testSearchQuery: fileConfig.testSearchQuery,
+    tunnel: fileConfig.tunnel
+    })
+)
+  
+
+  // GHA config > file config
   config = deepExtend(
       config,
       removeUndefinedValues({
@@ -67,4 +86,9 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   }
 
   return config
+}
+
+const getDefinedInput = (name: string) => {
+  const input = core.getInput(name)
+  return input !== '' ? input : undefined
 }

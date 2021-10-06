@@ -8,7 +8,8 @@ import {BaseContext} from 'clipanion'
 
 import {resolveConfig} from './resolve-config'
 import {reportCiError} from './report-ci-error'
-import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import { handleResults, renderResults } from './process-results'
+import { SyntheticsCIConfig } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 const run = async (): Promise<void> => {
   const context = {
@@ -18,34 +19,28 @@ const run = async (): Promise<void> => {
       stderr: process.stderr
     } as BaseContext
   }
-    
+  const startTime = Date.now()
   const reporter = getReporter([new DefaultReporter(context as any)])
-  const config = await resolveConfig()
+  let config : SyntheticsCIConfig = {} as SyntheticsCIConfig
+  try {
+    config = await resolveConfig()
+  } catch(error) {
+    core.setFailed(`Failed resolving Synthetics test configuration.`)
+  }
+   
 
   try {
-    const {results, summary, tests, triggers} = await executeTests(
-      reporter,
-      config
-    )
-    if (
-      summary.criticalErrors > 0 ||
-      summary.failed > 0 ||
-      summary.timedOut > 0 ||
-      summary.notFound > 0
-    )
-      core.setFailed(
-        `Datadog Synthetics tests failed : ${printSummary(summary)}`
-      )
+    const {results, summary, tests, triggers} = await executeTests(reporter, config)
+    const finalSummary = renderResults(config, results, summary, tests, triggers, startTime, reporter)
+    handleResults(finalSummary)
   } catch (error) {
     if (error instanceof CiError) {
       reportCiError(error, reporter)
     }
     core.setFailed('Running Datadog Synthetics tests failed.')
   }
+  
 }
-
-const printSummary = (summary: Summary) => (`{criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.notFound}, timedOut: ${summary.timedOut}}`)
-
 
 if (require.main === module) {
   run()
