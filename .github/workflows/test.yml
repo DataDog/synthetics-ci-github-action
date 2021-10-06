@@ -5,7 +5,7 @@ jobs:
   synthetics-tests: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@c2e2468cf24674fce308b151e152f7159f22a445
+      - uses: actions/checkout@v0.1-alpha
       - uses: ./
         with:
           api_key: ${{secrets.DD_API_KEY}}
