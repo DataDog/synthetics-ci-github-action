@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@homere.faivre/workflow-test
       - uses: ./
         with:
-          api_key: ${{secrets.DD_API_KEY}}
-          app_key: ${{secrets.DD_APP_KEY}}
-          public_ids: "3gy-tvm-e5n, 3dm-679-dhp"
+          api_key: xxx
+          app_key: 123
+          public_ids: 5
