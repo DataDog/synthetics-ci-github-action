@@ -1,14 +1,14 @@
 import * as core from '@actions/core'
-
+import {CiError} from '@datadog/datadog-ci/dist/commands/synthetics/errors'
 import {DefaultReporter} from '@datadog/datadog-ci/dist/commands/synthetics/reporters/default'
 import {executeTests} from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
-import {CiError} from '@datadog/datadog-ci/dist/commands/synthetics/errors'
 import {getReporter} from '@datadog/datadog-ci/dist/commands/synthetics/utils'
-import {BaseContext} from 'clipanion'
+import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
+import {BaseContext} from 'clipanion'
 import {resolveConfig} from './resolve-config'
 import {reportCiError} from './report-ci-error'
-import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+
 
 const run = async (): Promise<void> => {
   const context = {
