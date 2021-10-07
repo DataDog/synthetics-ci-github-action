@@ -4,6 +4,9 @@ import {MainReporter} from '@datadog/datadog-ci/dist/commands/synthetics/interfa
 
 export const reportCiError = (error: CiError, reporter: MainReporter) => {
   switch (error.code) {
+    case 'NO_RESULTS_TO_POLL':
+        reporter.log('No results to poll.\n')
+        break
     case 'NO_TESTS_TO_RUN':
       reporter.log('No test to run.\n')
       break
@@ -38,14 +41,14 @@ export const reportCiError = (error: CiError, reporter: MainReporter) => {
         }\n\n`
       )
       break
-    case 'UNAVAILABLE_TEST_CONF':
+    case 'UNAVAILABLE_TEST_CONFIG':
       reporter.error(
         `\n${chalk.bgRed.bold(
           ' ERROR: unable to obtain test configurations with search query '
         )}\n${error.message}\n\n`
       )
       break
-    case 'UNAVAILABLE_TUNNEL_CONF':
+    case 'UNAVAILABLE_TUNNEL_CONFIG':
       reporter.error(
         `\n${chalk.bgRed.bold(' ERROR: unable to get tunnel configuration')}\n${
           error.message

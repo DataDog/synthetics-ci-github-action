@@ -34,6 +34,7 @@ const run = async (): Promise<void> => {
     const finalSummary = renderResults(config, results, summary, tests, triggers, startTime, reporter)
     handleResults(finalSummary)
   } catch (error) {
+    console.log(error)
     if (error instanceof CiError) {
       reportCiError(error, reporter)
     }

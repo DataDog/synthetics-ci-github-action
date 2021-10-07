@@ -8,6 +8,7 @@ import run from '../src/main'
 import { Summary } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import * as utils from  '@datadog/datadog-ci/dist/helpers/utils'
 import * as processResults from '../src/process-results'
+import { CiError } from '../../datadog-ci/dist/commands/synthetics/errors'
 
 const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
 const inputs = {
@@ -42,7 +43,7 @@ describe('Run Github Action', () => {
       )
     })
   
-    test('Github Action called with dummy parameter fails with core.setFailed', async () => {
+    test.only('Github Action called with dummy parameter fails with core.setFailed', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -71,6 +72,27 @@ describe('Run Github Action', () => {
         ...inputs,
         publicIds
       })
+    })
+  })
+
+  describe('Handle invalid input parameters', () => {
+    beforeEach(() => {
+      jest.spyOn(utils, 'parseConfigFile').mockImplementation(()=> ({} as any))
+    
+    })
+
+    test.only('Github Action fails if invalid Datadog Site', async () => {
+      const datadogSite = 'https://foobar.com'
+      process.env = {
+        ...process.env,
+       'INPUT_DATADOG_SITE': datadogSite
+      }
+      const setFailedMock = jest.spyOn(core, 'setFailed')
+      await run()
+      expect(setFailedMock).toHaveBeenCalledWith(
+        'Running Datadog Synthetics tests failed.'
+      )
+
     })
   })
   
