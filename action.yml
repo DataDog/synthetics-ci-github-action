@@ -1,11 +1,21 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Datadog Synthetics CI'
+description: 'Trigger your Datadog Synthetics test using the datadog-ci tool'
+author: 'DataDog'
 inputs:
-  milliseconds: # change this
+  api_key: 
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Datadog API key'
+  app_key: 
+    required: true
+    description: 'Datadog Application key'
+  datadog_site: 
+    required: false
+    description: 'Datadog site'
+  public_ids: 
+    required: false
+    description: 'Public IDs of Synthetics test to run'
+
+  
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: docker
+  main: Dockerfile

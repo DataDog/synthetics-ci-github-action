@@ -1,0 +1,17 @@
+@actions/core,import,MIT,Copyright 2019 GitHub
+@types/deep-extend,dev,MIT,Copyright Microsoft Corporation
+@types/jest,dev,MIT,Copyright Microsoft Corporation
+@types/node,dev,MIT,Copyright Microsoft Corporation
+@typescript-eslint/parser,dev,BSD 2-Clause License, Copyright JS Foundation and other contributors
+@vercel/ncc,dev,MIT,Copyright 2018 ZEIT, Inc.
+chalk,import,MIT,Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+clipanion,import,MIT,Copyright (c) 2019 Mael Nison
+deep-extend,import,MIT,Copyright (c) 2013-2018, Viacheslav Lotsmanov
+eslint,dev,MIT,Copyright OpenJS Foundation and other contributors
+eslint-plugin-github,dev,MIT,Copyright (c) 2016 GitHub, Inc.
+eslint-plugin-jest,dev,MIT,Copyright (c) 2018 Jonathan Kim
+jest,dev,MIT,Copyright (c) Facebook, Inc. and its affiliates.
+js-yaml,dev,MIT,Copyright (C) 2011-2015 by Vitaly Puzrin
+prettier,dev,MIT,Copyright © James Long and contributors
+ts-jest,dev,MIT,Copyright (c) 2016-2018
+typescript,dev,Apache-2.0,Copyright (c) Microsoft Corporation.
