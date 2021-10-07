@@ -29,3 +29,40 @@ export const mockReporter: MainReporter = {
   testTrigger: jest.fn(),
   testWait: jest.fn()
 }
+
+export const mockResult = {
+  location: 1,
+  public_id: '123-456-789',
+  result: {
+    dc_id: 1,
+    result: {
+      device: 'chrome_laptop.large',
+      passed: true,
+      public_id: '123-456-789',
+    },
+    result_id: '1',
+  },
+  result_id: '1',
+}
+
+export const mockFailedResult = {
+  location: 1,
+  public_id: '123-456-789',
+  result: {
+    dc_id: 1,
+    result: {
+      device: 'chrome_laptop.large',
+      passed: false,
+      public_id: '123-456-789',
+    },
+    result_id: '1',
+  },
+  result_id: '1',
+}
+
+
+export const mockTestTriggerResponse = {
+  locations: ['location-1'],
+  results: [],
+  triggered_check_ids: ['123-456-789'],
+}
