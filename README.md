@@ -18,19 +18,19 @@ jobs:
         with:
           api_key: <DATADOG_API_KEY>
           app_key: <DATADOG_APP_KEY>
-          public_ids: <public_ids> # Optional
-          site: <site> # Optional
+          public_ids: <public_ids> 
+          datadog_site: <site> # Optional
         
 ```
 
 ### Inputs
 
-| Name         | Requirement | Default         | Description                                                                                                                                                                                                                                       |
-|--------------|-------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `api_key`    | _required_  | none            | Your Datadog API key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets).         |
-| `app_key`    | _required_  | none            | Your Datadog Application key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets). |
-| `public_ids` | _required_  | none            | String of comma-separated Synthetics test public IDs you want to trigger.                                                                                                                                                                         |
-| `site`       | _optional_  | `datadoghq.com` | The Datadog site. Needs to be set to `datadoghq.eu` for Datadog EU users. Ex: `datadoghq.com` or `datadoghq.eu`                                                                                                                                   |
+| Name           | Requirement | Default         | Description                                                                                                                                                                                                                                       |
+|----------------|-------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `api_key`      | _required_  | none            | Your Datadog API key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets).         |
+| `app_key`      | _required_  | none            | Your Datadog Application key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets). |
+| `public_ids`   | _required_  | none            | String of comma-separated Synthetics test public IDs you want to trigger.                                                                                                                                                                         |
+| `datadog_site` | _optional_  | `datadoghq.com` | The Datadog site. Needs to be set to `datadoghq.eu` for Datadog EU users. Ex: `datadoghq.com` or `datadoghq.eu`                                                                                                                                   |
 
 
 
