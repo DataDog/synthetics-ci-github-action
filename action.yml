@@ -17,5 +17,5 @@ inputs:
 
   
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: docker
+  main: Dockerfile
