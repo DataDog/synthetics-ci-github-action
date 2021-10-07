@@ -12,10 +12,9 @@ inputs:
     required: false
     description: 'Datadog site'
   public_ids: 
-    required: false
+    required: true
     description: 'Public IDs of Synthetics test to run'
-
   
 runs:
   using: docker
-  main: Dockerfile
+  image: Dockerfile
