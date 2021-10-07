@@ -5,9 +5,16 @@ import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test
 import {config} from '../src/fixtures'
 import * as core from '@actions/core'
 import run from '../src/main'
-import { Summary } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
-const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
+const emptySummary: Summary = {
+  criticalErrors: 0,
+  passed: 0,
+  failed: 0,
+  skipped: 0,
+  notFound: 0,
+  timedOut: 0
+}
 const inputs = {
   apiKey: 'xxx',
   appKey: 'yyy',
@@ -19,12 +26,19 @@ describe('execute Github Action', () => {
     jest.restoreAllMocks()
     process.env = {
       ...process.env,
-     'INPUT_API_KEY': inputs.apiKey,
-     'INPUT_APP_KEY': inputs.appKey,
-     'INPUT_PUBLIC_IDS': inputs.publicIds.join(', ')
-   }
+      INPUT_API_KEY: inputs.apiKey,
+      INPUT_APP_KEY: inputs.appKey,
+      INPUT_PUBLIC_IDS: inputs.publicIds.join(', ')
+    }
     process.stdout.write = jest.fn()
-    const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
+    const emptySummary: Summary = {
+      criticalErrors: 0,
+      passed: 0,
+      failed: 0,
+      skipped: 0,
+      notFound: 0,
+      timedOut: 0
+    }
   })
 
   test('Github Action called with dummy parameter fails with core.setFailed', async () => {
@@ -39,62 +53,80 @@ describe('execute Github Action', () => {
     jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
 
     await run()
-    expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs})
+    expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
+      ...config,
+      ...inputs
+    })
   })
 
   test('Github Action fails if Synthetics tests fail ', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
-    jest.spyOn(runTests, 'executeTests').mockReturnValue(Promise.resolve({summary: {...emptySummary, failed:1}} as any))
+    jest
+      .spyOn(runTests, 'executeTests')
+      .mockReturnValue(
+        Promise.resolve({summary: {...emptySummary, failed: 1}} as any)
+      )
 
     await run()
     expect(setFailedMock).toHaveBeenCalledWith(
-      'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0}'
+      `Datadog Synthetics tests failed :\ncriticalErrors: 0,\npassed: 0,\nfailed: 1,\nskipped: 0,\nnotFound: 0,\ntimedOut: 0`
     )
   })
 
   test('Github Action fails if Synthetics tests timed out ', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
-    jest.spyOn(runTests, 'executeTests').mockReturnValue(Promise.resolve({summary: {...emptySummary, timedOut:1}} as any))
+    jest
+      .spyOn(runTests, 'executeTests')
+      .mockReturnValue(
+        Promise.resolve({summary: {...emptySummary, timedOut: 1}} as any)
+      )
 
     await run()
     expect(setFailedMock).toHaveBeenCalledWith(
-      'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1}'
+      `Datadog Synthetics tests failed :\ncriticalErrors: 0,\npassed: 0,\nfailed: 0,\nskipped: 0,\nnotFound: 0,\ntimedOut: 1`
     )
   })
 
   test('Github Action fails if Synthetics tests not found ', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
-    jest.spyOn(runTests, 'executeTests').mockReturnValue(Promise.resolve({summary: {...emptySummary, notFound:1}} as any))
+    jest
+      .spyOn(runTests, 'executeTests')
+      .mockReturnValue(
+        Promise.resolve({summary: {...emptySummary, notFound: 1}} as any)
+      )
 
     await run()
     expect(setFailedMock).toHaveBeenCalledWith(
-      'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0}'
+      `Datadog Synthetics tests failed :\ncriticalErrors: 0,\npassed: 0,\nfailed: 0,\nskipped: 0,\nnotFound: 1,\ntimedOut: 0`
     )
   })
 
   test('Github Action succeeds if Synthetics tests do not fail', async () => {
     const setFailedMock = jest.spyOn(core, 'setFailed')
-    jest.spyOn(runTests, 'executeTests').mockReturnValue(Promise.resolve({summary: {...emptySummary, passed:1}} as any))
+    jest
+      .spyOn(runTests, 'executeTests')
+      .mockReturnValue(
+        Promise.resolve({summary: {...emptySummary, passed: 1}} as any)
+      )
 
     await run()
     expect(setFailedMock).not.toHaveBeenCalled()
   })
 
   test('Github Action parses out publicIds string', async () => {
-    const publicIds = ['public_id1', 'public_id2','public_id3']
+    const publicIds = ['public_id1', 'public_id2', 'public_id3']
     process.env = {
       ...process.env,
-     'INPUT_PUBLIC_IDS': publicIds.join(', ')
+      INPUT_PUBLIC_IDS: publicIds.join(', ')
     }
     jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
-    
+
     await run()
     expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
       ...config,
       ...inputs,
       publicIds
     })
-
   })
 
   test('Github Action runs from js file', async () => {

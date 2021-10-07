@@ -12,13 +12,13 @@ import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 const run = async (): Promise<void> => {
   const context = {
-    context : {
+    context: {
       stdin: process.stdin,
       stdout: process.stdout,
       stderr: process.stderr
     } as BaseContext
   }
-    
+
   const reporter = getReporter([new DefaultReporter(context as any)])
   const config = await resolveConfig()
 
@@ -34,7 +34,7 @@ const run = async (): Promise<void> => {
       summary.notFound > 0
     )
       core.setFailed(
-        `Datadog Synthetics tests failed : ${printSummary(summary)}`
+        `Datadog Synthetics tests failed :\n${printSummary(summary)}`
       )
   } catch (error) {
     if (error instanceof CiError) {
@@ -44,8 +44,13 @@ const run = async (): Promise<void> => {
   }
 }
 
-const printSummary = (summary: Summary) => (`{criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.notFound}, timedOut: ${summary.timedOut}}`)
-
+const printSummary = (summary: Summary) =>
+`criticalErrors: ${summary.criticalErrors},
+passed: ${summary.passed},
+failed: ${summary.failed},
+skipped: ${summary.skipped},
+notFound: ${summary.notFound},
+timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
   run()
