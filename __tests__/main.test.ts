@@ -82,7 +82,7 @@ describe('execute Github Action', () => {
       )
     })
   
-    test('Github Action fails if Synthetics tests timed out ', async () => {
+    test('Github Action fails if Synthetics tests timed out', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       jest
         .spyOn(processResults, 'renderResults')
@@ -94,7 +94,7 @@ describe('execute Github Action', () => {
       )
     })
   
-    test('Github Action fails if Synthetics tests not found ', async () => {
+    test('Github Action fails if Synthetics tests not found', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       jest
         .spyOn(processResults, 'renderResults')
