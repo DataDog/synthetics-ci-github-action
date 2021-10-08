@@ -26,14 +26,15 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.4.0",
-    "@datadog/datadog-ci": "file:../datadog-ci",
+    "@datadog/datadog-ci": "^0.17.6",
+    "chalk": "3.0.0",
     "clipanion": "^3.0.1",
     "deep-extend": "0.6.0"
   },
   "devDependencies": {
+    "@types/deep-extend": "0.4.31",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.3.3",
-    "@types/deep-extend": "0.4.31",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.29.0",
     "eslint": "^7.31.0",

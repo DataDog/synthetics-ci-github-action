@@ -12,4 +12,4 @@ RUN apk add --no-cache tini
 COPY --from=builder action/package.json .
 COPY --from=builder action/lib lib/
 COPY --from=builder action/node_modules node_modules/
-ENTRYPOINT [ "/sbin/tini", "--", "node", "/lib/index.js" ]
+ENTRYPOINT [ "/sbin/tini", "--", "node", "/lib/main.js" ]

@@ -22,12 +22,10 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = core.getInput('public_ids')
-    ? core
-        .getInput('public_ids')
+  const publicIds = core
+        .getInput('public_ids', {required: true})
         .split(',')
         .map((publicId: string) => publicId.trim())
-    : undefined
   const datadogSite = core.getInput('datadog_site')
     ? core.getInput('datadog_site')
     : undefined
