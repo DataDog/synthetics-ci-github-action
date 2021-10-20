@@ -4,20 +4,23 @@ This Datadog Github Action allows you to trigger your Datadog Synthetics test su
 
 ## Setup & Usage
 
-First you'll need to make sure you have Datadog API and application key setup as environment variables in your Github repository.
-Then you can simply call the `synthetics-ci-github-action` in your Github workflow as follows : 
+1. Make sure you have Datadog API and application key setup as environment variables in your Github repository.
+2. Checkout your repository with `actions/checkout`
+3. Use the `DataDog/synthetics-ci-github-action` in your Github workflow
 
 
 ```yaml
 jobs:
-  e2e_testing:
+  run:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: datadog/synthetics-ci-github-action@v1
+        uses: DataDog/github-action-synthetics-ci@v1
         with:
-          api_key: <DATADOG_API_KEY>
-          app_key: <DATADOG_APP_KEY>
+          api_key: ${{secrets.DD_API_KEY}}
+          app_key: ${{secrets.DD_APP_KEY}}
         
 ```
 
@@ -30,11 +33,13 @@ jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: datadog/synthetics-ci-github-action@v1
+        uses: DataDog/github-action-synthetics-ci@v1
         with:
-          api_key: <DATADOG_API_KEY>
-          app_key: <DATADOG_APP_KEY>
+          api_key: ${{secrets.DD_API_KEY}}
+          app_key: ${{secrets.DD_APP_KEY}}
           site: <site> # Optional
           public_ids: 'public_id1, public_id2' 
         
@@ -47,12 +52,14 @@ jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: datadog/synthetics-ci-github-action@v1
+        uses: DataDog/github-action-synthetics-ci@v1
         with:
-          api_key: <DATADOG_API_KEY>
-          app_key: <DATADOG_APP_KEY>
-          test_search_query: <my_search_query> # Optional
+          api_key: ${{secrets.DD_API_KEY}}
+          app_key: ${{secrets.DD_APP_KEY}}
+          test_search_query: <my_search_query> 
 
 ```
 
@@ -63,12 +70,14 @@ jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: datadog/synthetics-ci-github-action@v1
+        uses: DataDog/github-action-synthetics-ci@v1
         with:
-          api_key: <DATADOG_API_KEY>
-          app_key: <DATADOG_APP_KEY>
-          config_path: <path_to_global_config> # Optional
+          api_key: ${{secrets.DD_API_KEY}}
+          app_key: ${{secrets.DD_APP_KEY}}
+          config_path: <path_to_global_config> 
 
 ```
 
