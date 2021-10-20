@@ -39,7 +39,6 @@ const run = async (): Promise<void> => {
     }
     
   } catch (error) {
-    console.log(error)
     if (error instanceof CiError) {
       reportCiError(error, reporter)
     }
