@@ -1,6 +1,6 @@
 import {
-  SyntheticsCIConfig,
-  MainReporter
+  MainReporter,
+  SyntheticsCIConfig
 } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 export const config: SyntheticsCIConfig = {

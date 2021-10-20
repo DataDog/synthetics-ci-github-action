@@ -4,18 +4,32 @@ author: 'DataDog'
 inputs:
   api_key: 
     required: true
-    description: 'Datadog API key'
+    description: 'Datadog API key.'
   app_key: 
     required: true
-    description: 'Datadog Application key'
+    description: 'Datadog Application key.'
   datadog_site: 
     required: false
-    description: 'Datadog site'
+    description: 'Datadog site.'
   public_ids: 
     required: false
-    description: 'Public IDs of Synthetics test to run'
+    description: 'Public IDs of Synthetics test to run.'
+  config_path: 
+    required: false
+    description: 'Path to global configuration JSON.'
+  files: 
+    required: false
+    description: 'Glob pattern to detect synthetic tests config.'
+  subdomain: 
+    required: false
+    description: 'Name of your datadog custom subdomain.'
+  test_search_query: 
+    required: false
+    description: 'Search query to trigger tests.'
+  tunnel: 
+    required: false
+    description: 'Use tunnel to trigger tests.'
 
-  
 runs:
   using: 'node12'
   main: 'dist/index.js'

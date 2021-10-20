@@ -1,14 +1,16 @@
-import {execFile} from 'child_process'
-import * as path from 'path'
-import {expect, test} from '@jest/globals'
-import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
-import {config} from '../src/fixtures'
 import * as core from '@actions/core'
-import run from '../src/main'
+import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
 import { Summary } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import * as utils from  '@datadog/datadog-ci/dist/helpers/utils'
+import {expect, test} from '@jest/globals'
+
+import {execFile} from 'child_process'
+import * as path from 'path'
+
+import {config} from '../src/fixtures'
+import run from '../src/main'
 import * as processResults from '../src/process-results'
-import { CiError } from '../../datadog-ci/dist/commands/synthetics/errors'
+import * as resolveConfig from '../src/resolve-config'
 
 const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
 const inputs = {
@@ -30,9 +32,6 @@ describe('Run Github Action', () => {
   })
 
   describe('Handle input parameters', () => {
-    beforeEach(() => {
-    
-    })
 
     test('Github Action without required params fail', async () => {
       process.env = {}
@@ -43,7 +42,7 @@ describe('Run Github Action', () => {
       )
     })
   
-    test.only('Github Action called with dummy parameter fails with core.setFailed', async () => {
+    test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -59,7 +58,7 @@ describe('Run Github Action', () => {
     })
   
     test('Github Action parses out publicIds string', async () => {
-      const publicIds = ['public_id1', 'public_id2','public_id3']
+      const publicIds = ['public_id1', 'public_id2', 'public_id3']
       process.env = {
         ...process.env,
        'INPUT_PUBLIC_IDS': publicIds.join(', ')
@@ -75,31 +74,22 @@ describe('Run Github Action', () => {
     })
   })
 
-  describe('Handle invalid input parameters', () => {
-    beforeEach(() => {
-      jest.spyOn(utils, 'parseConfigFile').mockImplementation(()=> ({} as any))
-    
+  describe('Handle invalid and undefined input parameters', () => {
+    test('Use default configuration if Github Action input is not set ', async () => {
+      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      await run()
+      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs, datadogSite : "datadoghq.com"})
     })
 
-    test.only('Github Action fails if invalid Datadog Site', async () => {
-      const datadogSite = 'https://foobar.com'
-      process.env = {
-        ...process.env,
-       'INPUT_DATADOG_SITE': datadogSite
-      }
-      const setFailedMock = jest.spyOn(core, 'setFailed')
-      await run()
-      expect(setFailedMock).toHaveBeenCalledWith(
-        'Running Datadog Synthetics tests failed.'
-      )
-
+    test('getDefinedInput returns undefined if Github Action input not set', async () => {
+      const mockGetDefinedInput = jest.spyOn(resolveConfig, 'getDefinedInput')
+      resolveConfig.getDefinedInput("foobar")
+      expect(mockGetDefinedInput).toReturnWith(undefined)
     })
   })
   
   describe('Handle configuration file', () => {
-    beforeEach(() => {
-      
-    })
+
     test('Github Action throws if unable to parse config file ', async () => {
       const configPath =  'foobar'
       process.env = {
@@ -114,8 +104,15 @@ describe('Run Github Action', () => {
       process.env = {}
     })
   
-    test('Default configuration used if empty file config ', async () => {
-      jest.spyOn(utils, 'parseConfigFile').mockImplementation(()=> ({} as any))
+    test('Default configuration parameters get overriden by global configuration file ', async () => {
+      jest.spyOn(utils, 'getConfig').mockImplementation(()=> ({"files" : [ 'foobar.synthetics.json' ]} as any))
+      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      await run()
+      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs, files : [ 'foobar.synthetics.json' ]})
+    })
+
+    test('Default configuration applied if global configuration empty', async () => {
+      jest.spyOn(utils, 'getConfig').mockImplementation(()=> ({} as any))
       jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
       await run()
       expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs})
@@ -124,7 +121,6 @@ describe('Run Github Action', () => {
 
   describe('Handle Synthetics test results', () => {
     beforeEach(() => {
-      jest.spyOn(utils, 'parseConfigFile').mockImplementation(()=> ({} as any))
       jest.spyOn(runTests, 'executeTests').mockImplementation(()=> ({} as any))
       const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
     })
@@ -135,7 +131,7 @@ describe('Run Github Action', () => {
       
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0}'
+        'Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0'
       )
     })
   
@@ -145,7 +141,7 @@ describe('Run Github Action', () => {
   
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1}'
+        'Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1'
       )
     })
   
@@ -154,7 +150,7 @@ describe('Run Github Action', () => {
       jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, notFound:1} as any)
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        'Datadog Synthetics tests failed : {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0}'
+        'Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0'
       )
     })
   
@@ -184,5 +180,3 @@ describe('Run Github Action', () => {
   })
 
 })
-
-

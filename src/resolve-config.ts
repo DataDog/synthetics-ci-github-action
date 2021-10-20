@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
+import {SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {parseConfigFile} from '@datadog/datadog-ci/dist/helpers/utils'
 import deepExtend from 'deep-extend'
-import { SyntheticsCIConfig, CommandConfig } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-import { removeUndefinedValues } from './utils'
-import { parseConfigFile } from '@datadog/datadog-ci/dist/helpers/utils'
+import {removeUndefinedValues} from './utils'
 
 const DEFAULT_CONFIG: SyntheticsCIConfig = {
   apiKey: '',
@@ -20,75 +20,57 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
   tunnel: false
 }
 
-
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = getDefinedInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
+  const publicIds = getDefinedInput('public_ids')
+    ?.split(',')
+    .map((publicId: string) => publicId.trim())
   const datadogSite = getDefinedInput('datadog_site')
   const configPath = getDefinedInput('config_path')
-  const files = getDefinedInput('files')?.split(',').map((files: string) => files.trim()) 
+  const files = getDefinedInput('files')
+    ?.split(',')
+    .map((file: string) => file.trim())
   const testSearchQuery = getDefinedInput('test_search_query')
   const subdomain = getDefinedInput('subdomain')
   const tunnel = getDefinedInput('tunnel')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
-  let fileConfig: SyntheticsCIConfig = {} as SyntheticsCIConfig
+  // Override with file config variables
   try {
-    fileConfig = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
+    config = await parseConfigFile(
+      config,
+      configPath ?? DEFAULT_CONFIG.configPath
+    )
   } catch (error) {
-      if (configPath) {
-        core.error(`Unable to parse config file! Please verify config path : ${configPath}`)
-      }else{
-        core.error(`Unable to parse config file! Please verify config path : ${DEFAULT_CONFIG.configPath}`)
-      }
-  } 
+    if (configPath) {
+      core.error(
+        `Unable to parse config file! Please verify config path : ${configPath}`
+      )
+    }
+  }
 
-  
-  // file config > default config
+  // Override with GithubAction inputs
   config = deepExtend(
     config,
     removeUndefinedValues({
-    apiKey: fileConfig.apiKey,
-    appKey: fileConfig.appKey,
-    configPath: fileConfig.configPath,
-    datadogSite: fileConfig.datadogSite,
-    files: fileConfig.files,
-    publicIds: fileConfig.publicIds,
-    subdomain: fileConfig.subdomain,
-    testSearchQuery: fileConfig.testSearchQuery,
-    tunnel: fileConfig.tunnel
+      apiKey,
+      appKey,
+      configPath,
+      datadogSite,
+      files,
+      publicIds,
+      subdomain,
+      testSearchQuery,
+      tunnel
     })
-)
-  
-
-  // GHA config > file config
-  config = deepExtend(
-      config,
-      removeUndefinedValues({
-      apiKey: apiKey,
-      appKey: appKey,
-      configPath: configPath,
-      datadogSite: datadogSite,
-      files: files,
-      publicIds: publicIds,
-      subdomain: subdomain,
-      testSearchQuery: testSearchQuery,
-      tunnel: tunnel
-      })
   )
-
-  if (typeof config.files === 'string') {
-    core.warning(
-      '[DEPRECATED] "files" should be an array of string instead of a string.\n'
-    )
-    config.files = [config.files]
-  }
 
   return config
 }
 
-const getDefinedInput = (name: string) => {
+export const getDefinedInput = (name: string) => {
   const input = core.getInput(name)
+
   return input !== '' ? input : undefined
 }
