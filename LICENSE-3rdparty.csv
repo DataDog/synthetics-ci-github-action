@@ -7,11 +7,11 @@
 chalk,import,MIT,Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
 clipanion,import,MIT,Copyright (c) 2019 Mael Nison
 deep-extend,import,MIT,Copyright (c) 2013-2018, Viacheslav Lotsmanov
-eslint,dev,MIT,Copyright OpenJS Foundation and other contributors
-eslint-plugin-github,dev,MIT,Copyright (c) 2016 GitHub, Inc.
-eslint-plugin-jest,dev,MIT,Copyright (c) 2018 Jonathan Kim
 jest,dev,MIT,Copyright (c) Facebook, Inc. and its affiliates.
 js-yaml,dev,MIT,Copyright (C) 2011-2015 by Vitaly Puzrin
 prettier,dev,MIT,Copyright © James Long and contributors
+tslint,dev,Apache-2.0,Copyright 2013-2019 Palantir Technologies, Inc.
+tslint-config-prettier,dev,MIT,Copyright 2017 Alex Jover Morales <alexjovermorales@gmail.com>
+tslint-lines-between-class-members,dev,ISC,Copytight (c) Heather Roberts
 ts-jest,dev,MIT,Copyright (c) 2016-2018
 typescript,dev,Apache-2.0,Copyright (c) Microsoft Corporation.
