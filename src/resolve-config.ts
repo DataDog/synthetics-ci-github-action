@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {parseConfigFile} from '@datadog/datadog-ci/dist/helpers/utils'
 import deepExtend from 'deep-extend'
 import {removeUndefinedValues} from './utils'
 
@@ -22,26 +23,49 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = core
-        .getInput('public_ids', {required: true})
-        .split(',')
-        .map((publicId: string) => publicId.trim())
-  const datadogSite = core.getInput('datadog_site')
-    ? core.getInput('datadog_site')
-    : undefined
+  const publicIds = getDefinedInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
+  const datadogSite = getDefinedInput('datadog_site')
+  const configPath = getDefinedInput('config_path')
+  const files = getDefinedInput('files')?.split(',').map((file: string) => file.trim())
+  const testSearchQuery = getDefinedInput('test_search_query')
+  const subdomain = getDefinedInput('subdomain')
+  const tunnel = getDefinedInput('tunnel')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
+  // Override with file config variables
+  try {
+    config = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
+  } catch (error) {
+    if (configPath) {
+      core.setFailed(
+        `Unable to parse config file! Please verify config path : ${configPath}`
+      )
+      throw error
+    }
+    // Here, if configPath is not present it means that default config file does not exist : in this case it's expected for the github action to be silent.
+  }
 
-  // GHA config > default config
+  // Override with GithubAction inputs
   config = deepExtend(
     config,
     removeUndefinedValues({
       apiKey: apiKey,
       appKey: appKey,
+      configPath: configPath,
+      datadogSite: datadogSite,
+      files: files,
       publicIds: publicIds,
-      datadogSite: datadogSite
+      subdomain: subdomain,
+      testSearchQuery: testSearchQuery,
+      tunnel: tunnel
     })
   )
 
   return config
+}
+
+export const getDefinedInput = (name: string) => {
+  const input = core.getInput(name)
+
+  return input !== '' ? input : undefined
 }

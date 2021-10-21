@@ -10,7 +10,6 @@ import {config} from '../src/fixtures'
 import run from '../src/main'
 import * as processResults from '../src/process-results'
 
-
 const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
 const inputs = {
   apiKey: 'xxx',
@@ -18,7 +17,7 @@ const inputs = {
   publicIds: ['public_id1']
 }
 
-describe('execute Github Action', () => {
+describe('Run Github Action', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
     process.env = {
@@ -62,6 +61,28 @@ describe('execute Github Action', () => {
         ...inputs,
         publicIds
       })
+    })
+  })
+  describe('Handle invalid input parameters', () => {
+    test('Use default configuration if Github Action input is not set ', async () => {
+      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      await run()
+      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs, datadogSite : "datadoghq.com"})
+    })
+
+  })
+  
+  describe('Handle configuration file', () => {
+
+    test('Github Action fails if unable to parse config file ', async () => {
+      const configPath =  'foobar'
+      process.env = {
+        ...process.env,
+       'INPUT_CONFIG_PATH': configPath
+      }
+      await expect(run()).rejects.toThrowError('Config file not found')
+      expect(process.exitCode).toBe(1)
+      process.env = {}
     })
   })
 
