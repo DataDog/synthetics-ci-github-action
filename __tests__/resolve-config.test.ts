@@ -30,7 +30,6 @@ describe('Resolves Config', () => {
   test('getDefinedInput returns undefined if Github Action input not set', async () => {
     expect(resolveConfig.getDefinedInput('foobar')).toBeUndefined()
   })
-
   test('core.getInputs throws if required params not defined', async () => {
     process.env = {}
     await expect(resolveConfig.resolveConfig()).rejects.toThrowError()
