@@ -1,7 +1,6 @@
 import * as core from '@actions/core'
 import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
-import * as utils from '@datadog/datadog-ci/dist/helpers/utils'
 import {expect, test} from '@jest/globals'
 
 import {execFile} from 'child_process'
@@ -10,7 +9,6 @@ import * as path from 'path'
 import {config} from '../src/fixtures'
 import run from '../src/main'
 import * as processResults from '../src/process-results'
-import * as resolveConfig from '../src/resolve-config'
 
 const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
 const inputs = {
@@ -65,48 +63,26 @@ describe('Run Github Action', () => {
       })
     })
   })
-  describe('Handle invalid and undefined input parameters', () => {
+  describe('Handle invalid input parameters', () => {
     test('Use default configuration if Github Action input is not set ', async () => {
       jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
       await run()
       expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs, datadogSite : "datadoghq.com"})
     })
 
-    test('getDefinedInput returns undefined if Github Action input not set', async () => {
-      const mockGetDefinedInput = jest.spyOn(resolveConfig, 'getDefinedInput')
-      resolveConfig.getDefinedInput("foobar")
-      expect(mockGetDefinedInput).toReturnWith(undefined)
-    })
   })
   
   describe('Handle configuration file', () => {
 
-    test('Github Action throws if unable to parse config file ', async () => {
+    test('Github Action fails if unable to parse config file ', async () => {
       const configPath =  'foobar'
       process.env = {
         ...process.env,
        'INPUT_CONFIG_PATH': configPath
       }
-      const errorMock = jest.spyOn(core, 'error')
-      await run()
-      expect(errorMock).toHaveBeenCalledWith(
-        'Unable to parse config file! Please verify config path : foobar'
-      )
+      await expect(run()).rejects.toThrowError('Config file not found')
+      expect(process.exitCode).toBe(1)
       process.env = {}
-    })
-  
-    test('Default configuration parameters get overriden by global configuration file ', async () => {
-      jest.spyOn(utils, 'getConfig').mockImplementation(()=> ({"files" : [ 'foobar.synthetics.json' ]} as any))
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
-      await run()
-      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs, files : [ 'foobar.synthetics.json' ]})
-    })
-
-    test('Default configuration applied if global configuration empty', async () => {
-      jest.spyOn(utils, 'getConfig').mockImplementation(()=> ({} as any))
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
-      await run()
-      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {...config, ...inputs})
     })
   })
 

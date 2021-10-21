@@ -37,10 +37,12 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
     config = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
   } catch (error) {
     if (configPath) {
-      core.error(
+      core.setFailed(
         `Unable to parse config file! Please verify config path : ${configPath}`
       )
+      throw error
     }
+    // Here, if configPath is not present it means that default config file does not exist : in this case it's expected for the github action to be silent.
   }
 
   // Override with GithubAction inputs
