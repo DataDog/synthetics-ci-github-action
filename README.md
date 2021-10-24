@@ -1,16 +1,15 @@
 # Datadog Synthetic CI Github Action
 
-This Datadog Github Action allows you to trigger your Datadog Synthetics test suite, wait for the results and report the status, using the [datadog-ci](https://github.com/DataDog/datadog-ci) tool.
+This Datadog GitHub Action allows you to trigger Datadog Synthetics tests, wait for results, and report the status using the [datadog-ci](https://github.com/DataDog/datadog-ci) tool.
 
 ## Setup
-Get started in two steps:
+To get started:
 
-1. Add your Datadog API and application keys as environment variables to your Github repository (find out more [here](https://docs.datadoghq.com/account_management/api-app-keys/)).
-2. Use the `DataDog/synthetics-ci-github-action` in your Github workflow
+1. Add your Datadog API and Application Keys as environment variables to your Github repository. For more information, see [API and Application Keys](https://docs.datadoghq.com/account_management/api-app-keys/).
+2. In your Github workflow, use `DataDog/synthetics-ci-github-action`.
 
 
-[Simple workflows](#simple-workflows)\
-[Complex workflows](#complex-workflows)
+Your workflow can be [simple](#simple-workflows) or [complex](#complex-workflows).
 
 ## Simple workflows
 
@@ -40,7 +39,7 @@ jobs:
 name: Run Synthetics tests using existing synthetics.json file
 
 jobs:
-  run:
+  e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,8 +52,7 @@ jobs:
         
 ```
 
-**Note**:
-  By default this will run all the tests listed in the  `{,!(node_modules)/**/}*.synthetics.json` files (every files ending with `.synthetics.json` except those in the `node_modules` folder). It is also possible to specify a list of Synthetics tests to trigger by public id or by using a search query.
+**Note**: By default, this runs all tests listed in the `{,!(node_modules)/**/}*.synthetics.json` files (every file ending with `.synthetics.json` except for those in the `node_modules` folder). You can also trigger a list of Synthetics tests by specifying a `public_id` or using a search query.
 
 ## Complex workflows
 
@@ -104,11 +102,11 @@ jobs:
 |-----|------|----|----|-----|
 | `api_key`          | string | **_required_**  | none                                      | Your Datadog API key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets).         |
 | `app_key`          | string | **_required_** | none                                      | Your Datadog Application key. This key is created by your [Datadog organization](https://docs.datadoghq.com/account_management/api-app-keys/) and should be stored as a [secret](https://docs.github.com/en/actions/reference/encrypted-secrets). |
-| `datadog_site`     | string | _optional_  | `datadoghq.com`                           | The Datadog site. Needs to be set to `datadoghq.eu` for Datadog EU users. Ex: `datadoghq.com` or `datadoghq.eu`.                                                                                                                                  |
-| `public_ids`       | string | _optional_  | none                                      | String of **comma-separated** Synthetics test public IDs you want to trigger. If no value is provided the action will look for files with `synthetics.json` in the name.  |
-| `config_path`      | string | _optional_  | `datadog-ci.json`                         | The global JSON configuration to be used when launching tests. Please see the [example configuration here](https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#setup-the-client) for more details.                                        |
-| `files`            | string | _optional_  | `{,!(node_modules)/**/}*.synthetics.json` | Glob pattern to detect synthetic tests config files.                                                                                                                                                                                              |
-| `subdomain`        | string | _optional_  | app                                       | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com` the subdomain value then needs to be set to `myorg`.                                                          |
+| `datadog_site`     | string | _optional_  | `datadoghq.com`                           | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`.                                                                                                                                  |
+| `public_ids`       | string | _optional_  | none                                      | String of public IDs separated by commas for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`  |
+| `config_path`      | string | _optional_  | `datadog-ci.json`                         | The global JSON configuration is used when launching tests. See the [example configuration](https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#setup-the-client) for more details.                                         |
+| `files`            | string | _optional_  | `{,!(node_modules)/**/}*.synthetics.json` | Glob pattern to detect Synthetic tests config files.                                                                                                                                                                                              |
+| `subdomain`        | string | _optional_  | app                                       | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`.                                                          |
 | `test_search_query`| string | _optional_  | none                                      | Trigger tests corresponding to a [search](https://docs.datadoghq.com/synthetics/search/#search) query.                                                                                                                                            |
 | `tunnel`           | boolean | _optional_  | false                                     | Use the [testing tunnel](https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#use-the-testing-tunnel) to trigger tests.                                                                                                                    |
 
