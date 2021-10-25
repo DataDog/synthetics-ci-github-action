@@ -2,7 +2,7 @@
   "name": "datadog-synthetics-github-action",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
