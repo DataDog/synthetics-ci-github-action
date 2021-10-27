@@ -32,7 +32,7 @@
     "deep-extend": "0.6.0"
   },
   "devDependencies": {
-    "@types/deep-extend": "0.4.31",
+    "@types/deep-extend": "0.4.32",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.3.3",
     "@typescript-eslint/parser": "^5.2.0",
