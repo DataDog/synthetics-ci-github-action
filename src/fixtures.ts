@@ -1,7 +1,4 @@
-import {
-  SyntheticsCIConfig,
-  MainReporter
-} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {SyntheticsCIConfig, MainReporter} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 export const config: SyntheticsCIConfig = {
   apiKey: '',
@@ -16,7 +13,7 @@ export const config: SyntheticsCIConfig = {
   proxy: {protocol: 'http'},
   publicIds: [],
   subdomain: 'app',
-  tunnel: false
+  tunnel: false,
 }
 
 export const mockReporter: MainReporter = {
@@ -27,5 +24,5 @@ export const mockReporter: MainReporter = {
   runEnd: jest.fn(),
   testEnd: jest.fn(),
   testTrigger: jest.fn(),
-  testWait: jest.fn()
+  testWait: jest.fn(),
 }

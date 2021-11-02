@@ -8,18 +8,17 @@ import {renderResults} from './process-results'
 import {BaseContext} from 'clipanion'
 import {resolveConfig} from './resolve-config'
 import {reportCiError} from './report-ci-error'
-import { Summary } from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-
+import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 const run = async (): Promise<void> => {
   const context = {
     context: {
       stdin: process.stdin,
       stdout: process.stdout,
-      stderr: process.stderr
-    } as BaseContext
+      stderr: process.stderr,
+    } as BaseContext,
   }
-  
+
   const reporter = getReporter([new DefaultReporter(context as any)])
   const config = await resolveConfig()
 
@@ -37,7 +36,6 @@ const run = async (): Promise<void> => {
     } else {
       core.info(`Datadog Synthetics tests succeeded : ${printSummary(resultSummary)}`)
     }
-    
   } catch (error) {
     if (error instanceof CiError) {
       reportCiError(error, reporter)
@@ -47,7 +45,7 @@ const run = async (): Promise<void> => {
 }
 
 export const printSummary = (summary: Summary) =>
-`criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.notFound}, timedOut: ${summary.timedOut}`
+  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.notFound}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
   run()
