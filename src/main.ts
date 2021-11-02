@@ -31,7 +31,7 @@ const run = async (): Promise<void> => {
       resultSummary.criticalErrors > 0 ||
       resultSummary.failed > 0 ||
       resultSummary.timedOut > 0 ||
-      resultSummary.notFound > 0
+      resultSummary.testsNotFound.size > 0
     ) {
       core.setFailed(`Datadog Synthetics tests failed : ${printSummary(resultSummary)}`)
     } else {
@@ -47,7 +47,7 @@ const run = async (): Promise<void> => {
 }
 
 export const printSummary = (summary: Summary) =>
-`criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.notFound}, timedOut: ${summary.timedOut}`
+`criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
   run()
