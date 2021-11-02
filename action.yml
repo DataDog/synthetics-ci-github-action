@@ -1,6 +1,6 @@
-name: 'Datadog Synthetics CI'
-description: 'Trigger your Datadog Synthetics test using the datadog-ci tool'
-author: 'DataDog'
+name: 'datadog synthetics CI'
+description: 'Run datadog synthetics CI tests as part of your Github Actions workflow'
+author: 'dataDog'
 inputs:
   api_key: 
     required: true
