@@ -1,8 +1,8 @@
 {
   "name": "datadog-synthetics-github-action",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow.",
+  "version": "0.1.0",
+  "author": "Datadog",
+  "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,19 +10,18 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "https://github.com/DataDog/synthetics-ci-github-action"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "datadog",
+    "synthetics",
+    "test"
   ],
-  "author": "",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
