@@ -1,7 +1,11 @@
+import {readFile} from 'fs'
+
 import {expect, test} from '@jest/globals'
 import * as resolveConfig from '../src/resolve-config'
-import * as utils from '@datadog/datadog-ci/dist/helpers/utils'
 import {config} from '../src/fixtures'
+
+jest.mock('fs')
+const mockedReadFile = readFile as unknown as jest.MockedFunction<typeof readFile>
 
 const requiredInputs = {
   apiKey: 'xxx',
@@ -19,7 +23,14 @@ describe('Resolves Config', () => {
   })
 
   test('Default configuration parameters get overriden by global configuration file ', async () => {
-    jest.spyOn(utils, 'getConfig').mockImplementation(() => ({files: ['foobar.synthetics.json']} as any))
+    const fakeReadFile = ((
+      path: string,
+      encoding: string,
+      callback: (error: NodeJS.ErrnoException | null, data: Buffer) => void
+    ) => {
+      callback(null, Buffer.from(JSON.stringify({files: ['foobar.synthetics.json']})))
+    }) as typeof readFile
+    mockedReadFile.mockImplementation(fakeReadFile)
     await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,

@@ -1,10 +1,9 @@
 import * as core from '@actions/core'
-import {SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-import {parseConfigFile} from '@datadog/datadog-ci/dist/helpers/utils'
+import {parseConfigFile, Synthetics} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
 import {removeUndefinedValues} from './utils'
 
-const DEFAULT_CONFIG: SyntheticsCIConfig = {
+const DEFAULT_CONFIG: Synthetics.SyntheticsCIConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
@@ -20,7 +19,7 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
   tunnel: false,
 }
 
-export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
+export const resolveConfig = async (): Promise<Synthetics.SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
   const publicIds = getDefinedInput('public_ids')
@@ -44,7 +43,7 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
       core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)
       throw error
     }
-    // Here, if configPath is not present it means that default config file does not exist : in this case it's expected for the github action to be silent.
+    // Here, if configPath is not present it means that default config file does not exist: in this case it's expected for the github action to be silent.
   }
 
   // Override with GithubAction inputs

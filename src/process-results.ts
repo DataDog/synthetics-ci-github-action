@@ -1,24 +1,14 @@
-import {
-  ERRORS,
-  ExecutionRule,
-  LocationsMapping,
-  MainReporter,
-  PollResult,
-  Summary,
-  SyntheticsCIConfig,
-  Test,
-  Trigger,
-} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {Synthetics} from '@datadog/datadog-ci'
 import {hasTestSucceeded, isCriticalError} from '@datadog/datadog-ci/dist/commands/synthetics/utils'
 
 export const renderResults = (
-  results: {[key: string]: PollResult[]},
-  summary: Summary,
-  tests: Test[],
-  triggers: Trigger,
-  config: SyntheticsCIConfig,
+  results: {[key: string]: Synthetics.PollResult[]},
+  summary: Synthetics.Summary,
+  tests: Synthetics.Test[],
+  triggers: Synthetics.Trigger,
+  config: Synthetics.SyntheticsCIConfig,
   startTime: number,
-  reporter: MainReporter
+  reporter: Synthetics.MainReporter
 ) => {
   // Sort tests to show success first then non blocking failures and finally blocking failures.
   tests.sort(sortTestsByOutcome(results, config))
@@ -29,11 +19,11 @@ export const renderResults = (
     mapping[location.id] = location.display_name
 
     return mapping
-  }, {} as LocationsMapping)
+  }, {} as Synthetics.LocationsMapping)
   for (const test of tests) {
     const testResults = results[test.public_id]
 
-    const hasTimeout = testResults.some(pollResult => pollResult.result.error === ERRORS.TIMEOUT)
+    const hasTimeout = testResults.some(pollResult => pollResult.result.error === Synthetics.ERRORS.TIMEOUT)
     if (hasTimeout) {
       summary.timedOut++
     }
@@ -63,12 +53,15 @@ export const renderResults = (
   return summary
 }
 
-export const sortTestsByOutcome = (results: {[key: string]: PollResult[]}, config: SyntheticsCIConfig) => {
-  return (t1: Test, t2: Test) => {
+export const sortTestsByOutcome = (
+  results: {[key: string]: Synthetics.PollResult[]},
+  config: Synthetics.SyntheticsCIConfig
+) => {
+  return (t1: Synthetics.Test, t2: Synthetics.Test) => {
     const success1 = hasTestSucceeded(results[t1.public_id], config.failOnCriticalErrors, false)
     const success2 = hasTestSucceeded(results[t2.public_id], config.failOnCriticalErrors, false)
-    const isNonBlockingTest1 = t1.options.ci?.executionRule === ExecutionRule.NON_BLOCKING
-    const isNonBlockingTest2 = t2.options.ci?.executionRule === ExecutionRule.NON_BLOCKING
+    const isNonBlockingTest1 = t1.options.ci?.executionRule === Synthetics.ExecutionRule.NON_BLOCKING
+    const isNonBlockingTest2 = t2.options.ci?.executionRule === Synthetics.ExecutionRule.NON_BLOCKING
 
     if (success1 === success2) {
       if (isNonBlockingTest1 === isNonBlockingTest2) {
