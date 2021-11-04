@@ -17,16 +17,20 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
   proxy: {protocol: 'http'},
   publicIds: [],
   subdomain: 'app',
-  tunnel: false
+  tunnel: false,
 }
 
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   const apiKey = core.getInput('api_key', {required: true})
   const appKey = core.getInput('app_key', {required: true})
-  const publicIds = getDefinedInput('public_ids')?.split(',').map((publicId: string) => publicId.trim())
+  const publicIds = getDefinedInput('public_ids')
+    ?.split(',')
+    .map((publicId: string) => publicId.trim())
   const datadogSite = getDefinedInput('datadog_site')
   const configPath = getDefinedInput('config_path')
-  const files = getDefinedInput('files')?.split(',').map((file: string) => file.trim())
+  const files = getDefinedInput('files')
+    ?.split(',')
+    .map((file: string) => file.trim())
   const testSearchQuery = getDefinedInput('test_search_query')
   const subdomain = getDefinedInput('subdomain')
   const tunnel = getDefinedInput('tunnel')
@@ -37,9 +41,7 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
     config = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
   } catch (error) {
     if (configPath) {
-      core.setFailed(
-        `Unable to parse config file! Please verify config path : ${configPath}`
-      )
+      core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)
       throw error
     }
     // Here, if configPath is not present it means that default config file does not exist : in this case it's expected for the github action to be silent.
@@ -57,7 +59,7 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
       publicIds: publicIds,
       subdomain: subdomain,
       testSearchQuery: testSearchQuery,
-      tunnel: tunnel
+      tunnel: tunnel,
     })
   )
 

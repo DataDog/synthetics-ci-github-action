@@ -5,7 +5,7 @@ import {config} from '../src/fixtures'
 
 const requiredInputs = {
   apiKey: 'xxx',
-  appKey: 'yyy'
+  appKey: 'yyy',
 }
 
 describe('Resolves Config', () => {
@@ -14,17 +14,21 @@ describe('Resolves Config', () => {
     process.env = {
       ...process.env,
       INPUT_API_KEY: requiredInputs.apiKey,
-      INPUT_APP_KEY: requiredInputs.appKey
+      INPUT_APP_KEY: requiredInputs.appKey,
     }
   })
 
   test('Default configuration parameters get overriden by global configuration file ', async () => {
     jest.spyOn(utils, 'getConfig').mockImplementation(() => ({files: ['foobar.synthetics.json']} as any))
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs, files: ['foobar.synthetics.json']})
+    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+      files: ['foobar.synthetics.json'],
+    })
   })
 
   test('Default configuration applied if global configuration empty', async () => {
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs,})
+    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
   test('getDefinedInput returns undefined if Github Action input not set', async () => {
