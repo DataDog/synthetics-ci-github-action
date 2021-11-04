@@ -23,7 +23,6 @@ In order to ease/speed up our review, here are some items you can check/improve 
 - **Write meaningful commit messages**
 Messages should be concise but explanatory.
 The commit message should describe the reason for the change, to later understand quickly the thing you've been working on for a day.
-We are using a convention inspired by [gitmoji](https://gitmoji.carloscuesta.me/), to label our commit messages.
 
 - **Keep it small and focused.**
 Pull requests should contain only one fix, or one feature improvement.
