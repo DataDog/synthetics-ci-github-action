@@ -1,7 +1,8 @@
 {
   "name": "datadog-synthetics-github-action",
   "version": "0.1.0",
-  "description": "Run datadog synthetics CI tests as part of your Github Actions workflow",
+  "author": "Datadog",
+  "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -21,7 +22,6 @@
     "synthetics",
     "test"
   ],
-  "author": "Datadog",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",

@@ -1,5 +1,5 @@
-name: 'datadog synthetics CI'
-description: 'Run datadog synthetics CI tests as part of your Github Actions workflow'
+name: 'Datadog Synthetics CI'
+description: 'Run Datadog Synthetics CI tests as part of your Github Actions workflow'
 author: 'Datadog'
 inputs:
   api_key: 
