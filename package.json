@@ -21,7 +21,7 @@
     "synthetics",
     "test"
   ],
-  "author": "",
+  "author": "Datadog",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
