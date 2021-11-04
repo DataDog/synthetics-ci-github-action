@@ -10,7 +10,14 @@ import {config} from '../src/fixtures'
 import run from '../src/main'
 import * as processResults from '../src/process-results'
 
-const emptySummary: Summary = {criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 0}
+const emptySummary: Synthetics.Summary = {
+  criticalErrors: 0,
+  passed: 0,
+  failed: 0,
+  skipped: 0,
+  testsNotFound: new Set(),
+  timedOut: 0,
+}
 const inputs = {
   apiKey: 'xxx',
   appKey: 'yyy',
@@ -112,7 +119,7 @@ describe('Run Github Action', () => {
 
     test('Github Action fails if Synthetics tests not found', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, notFound: 1} as any)
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, testsNotFound: new Set([''])} as any)
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
