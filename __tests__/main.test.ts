@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import * as datadogCi from '@datadog/datadog-ci'
 import {Synthetics} from '@datadog/datadog-ci'
 import {expect, test} from '@jest/globals'
 
