@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import {SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-import {parseConfigFile} from '@datadog/datadog-ci/dist/helpers/utils'
 import deepExtend from 'deep-extend'
+import {parseConfigFile} from '@datadog/datadog-ci/dist/helpers/utils'
 import {removeUndefinedValues} from './utils'
 
 const DEFAULT_CONFIG: SyntheticsCIConfig = {
@@ -51,22 +51,22 @@ export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
   config = deepExtend(
     config,
     removeUndefinedValues({
-      apiKey: apiKey,
-      appKey: appKey,
-      configPath: configPath,
-      datadogSite: datadogSite,
-      files: files,
-      publicIds: publicIds,
-      subdomain: subdomain,
-      testSearchQuery: testSearchQuery,
-      tunnel: tunnel,
+      apiKey,
+      appKey,
+      configPath,
+      datadogSite,
+      files,
+      publicIds,
+      subdomain,
+      testSearchQuery,
+      tunnel,
     })
   )
 
   return config
 }
 
-export const getDefinedInput = (name: string) => {
+export const getDefinedInput = (name: string): string | undefined => {
   const input = core.getInput(name)
 
   return input !== '' ? input : undefined

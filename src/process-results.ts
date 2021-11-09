@@ -19,7 +19,7 @@ export const renderResults = (
   config: SyntheticsCIConfig,
   startTime: number,
   reporter: MainReporter
-) => {
+): Summary => {
   // Sort tests to show success first then non blocking failures and finally blocking failures.
   tests.sort(sortTestsByOutcome(results, config))
 

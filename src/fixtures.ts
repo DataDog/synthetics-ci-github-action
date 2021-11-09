@@ -1,4 +1,4 @@
-import {SyntheticsCIConfig, MainReporter} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {MainReporter, SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 
 export const config: SyntheticsCIConfig = {
   apiKey: '',
