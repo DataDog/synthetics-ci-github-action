@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
-import {Summary, SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import {BaseContext} from 'clipanion'
 import {CiError} from '@datadog/datadog-ci/dist/commands/synthetics/errors'
 import {DefaultReporter} from '@datadog/datadog-ci/dist/commands/synthetics/reporters/default'
+import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import {executeTests} from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
 import {getReporter} from '@datadog/datadog-ci/dist/commands/synthetics/utils'
 import {renderResults} from './process-results'
@@ -19,14 +19,7 @@ const run = async (): Promise<void> => {
   }
 
   const reporter = getReporter([new DefaultReporter(context)])
-
-  let config = {} as SyntheticsCIConfig
-  try {
-    config = await resolveConfig()
-  } catch (error) {
-    core.setFailed(`Unable to resolve Synthetics CI configuration`)
-    throw error
-  }
+  const config = await resolveConfig()
 
   try {
     const startTime = Date.now()
