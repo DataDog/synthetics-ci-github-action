@@ -21,8 +21,15 @@ const DEFAULT_CONFIG: SyntheticsCIConfig = {
 }
 
 export const resolveConfig = async (): Promise<SyntheticsCIConfig> => {
-  const apiKey = core.getInput('api_key', {required: true})
-  const appKey = core.getInput('app_key', {required: true})
+  let apiKey
+  let appKey
+  try {
+    apiKey = core.getInput('api_key', {required: true})
+    appKey = core.getInput('app_key', {required: true})
+  } catch (error) {
+    core.setFailed('Missing API or APP keys to initialize datadog-ci!')
+    throw error
+  }
   const publicIds = getDefinedInput('public_ids')
     ?.split(',')
     .map((publicId: string) => publicId.trim())
