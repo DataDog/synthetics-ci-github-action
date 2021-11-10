@@ -143,11 +143,11 @@ describe('Run Github Action', () => {
       try {
         const result = await new Promise<string>((resolve, reject) =>
           execFile(nodePath, [scriptPath], (error, stdout, stderr) =>
-            error ? reject(error) : resolve(stdout.toString())
+            error ? reject(error.code) : resolve(stdout.toString())
           )
         )
-      } catch (error) {
-        expect(error.code).toBe(1)
+      } catch (exitCode) {
+        expect(exitCode).toBe(1)
       }
     })
   })
