@@ -1,14 +1,13 @@
 import * as core from '@actions/core'
+import {BaseContext} from 'clipanion'
 import {CiError} from '@datadog/datadog-ci/dist/commands/synthetics/errors'
 import {DefaultReporter} from '@datadog/datadog-ci/dist/commands/synthetics/reporters/default'
+import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import {executeTests} from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
 import {getReporter} from '@datadog/datadog-ci/dist/commands/synthetics/utils'
 import {renderResults} from './process-results'
-
-import {BaseContext} from 'clipanion'
-import {resolveConfig} from './resolve-config'
 import {reportCiError} from './report-ci-error'
-import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {resolveConfig} from './resolve-config'
 
 const run = async (): Promise<void> => {
   const context = {
@@ -19,7 +18,7 @@ const run = async (): Promise<void> => {
     } as BaseContext,
   }
 
-  const reporter = getReporter([new DefaultReporter(context as any)])
+  const reporter = getReporter([new DefaultReporter(context)])
   const config = await resolveConfig()
 
   try {
@@ -44,7 +43,7 @@ const run = async (): Promise<void> => {
   }
 }
 
-export const printSummary = (summary: Summary) =>
+export const printSummary = (summary: Summary): string =>
   `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {

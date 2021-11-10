@@ -10,7 +10,7 @@ import {config} from '../src/fixtures'
 import run from '../src/main'
 import * as processResults from '../src/process-results'
 
-const emptySummary: Synthetics.Summary = {
+const emptySummary: Summary = {
   criticalErrors: 0,
   passed: 0,
   failed: 0,
