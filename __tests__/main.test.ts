@@ -3,7 +3,7 @@ import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
 import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
 import {expect, test} from '@jest/globals'
 
-import {execFile} from 'child_process'
+import {execFile, ExecFileException} from 'child_process'
 import * as path from 'path'
 
 import {config} from '../src/fixtures'
@@ -143,13 +143,11 @@ describe('Run Github Action', () => {
       try {
         const result = await new Promise<string>((resolve, reject) =>
           execFile(nodePath, [scriptPath], (error, stdout, stderr) => 
-            error ? reject(new Error(`${error}`)) : resolve(stdout.toString())
+            error ? reject(error) : resolve(stdout.toString())
           )
         )
-      } catch (error) {
-        if(error instanceof Error){
-          expect(error.stack).toContain('Command failed')
-        }
+      } catch (error : any) {
+        expect(error.code).toBe(1)
       }
     })
   })
