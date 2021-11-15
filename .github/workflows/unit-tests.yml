@@ -1,0 +1,21 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests
+
+name: Run unit tests
+
+on: push
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.22.0'
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn test
