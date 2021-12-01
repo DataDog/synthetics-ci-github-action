@@ -10,7 +10,7 @@ further_reading:
   text: Datadog Synthetics CI GitHub Action
 ---
 
-This Datadog GitHub Action allows you to trigger Datadog Synthetics tests, wait for results, and report the status using the [datadog-ci](https://github.com/DataDog/datadog-ci) tool.
+This Datadog GitHub Action allows you to trigger Datadog Synthetics tests, wait for results, and report the status using the [datadog-ci][1] tool.
 
 ## Setup
 
