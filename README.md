@@ -1,7 +1,7 @@
 ---
 title: Synthetics and CI GitHub Actions
 kind: documentation
-description: 
+description: Integrate Synthetic tests within your GitHub Action workflows using Datadog's Synthetics in CI GitHub Action.
 dependencies:
 - https://github.com/DataDog/synthetics-ci-github-action/blob/main/README.md
 further_reading:
@@ -10,7 +10,9 @@ further_reading:
   text: Datadog Synthetics CI GitHub Action
 ---
 
-This Datadog GitHub Action allows you to trigger Datadog Synthetics tests, wait for results, and report the status using the [datadog-ci][1] tool.
+## Overview
+
+Trigger Synthetic tests from your GitHub workflows with the [Datadog Synthetic CI GitHub Action][1] .
 
 ## Setup
 
