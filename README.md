@@ -5,9 +5,9 @@ description: Integrate Synthetic tests within your GitHub Action workflows using
 dependencies:
 - https://github.com/DataDog/synthetics-ci-github-action/blob/main/README.md
 further_reading:
-- link: https://github.com/DataDog/synthetics-ci-github-action/blob/main/README.md
-  tag: GitHub
-  text: Datadog Synthetics CI GitHub Action
+- link: "https://docs.datadoghq.com/synthetics/cicd_integrations/configuration"
+  tag: "Documentation"
+  text: "CI/CD Integrations Configuration"
 ---
 
 ## Overview
@@ -114,6 +114,10 @@ jobs:
 | `subdomain`        | string | _optional_  | app                                       | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`.                                                          |
 | `test_search_query`| string | _optional_  | none                                      | Trigger tests corresponding to a [search][5] query.                                                                                                                                            |
 | `tunnel`           | boolean | _optional_  | false                                     | Use the [testing tunnel][6] to trigger tests.      
+
+## Further Reading
+
+{{< partial name="whats-next/whats-next.html" >}}
 
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
