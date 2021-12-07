@@ -1,9 +1,10 @@
 import * as core from '@actions/core'
-import {parseConfigFile, Synthetics} from '@datadog/datadog-ci'
+import {synthetics, utils} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
+
 import {removeUndefinedValues} from './utils'
 
-const DEFAULT_CONFIG: Synthetics.SyntheticsCIConfig = {
+const DEFAULT_CONFIG: synthetics.SyntheticsCIConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
@@ -19,9 +20,16 @@ const DEFAULT_CONFIG: Synthetics.SyntheticsCIConfig = {
   tunnel: false,
 }
 
-export const resolveConfig = async (): Promise<Synthetics.SyntheticsCIConfig> => {
-  const apiKey = core.getInput('api_key', {required: true})
-  const appKey = core.getInput('app_key', {required: true})
+export const resolveConfig = async (): Promise<synthetics.SyntheticsCIConfig> => {
+  let apiKey
+  let appKey
+  try {
+    apiKey = core.getInput('api_key', {required: true})
+    appKey = core.getInput('app_key', {required: true})
+  } catch (error) {
+    core.setFailed('Missing API or APP keys to initialize datadog-ci!')
+    throw error
+  }
   const publicIds = getDefinedInput('public_ids')
     ?.split(',')
     .map((publicId: string) => publicId.trim())
@@ -37,7 +45,7 @@ export const resolveConfig = async (): Promise<Synthetics.SyntheticsCIConfig> =>
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
   try {
-    config = await parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
+    config = await utils.parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
   } catch (error) {
     if (configPath) {
       core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)
@@ -50,22 +58,22 @@ export const resolveConfig = async (): Promise<Synthetics.SyntheticsCIConfig> =>
   config = deepExtend(
     config,
     removeUndefinedValues({
-      apiKey: apiKey,
-      appKey: appKey,
-      configPath: configPath,
-      datadogSite: datadogSite,
-      files: files,
-      publicIds: publicIds,
-      subdomain: subdomain,
-      testSearchQuery: testSearchQuery,
-      tunnel: tunnel,
+      apiKey,
+      appKey,
+      configPath,
+      datadogSite,
+      files,
+      publicIds,
+      subdomain,
+      testSearchQuery,
+      tunnel,
     })
   )
 
   return config
 }
 
-export const getDefinedInput = (name: string) => {
+export const getDefinedInput = (name: string): string | undefined => {
   const input = core.getInput(name)
 
   return input !== '' ? input : undefined

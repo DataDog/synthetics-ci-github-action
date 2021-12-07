@@ -31,5 +31,5 @@ inputs:
     description: 'Use tunnel to trigger tests.'
   
 runs:
-  using: docker
-  image: Dockerfile
+  using: 'node12'
+  main: 'dist/index.js'

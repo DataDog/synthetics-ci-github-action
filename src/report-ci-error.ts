@@ -1,7 +1,7 @@
 import chalk from 'chalk'
-import {Synthetics} from '@datadog/datadog-ci'
+import {synthetics} from '@datadog/datadog-ci'
 
-export const reportCiError = (error: Synthetics.CiError, reporter: Synthetics.MainReporter) => {
+export const reportCiError = (error: synthetics.CiError, reporter: synthetics.MainReporter): void => {
   switch (error.code) {
     case 'NO_RESULTS_TO_POLL':
       reporter.log('No results to poll.\n')
