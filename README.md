@@ -1,3 +1,5 @@
+<!-- xxx tabs xxx -->
+<!-- xxx tab "Front Matter" xxx -->
 ---
 title: Synthetics and CI GitHub Actions
 kind: documentation
@@ -9,6 +11,8 @@ further_reading:
   tag: "Documentation"
   text: "CI/CD Integrations Configuration"
 ---
+<!-- xxz tab xxx -->
+<!-- xxz tabs xxx -->
 
 ## Overview
 
