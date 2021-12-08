@@ -39,6 +39,9 @@ describe('Resolves Config', () => {
   })
 
   test('Default configuration applied if global configuration empty', async () => {
+    const fakeReadFile = ((path: string, cb: (error: NodeJS.ErrnoException | null, data?: Buffer) => void) =>
+      cb({code: 'ENOENT'} as NodeJS.ErrnoException)) as typeof readFile
+    mockedReadFile.mockImplementation(fakeReadFile)
     await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
