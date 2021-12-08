@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@datadog/datadog-ci": "^0.17.8",
+    "@datadog/datadog-ci": "^0.17.11",
     "chalk": "4.1.2",
     "clipanion": "^3.0.1",
     "deep-extend": "0.6.0"

@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-import * as runTests from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
+import {synthetics} from '@datadog/datadog-ci'
 import {expect, test} from '@jest/globals'
 
 import {execFile} from 'child_process'
@@ -10,7 +9,7 @@ import {config} from '../src/fixtures'
 import run from '../src/main'
 import * as processResults from '../src/process-results'
 
-const emptySummary: Summary = {
+const emptySummary: synthetics.Summary = {
   criticalErrors: 0,
   passed: 0,
   failed: 0,
@@ -43,10 +42,10 @@ describe('Run Github Action', () => {
     })
 
     test('Github Action core.getInput parameters are passed on to runTests', async () => {
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
 
       await run()
-      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
+      expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
       })
@@ -57,10 +56,10 @@ describe('Run Github Action', () => {
         ...process.env,
         INPUT_PUBLIC_IDS: publicIds.join(', '),
       }
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
 
       await run()
-      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
+      expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
         publicIds,
@@ -69,9 +68,9 @@ describe('Run Github Action', () => {
   })
   describe('Handle invalid input parameters', () => {
     test('Use default configuration if Github Action input is not set ', async () => {
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
       await run()
-      expect(runTests.executeTests).toHaveBeenCalledWith(expect.anything(), {
+      expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
         datadogSite: 'datadoghq.com',
@@ -94,12 +93,12 @@ describe('Run Github Action', () => {
 
   describe('Handle Synthetics test results', () => {
     beforeEach(() => {
-      jest.spyOn(runTests, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
     })
 
     test('Github Action fails if Synthetics tests fail ', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, failed: 1} as any)
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, failed: 1})
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -109,7 +108,7 @@ describe('Run Github Action', () => {
 
     test('Github Action fails if Synthetics tests timed out', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, timedOut: 1} as any)
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, timedOut: 1})
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -119,7 +118,9 @@ describe('Run Github Action', () => {
 
     test('Github Action fails if Synthetics tests not found', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, testsNotFound: new Set([''])} as any)
+      jest
+        .spyOn(processResults, 'renderResults')
+        .mockReturnValue({...emptySummary, testsNotFound: new Set([''])} as any)
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -129,7 +130,7 @@ describe('Run Github Action', () => {
 
     test('Github Action succeeds if Synthetics tests do not fail', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, passed: 1} as any)
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, passed: 1})
 
       await run()
       expect(setFailedMock).not.toHaveBeenCalled()
@@ -142,11 +143,11 @@ describe('Run Github Action', () => {
       const scriptPath = path.join(__dirname, '..', 'lib', 'main.js')
       try {
         const result = await new Promise<string>((resolve, reject) =>
-          execFile(nodePath, [scriptPath], (error, stdout, stderr) => 
+          execFile(nodePath, [scriptPath], (error, stdout, stderr) =>
             error ? reject(error) : resolve(stdout.toString())
           )
         )
-      } catch (error : any) {
+      } catch (error: any) {
         expect(error.code).toBe(1)
       }
     })

@@ -1,6 +1,6 @@
-import {MainReporter, SyntheticsCIConfig} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
+import {synthetics} from '@datadog/datadog-ci'
 
-export const config: SyntheticsCIConfig = {
+export const config: synthetics.SyntheticsCIConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
@@ -16,7 +16,7 @@ export const config: SyntheticsCIConfig = {
   tunnel: false,
 }
 
-export const mockReporter: MainReporter = {
+export const mockReporter: synthetics.MainReporter = {
   error: jest.fn(),
   initErrors: jest.fn(),
   log: jest.fn(),

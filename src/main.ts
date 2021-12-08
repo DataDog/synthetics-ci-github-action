@@ -1,29 +1,23 @@
 import * as core from '@actions/core'
 import {BaseContext} from 'clipanion'
-import {CiError} from '@datadog/datadog-ci/dist/commands/synthetics/errors'
-import {DefaultReporter} from '@datadog/datadog-ci/dist/commands/synthetics/reporters/default'
-import {Summary} from '@datadog/datadog-ci/dist/commands/synthetics/interfaces'
-import {executeTests} from '@datadog/datadog-ci/dist/commands/synthetics/run-test'
-import {getReporter} from '@datadog/datadog-ci/dist/commands/synthetics/utils'
 import {renderResults} from './process-results'
 import {reportCiError} from './report-ci-error'
 import {resolveConfig} from './resolve-config'
+import {synthetics} from '@datadog/datadog-ci'
 
 const run = async (): Promise<void> => {
-  const context = {
-    context: {
-      stdin: process.stdin,
-      stdout: process.stdout,
-      stderr: process.stderr,
-    } as BaseContext,
+  const context: BaseContext = {
+    stdin: process.stdin,
+    stdout: process.stdout,
+    stderr: process.stderr,
   }
 
-  const reporter = getReporter([new DefaultReporter(context)])
+  const reporter = synthetics.utils.getReporter([new synthetics.DefaultReporter({context})])
   const config = await resolveConfig()
 
   try {
     const startTime = Date.now()
-    const {results, summary, tests, triggers} = await executeTests(reporter, config)
+    const {results, summary, tests, triggers} = await synthetics.executeTests(reporter, config)
     const resultSummary = renderResults(results, summary, tests, triggers, config, startTime, reporter)
     if (
       resultSummary.criticalErrors > 0 ||
@@ -36,14 +30,14 @@ const run = async (): Promise<void> => {
       core.info(`Datadog Synthetics tests succeeded : ${printSummary(resultSummary)}`)
     }
   } catch (error) {
-    if (error instanceof CiError) {
+    if (error instanceof synthetics.CiError) {
       reportCiError(error, reporter)
     }
     core.setFailed('Running Datadog Synthetics tests failed.')
   }
 }
 
-export const printSummary = (summary: Summary): string =>
+export const printSummary = (summary: synthetics.Summary): string =>
   `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
