@@ -100,7 +100,7 @@ jobs:
 | `tunnel`            | boolean | _optional_     | Use the [testing tunnel][6] to trigger tests. **Default:** false.                                                                                                                                       |
 | `subdomain`         | string  | _optional_     | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`. |
 | `files`             | string  | _optional_     | Glob pattern to detect Synthetic tests config files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                            |
-| `datadog_site`      | string  | _optional_     | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`                                                             |
+| `datadog_site`      | string  | _optional_     | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                             |
 | `config_path`       | string  | _optional_     | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 
 ## Further Reading
