@@ -105,7 +105,9 @@ jobs:
 
 ## Further Reading
 
-{{< partial name="whats-next/whats-next.html" >}}
+Additional helpful documentation, links, and articles:
+
+- [CI/CD Integrations Configuration][7]
 
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
@@ -113,3 +115,4 @@ jobs:
 [4]: https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#setup-the-client
 [5]: https://docs.datadoghq.com/synthetics/search/#search
 [6]: https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#use-the-testing-tunnel
+[7]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
