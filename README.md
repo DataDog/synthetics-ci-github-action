@@ -112,7 +112,7 @@ Additional helpful documentation, links, and articles:
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
-[4]: https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#setup-the-client
+[4]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#setup-a-client
 [5]: https://docs.datadoghq.com/synthetics/search/#search
-[6]: https://docs.datadoghq.com/synthetics/cicd_testing/?tab=npm#use-the-testing-tunnel
+[6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#use-the-testing-tunnel
 [7]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
