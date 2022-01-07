@@ -1,14 +1,7 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 208:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) {
-
-"use strict";
 /* eslint-disable no-shadow, no-invalid-this */
 /* global vm, host, Contextify, Decontextify, VMError, options */
 
-
+'use strict';
 
 const {Script} = host.require('vm');
 const fs = host.require('fs');
@@ -73,10 +66,12 @@ return ((vm, host) => {
 					let contents = fs.readFileSync(filename, 'utf8');
 					contents = vm._compiler(contents, filename);
 
-					const code = `(function (exports, require, module, __filename, __dirname) { 'use strict'; ${contents} \n});`;
+					const code = host.STRICT_MODULE_PREFIX + contents + host.MODULE_SUFFIX;
+
+					const ccode = vm._hook('run', [code]);
 
 					// Precompile script
-					script = new Script(code, {
+					script = new Script(ccode, {
 						__proto__: null,
 						filename: filename || 'vm.js',
 						displayErrors: false,
@@ -95,7 +90,7 @@ return ((vm, host) => {
 				});
 
 				// run the script
-				closure(module.exports, __nccwpck_require__(952), module, filename, dirname);
+				closure(module.exports, module.require, module, filename, dirname);
 			}
 		};
 	}
@@ -233,7 +228,7 @@ return ((vm, host) => {
 			// run script
 			try {
 				// FIXME binding should be contextified
-				script.runInContext(global)(module.exports, __nccwpck_require__(952), module, host.process, host.process.binding);
+				script.runInContext(global)(module.exports, module.require, module, host.process, host.process.binding);
 			} catch (e) {
 				// e could be from inside or outside of sandbox
 				throw new VMError(`Error loading '${moduleName}'`);
@@ -685,75 +680,3 @@ return ((vm, host) => {
 
 	return _prepareRequire;
 })(vm, host);
-
-
-/***/ }),
-
-/***/ 952:
-/***/ ((module) => {
-
-function webpackEmptyContext(req) {
-	var e = new Error("Cannot find module '" + req + "'");
-	e.code = 'MODULE_NOT_FOUND';
-	throw e;
-}
-webpackEmptyContext.keys = () => ([]);
-webpackEmptyContext.resolve = webpackEmptyContext;
-webpackEmptyContext.id = 952;
-module.exports = webpackEmptyContext;
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nccwpck_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 		}
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(208);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
-/******/ })()
-;
-//# sourceMappingURL=sandbox.js.map
