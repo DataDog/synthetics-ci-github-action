@@ -1,11 +1,4 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 863:
-/***/ (function() {
-
-
+'use strict';
 
 // eslint-disable-next-line no-invalid-this, no-shadow
 const {GeneratorFunction, AsyncFunction, AsyncGeneratorFunction, global, internal, host, hook} = this;
@@ -73,37 +66,18 @@ global.eval = new host.Proxy(eval_, makeCheckFunction('eval'));
 if (Promise) {
 
 	Promise.prototype.then = new host.Proxy(Promise.prototype.then, makeCheckFunction('promise_then'));
-	Contextify.connect(host.Promise.prototype.then, Promise.prototype.then);
+	// This seems not to work, and will produce
+	// UnhandledPromiseRejectionWarning: TypeError: Method Promise.prototype.then called on incompatible receiver [object Object].
+	// This is likely caused since the host.Promise.prototype.then cannot use the VM Proxy object.
+	// Contextify.connect(host.Promise.prototype.then, Promise.prototype.then);
 
 	if (Promise.prototype.finally) {
 		Promise.prototype.finally = new host.Proxy(Promise.prototype.finally, makeCheckFunction('promise_finally'));
-		Contextify.connect(host.Promise.prototype.finally, Promise.prototype.finally);
+		// Contextify.connect(host.Promise.prototype.finally, Promise.prototype.finally);
 	}
 	if (Promise.prototype.catch) {
 		Promise.prototype.catch = new host.Proxy(Promise.prototype.catch, makeCheckFunction('promise_catch'));
-		Contextify.connect(host.Promise.prototype.catch, Promise.prototype.catch);
+		// Contextify.connect(host.Promise.prototype.catch, Promise.prototype.catch);
 	}
 
 }
-
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__[863]();
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
-/******/ })()
-;
-//# sourceMappingURL=fixasync.js.map

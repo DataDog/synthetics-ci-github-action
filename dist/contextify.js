@@ -1,14 +1,7 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 780:
-/***/ (function() {
-
 /* global host */
 /* eslint-disable block-spacing, no-multi-spaces, brace-style, no-array-constructor, new-cap, no-use-before-define */
 
-
+'use strict';
 
 // eslint-disable-next-line no-invalid-this, no-shadow
 const global = this;
@@ -31,6 +24,12 @@ local.Reflect.isExtensible = Reflect.isExtensible;
 local.Reflect.preventExtensions = Reflect.preventExtensions;
 local.Reflect.getOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor;
 
+function uncurryThis(func) {
+	return (thiz, args) => local.Reflect.apply(func, thiz, args);
+}
+
+const FunctionBind = uncurryThis(Function.prototype.bind);
+
 // global is originally prototype of host.Object so it can be used to climb up from the sandbox.
 Object.setPrototypeOf(global, Object.prototype);
 
@@ -45,23 +44,35 @@ const DEBUG = false;
 const OPNA = 'Operation not allowed on contextified object.';
 const captureStackTrace = Error.captureStackTrace;
 
-const FROZEN_TRAPS = host.Object.create(null);
-FROZEN_TRAPS.set = (target, key) => false;
-FROZEN_TRAPS.setPrototypeOf = (target, key) => false;
-FROZEN_TRAPS.defineProperty = (target, key) => false;
-FROZEN_TRAPS.deleteProperty = (target, key) => false;
-FROZEN_TRAPS.isExtensible = (target, key) => false;
-FROZEN_TRAPS.preventExtensions = (target) => false;
+const RETURN_FALSE = () => false;
+
+const FROZEN_TRAPS = {
+	__proto__: null,
+	set(target, key, value, receiver) {
+		return local.Reflect.defineProperty(receiver, key, {
+			__proto__: null,
+			value: value,
+			writable: true,
+			enumerable: true,
+			configurable: true
+		});
+	},
+	setPrototypeOf: RETURN_FALSE,
+	defineProperty: RETURN_FALSE,
+	deleteProperty: RETURN_FALSE,
+	isExtensible: RETURN_FALSE,
+	preventExtensions: RETURN_FALSE
+};
 
 // Map of contextified objects to original objects
 const Contextified = new host.WeakMap();
 const Decontextified = new host.WeakMap();
 
 // We can't use host's hasInstance method
-const hasInstance = local.Object[Symbol.hasInstance];
+const ObjectHasInstance = uncurryThis(local.Object[Symbol.hasInstance]);
 function instanceOf(value, construct) {
 	try {
-		return host.Reflect.apply(hasInstance, construct, [value]);
+		return ObjectHasInstance(construct, [value]);
 	} catch (ex) {
 		// Never pass the handled exception through!
 		throw new VMError('Unable to perform instanceOf check.');
@@ -70,6 +81,7 @@ function instanceOf(value, construct) {
 }
 
 const SHARED_OBJECT = {__proto__: null};
+function SHARED_FUNCTION() {}
 
 function createBaseObject(obj) {
 	let base;
@@ -82,9 +94,8 @@ function createBaseObject(obj) {
 					return this;
 				}
 			})();
-			// eslint-disable-next-line func-names
-			base = function() {};
-			base.prototype = null;
+			// Bind the function since bound functions do not have a prototype property.
+			base = FunctionBind(SHARED_FUNCTION, [null]);
 		} catch (e) {
 			base = () => {};
 		}
@@ -619,6 +630,11 @@ Contextify.function = (fnc, traps, deepTraps, flags, mock) => {
 	let proxy;
 
 	base.apply = (target, context, args) => {
+		// Fixes buffer unsafe allocation for node v6/7
+		if (host.version < 8 && fnc === host.Buffer && 'number' === typeof args[0]) {
+			args[0] = new local.Array(args[0]).fill(0);
+		}
+
 		context = Decontextify.value(context);
 
 		// Set context of all arguments to host's context.
@@ -633,7 +649,7 @@ Contextify.function = (fnc, traps, deepTraps, flags, mock) => {
 	base.construct = (target, args, newTarget) => {
 		// Fixes buffer unsafe allocation for node v6/7
 		if (host.version < 8 && fnc === host.Buffer && 'number' === typeof args[0]) {
-			args[0] = new Array(args[0]).fill(0);
+			args[0] = new local.Array(args[0]).fill(0);
 		}
 
 		args = Decontextify.arguments(args);
@@ -985,6 +1001,132 @@ BufferOverride.inspect = function inspect(recurseTimes, ctx) {
 };
 const LocalBuffer = global.Buffer = Contextify.readonly(host.Buffer, BufferMock);
 Contextify.connect(host.Buffer.prototype.inspect, BufferOverride.inspect);
+Contextify.connect(host.Function.prototype.bind, Function.prototype.bind);
+
+const oldPrepareStackTraceDesc = Reflect.getOwnPropertyDescriptor(Error, 'prepareStackTrace');
+
+let currentPrepareStackTrace = Error.prepareStackTrace;
+const wrappedPrepareStackTrace = new host.WeakMap();
+if (typeof currentPrepareStackTrace === 'function') {
+	wrappedPrepareStackTrace.set(currentPrepareStackTrace, currentPrepareStackTrace);
+}
+
+let OriginalCallSite;
+Error.prepareStackTrace = (e, sst) => {
+	OriginalCallSite = sst[0].constructor;
+};
+new Error().stack;
+if (typeof OriginalCallSite === 'function') {
+	Error.prepareStackTrace = undefined;
+
+	function makeCallSiteGetters(list) {
+		const callSiteGetters = [];
+		for (let i=0; i<list.length; i++) {
+			const name = list[i];
+			const func = OriginalCallSite.prototype[name];
+			callSiteGetters[i] = {__proto__: null,
+				name,
+				propName: '_' + name,
+				func: (thiz) => {
+					return local.Reflect.apply(func, thiz, []);
+				}
+			};
+		}
+		return callSiteGetters;
+	}
+
+	function applyCallSiteGetters(callSite, getters) {
+		const properties = {__proto__: null};
+		for (let i=0; i<getters.length; i++) {
+			const getter = getters[i];
+			properties[getter.propName] = {
+				__proto__: null,
+				value: getter.func(callSite)
+			};
+		}
+		return properties;
+	}
+
+	const callSiteGetters = makeCallSiteGetters([
+		'getTypeName',
+		'getFunctionName',
+		'getMethodName',
+		'getFileName',
+		'getLineNumber',
+		'getColumnNumber',
+		'getEvalOrigin',
+		'isToplevel',
+		'isEval',
+		'isNative',
+		'isConstructor',
+		'isAsync',
+		'isPromiseAll',
+		'getPromiseIndex'
+	]);
+
+	class CallSite {
+		constructor(callSite) {
+			Object.defineProperties(this, applyCallSiteGetters(callSite, callSiteGetters));
+		}
+		getThis() {return undefined;}
+		getFunction() {return undefined;}
+		toString() {return 'CallSite {}';}
+	}
+
+	(function setupCallSite() {
+		for (let i=0; i<callSiteGetters.length; i++) {
+			const name = callSiteGetters[i].name;
+			const funcProp = Object.getOwnPropertyDescriptor(OriginalCallSite.prototype, name);
+			if (funcProp === undefined) continue;
+			const propertyName = callSiteGetters[i].propName;
+			const func = {func() {
+				return this[propertyName];
+			}}.func;
+			const nameProp = Object.getOwnPropertyDescriptor(func, 'name');
+			nameProp.value = name;
+			Object.defineProperty(func, 'name', nameProp);
+			funcProp.value = func;
+			Object.defineProperty(CallSite.prototype, name, funcProp);
+		}
+	})();
+
+	Object.defineProperty(Error, 'prepareStackTrace', {
+		configurable: false,
+		enumerable: false,
+		get() {
+			return currentPrepareStackTrace;
+		},
+		set(value) {
+			if (typeof(value) !== 'function') {
+				currentPrepareStackTrace = value;
+				return;
+			}
+			const wrapped = wrappedPrepareStackTrace.get(value);
+			if (wrapped) {
+				currentPrepareStackTrace = wrapped;
+				return;
+			}
+			const newWrapped = (error, sst) => {
+				if (host.Array.isArray(sst)) {
+					for (let i=0; i<sst.length; i++) {
+						const cs = sst[i];
+						if (typeof cs === 'object' && local.Reflect.getPrototypeOf(cs) === OriginalCallSite.prototype) {
+							sst[i] = new CallSite(cs);
+						}
+					}
+				}
+				return value(error, sst);
+			};
+			wrappedPrepareStackTrace.set(value, newWrapped);
+			wrappedPrepareStackTrace.set(newWrapped, newWrapped);
+			currentPrepareStackTrace = newWrapped;
+		}
+	});
+} else if (oldPrepareStackTraceDesc) {
+	Reflect.defineProperty(Error, 'prepareStackTrace', oldPrepareStackTraceDesc);
+} else {
+	Reflect.deleteProperty(Error, 'prepareStackTrace');
+}
 
 
 const exportsMap = host.Object.create(null);
@@ -995,25 +1137,3 @@ exportsMap.sandbox = Decontextify.value(global);
 exportsMap.Function = Function;
 
 return exportsMap;
-
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__[780]();
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
-/******/ })()
-;
-//# sourceMappingURL=contextify.js.map
