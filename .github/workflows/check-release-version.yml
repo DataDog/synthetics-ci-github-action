@@ -14,3 +14,6 @@ jobs:
 
       - name: Check build files and doc
         run: ./ci/check-release-version.sh
+
+      - name: Check LICENSE-3rdparty.csv
+        run: ./ci/check-license-3rdparty.sh
