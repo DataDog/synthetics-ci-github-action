@@ -1,0 +1,16 @@
+# This workflow ensures project has been built and doc updated before release
+
+name: Check release version
+
+on: push
+
+jobs:
+  check-release-version:
+    name: Check build files
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check build files and doc
+        run: ./ci/check-release-version.sh
