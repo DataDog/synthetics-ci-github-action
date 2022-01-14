@@ -28,9 +28,9 @@ jobs:
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
-          public_ids: 'abc-d3f-ghi, jkl-mn0-pqr' 
-        
+          public_ids: 'abc-d3f-ghi, jkl-mn0-pqr'
 ```
+
 ### Example workflow using an existing `synthetics.json` file
 
 ```yaml
@@ -46,7 +46,6 @@ jobs:
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
-        
 ```
 
 **Note**: By default, this workflow runs all the tests listed in `{,!(node_modules)/**/}*.synthetics.json` files (every file ending with `.synthetics.json` except for those in the `node_modules` folder). You can also trigger a list of Synthetics tests by specifying a `public_id` or using a search query.
@@ -91,17 +90,17 @@ jobs:
 
 ## Inputs
 
-| Name                | Type    | Requirement    | Description                                                                                                                                                                                            |
-|---------------------|---------|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `api_key`           | string  | _required_ | Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                                   |
-| `app_key`           | string  | _required_ | Your Datadog Application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                           |
-| `public_ids`        | string  | _optional_     | String of public IDs separated by commas for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`. **Default:** none.                  |
-| `test_search_query` | string  | _optional_     | Trigger tests corresponding to a [search][5] query. **Default:** none.                                                                                                                                  |
-| `tunnel`            | boolean | _optional_     | Use the [testing tunnel][6] to trigger tests. **Default:** false.                                                                                                                                       |
-| `subdomain`         | string  | _optional_     | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`. |
-| `files`             | string  | _optional_     | Glob pattern to detect Synthetic tests config files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                            |
-| `datadog_site`      | string  | _optional_     | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                             |
-| `config_path`       | string  | _optional_     | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
+| Name                | Type    | Requirement | Description                                                                                                                                                                                              |
+| ------------------- | ------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api_key`           | string  | _required_  | Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                                    |
+| `app_key`           | string  | _required_  | Your Datadog Application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                            |
+| `public_ids`        | string  | _optional_  | String of public IDs separated by commas for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`. **Default:** none.                   |
+| `test_search_query` | string  | _optional_  | Trigger tests corresponding to a [search][5] query. **Default:** none.                                                                                                                                   |
+| `tunnel`            | boolean | _optional_  | Use the [testing tunnel][6] to trigger tests. **Default:** false.                                                                                                                                        |
+| `subdomain`         | string  | _optional_  | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`. |
+| `files`             | string  | _optional_  | Glob pattern to detect Synthetic tests config files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                             |
+| `datadog_site`      | string  | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
+| `config_path`       | string  | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 
 ## Further Reading
 
@@ -116,3 +115,32 @@ Additional helpful documentation, links, and articles:
 [5]: https://docs.datadoghq.com/synthetics/search/#search
 [6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#use-the-testing-tunnel
 [7]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
+
+## Development
+
+```bash
+# Run the tests
+yarn jest
+
+# Build project
+yarn build
+
+# Compile project and its dependencies for release
+yarn package
+```
+
+### Release Process
+
+Releasing a new version of `synthetics-ci-github-action` unfolds as follow:
+
+1. Create a new branch for the version upgrade.
+2. Update the version using `yarn version [--patch|--minor|--major]` depending on the nature of the changes introduced.
+   You may refer to [Semantic Versioning](https://semver.org/#summary) to determine which to increment.
+3. Push the branch along with the release tag (`git push --tags`) to the upstream (Github).
+   Create a Pull Request with the changes introduced detailed in the description and get at least one approval.
+4. Merge the Pull Request.
+5. Create a Github Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of changes introduced.
+
+   ⚠️ Ensure the release version follows the expected format `vX.X.X`.
+
+Once the release has been created, the new version of the Github Action is available to use as a workflow.
