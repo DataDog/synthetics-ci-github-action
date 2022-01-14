@@ -1,4 +1,4 @@
-# This workflow ensures project has been built and doc updated before release
+# This workflow ensures LICENSE-3rdparty.csv is up-to-date with all dependencies used
 
 name: Check release version
 
@@ -12,5 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check build files and doc
-        run: ./ci/check-release-version.sh
+      - name: Check LICENSE-3rdparty.csv
+        run: ./ci/check-license-3rdparty.sh
