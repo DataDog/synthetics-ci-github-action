@@ -1,0 +1,16 @@
+# This workflow ensures LICENSE-3rdparty.csv is up-to-date with all dependencies used
+
+name: Check dependencies license
+
+on: push
+
+jobs:
+  check-license-3rdparty:
+    name: Check LICENSE-3rdparty.csv
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check LICENSE-3rdparty.csv
+        run: ./ci/check-license-3rdparty.sh

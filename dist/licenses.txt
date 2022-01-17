@@ -608,6 +608,9 @@ IN THE SOFTWARE.
 data-uri-to-buffer
 MIT
 
+datadog-synthetics-github-action
+MIT
+
 debug
 MIT
 (The MIT License)

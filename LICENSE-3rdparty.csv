@@ -1,4 +1,5 @@
 @actions/core,import,MIT,Copyright 2019 GitHub
+@datadog/datadog-ci,import,Apache-2.0,Copyright 2019-Present Datadog, Inc.
 @types/deep-extend,dev,MIT,Copyright Microsoft Corporation
 @types/jest,dev,MIT,Copyright Microsoft Corporation
 @types/node,dev,MIT,Copyright Microsoft Corporation

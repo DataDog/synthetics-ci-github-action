@@ -45,3 +45,9 @@ if (require.main === module) {
 }
 
 export default run
+
+// Force embed of version in build files from package.json for release check
+/* eslint-disable eslint-comments/no-unlimited-disable */
+/* eslint-disable */
+require('../package.json').name
+require('../package.json').version
