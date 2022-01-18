@@ -40,7 +40,6 @@ export const resolveConfig = async (): Promise<synthetics.SyntheticsCIConfig> =>
     .map((file: string) => file.trim())
   const testSearchQuery = getDefinedInput('test_search_query')
   const subdomain = getDefinedInput('subdomain')
-  const tunnel = getDefinedInput('tunnel')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
@@ -66,7 +65,6 @@ export const resolveConfig = async (): Promise<synthetics.SyntheticsCIConfig> =>
       publicIds,
       subdomain,
       testSearchQuery,
-      tunnel,
     })
   )
 
