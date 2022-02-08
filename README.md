@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.2.1
+        uses: DataDog/synthetics-ci-github-action@v0.2.2
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.2.1
+        uses: DataDog/synthetics-ci-github-action@v0.2.2
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.2.1
+        uses: DataDog/synthetics-ci-github-action@v0.2.2
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -81,7 +81,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.2.1
+        uses: DataDog/synthetics-ci-github-action@v0.2.2
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -132,8 +132,9 @@ yarn package
 Releasing a new version of `synthetics-ci-github-action` unfolds as follow:
 
 1. Create a new branch for the version upgrade.
-2. Update the version using `yarn version [--patch|--minor|--major]` depending on the nature of the changes introduced.
+2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of the changes introduced.
    You may refer to [Semantic Versioning](https://semver.org/#summary) to determine which to increment.
+   Rebuild and package the project before release and update the `README.md` example versions.
 3. Push the branch along with the release tag (`git push --tags`) to the upstream (Github).
    Create a Pull Request with the changes introduced detailed in the description and get at least one approval.
 4. Merge the Pull Request.

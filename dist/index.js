@@ -76,10 +76,9 @@ if (require.main === require.cache[eval('__filename')]) {
     run();
 }
 exports.default = run;
-// Embed package version in build files
-/* eslint-disable import/no-commonjs */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-require-imports */
+// Force embed of version in build files from package.json for release check
+/* eslint-disable eslint-comments/no-unlimited-disable */
+/* eslint-disable */
 __nccwpck_require__(306)/* .name */ .u2;
 __nccwpck_require__(306)/* .version */ .i8;
 
@@ -265,7 +264,6 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     const files = (_b = (0, exports.getDefinedInput)('files')) === null || _b === void 0 ? void 0 : _b.split(',').map((file) => file.trim());
     const testSearchQuery = (0, exports.getDefinedInput)('test_search_query');
     const subdomain = (0, exports.getDefinedInput)('subdomain');
-    const tunnel = (0, exports.getDefinedInput)('tunnel');
     let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
     // Override with file config variables
     try {
@@ -288,7 +286,6 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
         publicIds,
         subdomain,
         testSearchQuery,
-        tunnel,
     }));
     return config;
 });
@@ -90797,7 +90794,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.2.1"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.2.2"}');
 
 /***/ }),
 
