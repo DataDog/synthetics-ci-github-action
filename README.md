@@ -101,22 +101,10 @@ jobs:
 | `datadog_site`      | string | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
 | `config_path`       | string | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 
-## Further Reading
-
-Additional helpful documentation, links, and articles:
-
-- [CI/CD Integrations Configuration][6]
-
-[1]: https://github.com/DataDog/datadog-ci
-[2]: https://docs.datadoghq.com/account_management/api-app-keys/
-[3]: https://docs.github.com/en/actions/reference/encrypted-secrets
-[4]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#setup-a-client
-[5]: https://docs.datadoghq.com/synthetics/search/#search
-[6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
-
 ## Development
 
 ```bash
+
 # Run the tests
 yarn jest
 
@@ -129,17 +117,30 @@ yarn package
 
 ### Release Process
 
-Releasing a new version of `synthetics-ci-github-action` unfolds as follow:
+To release a new version of `synthetics-ci-github-action`:
 
 1. Create a new branch for the version upgrade.
-2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of the changes introduced.
-   You may refer to [Semantic Versioning](https://semver.org/#summary) to determine which to increment.
-   Rebuild and package the project before release and update the `README.md` example versions.
-3. Push the branch along with the release tag (`git push --tags`) to the upstream (Github).
-   Create a Pull Request with the changes introduced detailed in the description and get at least one approval.
-4. Merge the Pull Request.
-5. Create a Github Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of changes introduced.
+2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes.
+   - See [Semantic Versioning](https://semver.org/#summary) to determine what you need to increment.
+   - Rebuild and package the project before release. Remember to update the `README.md` example versions.
+3. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
+   - Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
+4. Merge the pull request.
+5. Create a GitHub Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of your changes.
 
-   ⚠️ Ensure the release version follows the expected format `vX.X.X`.
+⚠️ Ensure the release version follows the expected format `vX.X.X`.
 
-Once the release has been created, the new version of the Github Action is available to use as a workflow.
+Once the release is created, the new version of the Github Action is available as a workflow.
+
+## Further Reading
+
+Additional helpful documentation, links, and articles:
+
+- [CI/CD Integrations Configuration][6]
+
+[1]: https://github.com/DataDog/datadog-ci
+[2]: https://docs.datadoghq.com/account_management/api-app-keys/
+[3]: https://docs.github.com/en/actions/reference/encrypted-secrets
+[4]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#setup-a-client
+[5]: https://docs.datadoghq.com/synthetics/search/#search
+[6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
