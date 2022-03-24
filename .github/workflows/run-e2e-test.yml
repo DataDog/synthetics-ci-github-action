@@ -1,0 +1,24 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests
+
+name: Run E2E Synthetics test on dist/ files
+
+on:
+  push:
+    paths:
+      - 'dist'
+
+jobs:
+  build-and-test:
+    name: Run e2e on dist/ files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      - name: Run synthetics test - dist
+        run: node dist
+        env:
+          INPUT_API_KEY: ${{ secrets.datadog_api_key }}
+          INPUT_APP_KEY: ${{ secrets.datadog_app_key }}
+          INPUT_PUBLIC_IDS: pwd-mwg-3p5,2r9-q7u-4nn
