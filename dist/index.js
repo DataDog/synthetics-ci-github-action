@@ -106850,7 +106850,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.2.2"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.3.0"}');
 
 /***/ }),
 
