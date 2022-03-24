@@ -10,7 +10,8 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest"
+    "test": "jest",
+    "local-run-tests": "ci/local-run-tests.sh"
   },
   "repository": {
     "type": "git",
