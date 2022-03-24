@@ -12,6 +12,7 @@ const run = async (): Promise<void> => {
     stderr: process.stderr,
   }
 
+  synthetics.utils.setCiTriggerApp('github_action')
   const reporter = synthetics.utils.getReporter([new synthetics.DefaultReporter({context})])
   const config = await resolveConfig()
 

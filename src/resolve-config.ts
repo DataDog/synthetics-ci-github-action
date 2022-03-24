@@ -18,6 +18,7 @@ const DEFAULT_CONFIG: synthetics.SyntheticsCIConfig = {
   publicIds: [],
   subdomain: 'app',
   tunnel: false,
+  variableStrings: [],
 }
 
 export const resolveConfig = async (): Promise<synthetics.SyntheticsCIConfig> => {
