@@ -323,11 +323,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@datadog/datadog-ci@^0.17.11":
-  version "0.17.11"
-  resolved "https://registry.yarnpkg.com/@datadog/datadog-ci/-/datadog-ci-0.17.11.tgz#ca8be2b68c887e34ed139dd4311cab92fef269be"
-  integrity sha512-vtfKejy09sy8X5vXSIlYS57CF+98HLIpDQRa+U9yaRg84xdknupT6kgrY6PWz+RT1fOLjrynHgZYZDtqOeUmaw==
+"@datadog/datadog-ci@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@datadog/datadog-ci/-/datadog-ci-1.1.2.tgz#526b1caad370c4480a927b8352222ac12347c19f"
+  integrity sha512-O/TIKFp8+bZRZaxu8TFrfAo99AKoz4Lef3XLZPm46LC9HScLYZwlZtFTnfmaLhLQYE5A8rOx/cG5W7d4lnCJGA==
   dependencies:
+    "@types/datadog-metrics" "0.6.1"
     async-retry "1.3.1"
     aws-sdk "2.1012.0"
     axios "0.21.2"
@@ -340,7 +341,7 @@
     glob "7.1.4"
     inquirer "8.2.0"
     proxy-agent "5.0.0"
-    simple-git "2.31.0"
+    simple-git "3.3.0"
     ssh2 "1.4.0"
     ssh2-streams "0.4.10"
     sshpk "1.16.1"
@@ -647,6 +648,11 @@
   integrity sha512-K2waXdXBi2302XUdcHcR1jCeU0LL4TD9HRs/gk0N2Xvrht+G/BfJa4QObBQZfhMdxiCpV3COl5Nfq4uKTeTnJA==
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/datadog-metrics@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@types/datadog-metrics/-/datadog-metrics-0.6.1.tgz#9957ad75fe3a4742c87b94273e94c40228c8dd4c"
+  integrity sha512-p6zVpfmNcXwtcXjgpz7do/fKyfndGhU5sGJVtb5Gn5PvLDiQUAgD0mI/itf/99sBi9DRxeyhFQ9dQF6OxxQNbA==
 
 "@types/deep-extend@0.4.32":
   version "0.4.32"
@@ -1412,7 +1418,7 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2:
+debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
@@ -1432,6 +1438,13 @@ debug@^3.2.7:
   integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
   dependencies:
     ms "^2.1.1"
+
+debug@^4.3.3:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
 
 decimal.js@^10.2.1:
   version "10.3.1"
@@ -3877,14 +3890,14 @@ signal-exit@^3.0.2, signal-exit@^3.0.3:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.5.tgz#9e3e8cc0c75a99472b44321033a7702e7738252f"
   integrity sha512-KWcOiKeQj6ZyXx7zq4YxSMgHRlod4czeBQZrPb8OKcohcqAXShm7E20kEMle9WBt26hFcAf0qLOcp5zmY7kOqQ==
 
-simple-git@2.31.0:
-  version "2.31.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.31.0.tgz#3e5954c1e36c76fb382c08eaa2749a206db9f613"
-  integrity sha512-/+rmE7dYZMbRAfEmn8EUIOwlM2G7UdzpkC60KF86YAfXGnmGtsPrKsym0hKvLBdFLLW019C+aZld1+6iIVy5xA==
+simple-git@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.3.0.tgz#91692d576f851be691124781b79872b246d2f92c"
+  integrity sha512-K9qcbbZwPHhk7MLi0k0ekvSFXJIrRoXgHhqMXAFM75qS68vdHTcuzmul1ilKI02F/4lXshVgBoDll2t++JK0PQ==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
-    debug "^4.3.1"
+    debug "^4.3.3"
 
 sisteransi@^1.0.5:
   version "1.0.5"

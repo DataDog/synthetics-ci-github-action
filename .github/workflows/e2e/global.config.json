@@ -1,0 +1,6 @@
+{
+  "global": {
+    "headers": {"X-Fake-Header": "fake value"}
+  },
+  "timeout": 240000
+}

@@ -14,6 +14,7 @@ export const config: synthetics.SyntheticsCIConfig = {
   publicIds: [],
   subdomain: 'app',
   tunnel: false,
+  variableStrings: [],
 }
 
 export const mockReporter: synthetics.MainReporter = {
@@ -25,4 +26,5 @@ export const mockReporter: synthetics.MainReporter = {
   testEnd: jest.fn(),
   testTrigger: jest.fn(),
   testWait: jest.fn(),
+  testsWait: jest.fn(),
 }

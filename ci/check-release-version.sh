@@ -18,7 +18,7 @@ README_VERSIONS=$(grep "uses: DataDog/synthetics-ci-github-action@v" README.md)
 while IFS= read -r README_VERSION; do
   if [[ $README_VERSION != *"$PACKAGE_RELEASE_VERSION"* ]]; then
     INVALID=true
-    echo "REAME.md workflow not up to date with latest version v$PACKAGE_RELEASE_VERSION"
+    echo "README.md workflow not up to date with latest version v$PACKAGE_RELEASE_VERSION"
     echo "=> $README_VERSION"
     echo
   fi
