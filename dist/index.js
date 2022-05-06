@@ -76,6 +76,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         if (error instanceof datadog_ci_1.synthetics.CiError) {
             (0, report_ci_error_1.reportCiError)(error, reporter);
         }
+        else {
+            core.info(`Internal error: ${String(error)}`);
+        }
         core.setFailed('Running Datadog Synthetics tests failed.');
     }
 });
@@ -106850,7 +106853,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.3.0"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.3.1"}');
 
 /***/ }),
 
