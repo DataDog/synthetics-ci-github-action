@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import {BaseContext} from 'clipanion'
-import {renderResults} from './process-results'
 import {reportCiError} from './report-ci-error'
 import {resolveConfig} from './resolve-config'
 import {synthetics} from '@datadog/datadog-ci'
@@ -18,8 +17,9 @@ const run = async (): Promise<void> => {
 
   try {
     const startTime = Date.now()
-    const {results, summary, tests, triggers} = await synthetics.executeTests(reporter, config)
-    const resultSummary = renderResults(results, summary, tests, triggers, config, startTime, reporter)
+    const {results, summary} = await synthetics.executeTests(reporter, config)
+    synthetics.utils.renderResults({config, reporter, results, startTime, summary})
+    const resultSummary = summary
     if (
       resultSummary.criticalErrors > 0 ||
       resultSummary.failed > 0 ||
@@ -41,7 +41,7 @@ const run = async (): Promise<void> => {
 }
 
 export const printSummary = (summary: synthetics.Summary): string =>
-  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
+  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
   run()
