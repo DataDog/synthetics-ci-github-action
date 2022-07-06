@@ -18,8 +18,8 @@ const run = async (): Promise<void> => {
 
   try {
     const startTime = Date.now()
-    const {results, summary, tests, triggers} = await synthetics.executeTests(reporter, config)
-    const resultSummary = renderResults(results, summary, tests, triggers, config, startTime, reporter)
+    const {results, summary} = await synthetics.executeTests(reporter, config)
+    const resultSummary = renderResults({config, reporter, results, startTime, summary})
     if (
       resultSummary.criticalErrors > 0 ||
       resultSummary.failed > 0 ||
@@ -41,7 +41,7 @@ const run = async (): Promise<void> => {
 }
 
 export const printSummary = (summary: synthetics.Summary): string =>
-  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
+  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
 
 if (require.main === module) {
   run()

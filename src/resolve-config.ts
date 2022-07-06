@@ -4,12 +4,13 @@ import deepExtend from 'deep-extend'
 
 import {removeUndefinedValues} from './utils'
 
-const DEFAULT_CONFIG: synthetics.SyntheticsCIConfig = {
+const DEFAULT_CONFIG: synthetics.CommandConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
   failOnCriticalErrors: false,
+  failOnTimeout: false,
   files: ['{,!(node_modules)/**/}*.synthetics.json'],
   global: {},
   locations: [],
@@ -21,7 +22,7 @@ const DEFAULT_CONFIG: synthetics.SyntheticsCIConfig = {
   variableStrings: [],
 }
 
-export const resolveConfig = async (): Promise<synthetics.SyntheticsCIConfig> => {
+export const resolveConfig = async (): Promise<synthetics.CommandConfig> => {
   let apiKey
   let appKey
   try {

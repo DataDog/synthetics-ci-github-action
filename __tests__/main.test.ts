@@ -13,6 +13,7 @@ const emptySummary: synthetics.Summary = {
   criticalErrors: 0,
   passed: 0,
   failed: 0,
+  failedNonBlocking: 0,
   skipped: 0,
   testsNotFound: new Set(),
   timedOut: 0,
@@ -102,7 +103,7 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0`
       )
     })
 
@@ -112,7 +113,7 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1`
       )
     })
 
@@ -124,7 +125,7 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0`
       )
     })
 
