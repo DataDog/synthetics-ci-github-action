@@ -18,6 +18,7 @@ const emptySummary: synthetics.Summary = {
   testsNotFound: new Set(),
   timedOut: 0,
 }
+
 const inputs = {
   apiKey: 'xxx',
   appKey: 'yyy',
@@ -51,6 +52,7 @@ describe('Run Github Action', () => {
         ...inputs,
       })
     })
+
     test('Github Action parses out publicIds string', async () => {
       const publicIds = ['public_id1', 'public_id2', 'public_id3']
       process.env = {
@@ -67,8 +69,9 @@ describe('Run Github Action', () => {
       })
     })
   })
+
   describe('Handle invalid input parameters', () => {
-    test('Use default configuration if Github Action input is not set ', async () => {
+    test('Use default configuration if Github Action input is not set', async () => {
       jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
       await run()
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
@@ -80,7 +83,7 @@ describe('Run Github Action', () => {
   })
 
   describe('Handle configuration file', () => {
-    test('Github Action fails if unable to parse config file ', async () => {
+    test('Github Action fails if unable to parse config file', async () => {
       const configPath = 'foobar'
       process.env = {
         ...process.env,
@@ -97,7 +100,7 @@ describe('Run Github Action', () => {
       jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
     })
 
-    test('Github Action fails if Synthetics tests fail ', async () => {
+    test('Github Action fails if Synthetics tests fail', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, failed: 1})
 

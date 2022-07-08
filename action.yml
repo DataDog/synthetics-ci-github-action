@@ -13,19 +13,22 @@ inputs:
     description: 'Datadog site.'
   public_ids:
     required: false
-    description: 'Public IDs of Synthetics test to run.'
+    description: 'Public IDs of Synthetic tests to run.'
   config_path:
     required: false
     description: 'Path to global configuration JSON.'
   files:
     required: false
-    description: 'Glob pattern to detect synthetic tests config.'
+    description: 'Glob pattern to detect Synthetic tests config.'
   subdomain:
     required: false
-    description: 'Name of your datadog custom subdomain.'
+    description: 'Name of your Datadog custom subdomain.'
   test_search_query:
     required: false
     description: 'Search query to trigger tests.'
+  variables:
+    required: false
+    description: 'Comma-separated list of variable_name=variable_value pairs.'
 
 runs:
   using: 'node12'
