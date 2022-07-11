@@ -3,11 +3,11 @@ import {synthetics} from '@datadog/datadog-ci'
 
 export const reportCiError = (error: synthetics.CiError, reporter: synthetics.MainReporter): void => {
   switch (error.code) {
-    case 'NO_RESULTS_TO_POLL':
-      reporter.log('No results to poll.\n')
-      break
     case 'NO_TESTS_TO_RUN':
       reporter.log('No test to run.\n')
+      break
+    case 'AUTHORIZATION_ERROR':
+      reporter.error(`\n${chalk.bgRed.bold(' ERROR: authorization error ')}\n${error.message}\n\n`)
       break
     case 'MISSING_APP_KEY':
       reporter.error(`Missing ${chalk.red.bold('DATADOG_APP_KEY')} in your environment.\n`)

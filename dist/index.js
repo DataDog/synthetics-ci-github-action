@@ -5,7 +5,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.1.2"};
+module.exports = {"i8":"1.8.0"};
 
 /***/ }),
 
@@ -60,8 +60,8 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const config = yield (0, resolve_config_1.resolveConfig)();
     try {
         const startTime = Date.now();
-        const { results, summary, tests, triggers } = yield datadog_ci_1.synthetics.executeTests(reporter, config);
-        const resultSummary = (0, process_results_1.renderResults)(results, summary, tests, triggers, config, startTime, reporter);
+        const { results, summary } = yield datadog_ci_1.synthetics.executeTests(reporter, config);
+        const resultSummary = (0, process_results_1.renderResults)({ config, reporter, results, startTime, summary });
         if (resultSummary.criticalErrors > 0 ||
             resultSummary.failed > 0 ||
             resultSummary.timedOut > 0 ||
@@ -82,7 +82,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         core.setFailed('Running Datadog Synthetics tests failed.');
     }
 });
-const printSummary = (summary) => `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`;
+const printSummary = (summary) => `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`;
 exports.printSummary = printSummary;
 if (require.main === require.cache[eval('__filename')]) {
     run();
@@ -103,54 +103,13 @@ __nccwpck_require__(306)/* .version */ .i8;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sortTestsByOutcome = exports.renderResults = void 0;
+exports.renderResults = void 0;
 const datadog_ci_1 = __nccwpck_require__(3087);
-const renderResults = (results, summary, tests, triggers, config, startTime, reporter) => {
-    // Sort tests to show success first then non blocking failures and finally blocking failures.
-    tests.sort((0, exports.sortTestsByOutcome)(results, config));
-    // Rendering the results.
-    reporter.reportStart({ startTime });
-    const locationNames = triggers.locations.reduce((mapping, location) => {
-        mapping[location.id] = location.display_name;
-        return mapping;
-    }, {});
-    for (const test of tests) {
-        const testResults = results[test.public_id];
-        const hasTimeout = testResults.some(pollResult => pollResult.result.error === datadog_ci_1.synthetics.ERRORS.TIMEOUT);
-        if (hasTimeout) {
-            summary.timedOut++;
-        }
-        if (!config.failOnCriticalErrors) {
-            const hasCriticalErrors = testResults.some(pollResult => datadog_ci_1.synthetics.utils.isCriticalError(pollResult.result));
-            if (hasCriticalErrors) {
-                summary.criticalErrors++;
-            }
-        }
-        const passed = datadog_ci_1.synthetics.utils.hasTestSucceeded(testResults, config.failOnCriticalErrors, false);
-        passed ? summary.passed++ : summary.failed++;
-        reporter.testEnd(test, testResults, `https://${config.subdomain}.${config.datadogSite}/`, locationNames, config.failOnCriticalErrors, false);
-    }
-    reporter.runEnd(summary);
-    return summary;
+const renderResults = (args) => {
+    datadog_ci_1.synthetics.utils.renderResults(args);
+    return args.summary;
 };
 exports.renderResults = renderResults;
-const sortTestsByOutcome = (results, config) => {
-    return (t1, t2) => {
-        var _a, _b;
-        const success1 = datadog_ci_1.synthetics.utils.hasTestSucceeded(results[t1.public_id], config.failOnCriticalErrors, false);
-        const success2 = datadog_ci_1.synthetics.utils.hasTestSucceeded(results[t2.public_id], config.failOnCriticalErrors, false);
-        const isNonBlockingTest1 = ((_a = t1.options.ci) === null || _a === void 0 ? void 0 : _a.executionRule) === datadog_ci_1.synthetics.ExecutionRule.NON_BLOCKING;
-        const isNonBlockingTest2 = ((_b = t2.options.ci) === null || _b === void 0 ? void 0 : _b.executionRule) === datadog_ci_1.synthetics.ExecutionRule.NON_BLOCKING;
-        if (success1 === success2) {
-            if (isNonBlockingTest1 === isNonBlockingTest2) {
-                return 0;
-            }
-            return isNonBlockingTest1 ? -1 : 1;
-        }
-        return success1 ? -1 : 1;
-    };
-};
-exports.sortTestsByOutcome = sortTestsByOutcome;
 
 
 /***/ }),
@@ -168,11 +127,11 @@ exports.reportCiError = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(8818));
 const reportCiError = (error, reporter) => {
     switch (error.code) {
-        case 'NO_RESULTS_TO_POLL':
-            reporter.log('No results to poll.\n');
-            break;
         case 'NO_TESTS_TO_RUN':
             reporter.log('No test to run.\n');
+            break;
+        case 'AUTHORIZATION_ERROR':
+            reporter.error(`\n${chalk_1.default.bgRed.bold(' ERROR: authorization error ')}\n${error.message}\n\n`);
             break;
         case 'MISSING_APP_KEY':
             reporter.error(`Missing ${chalk_1.default.red.bold('DATADOG_APP_KEY')} in your environment.\n`);
@@ -249,6 +208,7 @@ const DEFAULT_CONFIG = {
     configPath: 'datadog-ci.json',
     datadogSite: 'datadoghq.com',
     failOnCriticalErrors: false,
+    failOnTimeout: false,
     files: ['{,!(node_modules)/**/}*.synthetics.json'],
     global: {},
     locations: [],
@@ -260,7 +220,7 @@ const DEFAULT_CONFIG = {
     variableStrings: [],
 };
 const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     let apiKey;
     let appKey;
     try {
@@ -277,12 +237,14 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     const files = (_b = (0, exports.getDefinedInput)('files')) === null || _b === void 0 ? void 0 : _b.split(',').map((file) => file.trim());
     const testSearchQuery = (0, exports.getDefinedInput)('test_search_query');
     const subdomain = (0, exports.getDefinedInput)('subdomain');
+    const variableStrings = (_c = (0, exports.getDefinedInput)('variable_strings')) === null || _c === void 0 ? void 0 : _c.split(',').map((variableString) => variableString.trim());
     let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
     // Override with file config variables
     try {
         config = yield datadog_ci_1.utils.parseConfigFile(config, configPath !== null && configPath !== void 0 ? configPath : DEFAULT_CONFIG.configPath);
     }
     catch (error) {
+        console.log(`>>>parse config error = ${JSON.stringify(error)}`);
         if (configPath) {
             core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`);
             throw error;
@@ -299,7 +261,9 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
         publicIds,
         subdomain,
         testSearchQuery,
+        variableStrings,
     }));
+    console.log(`>>>config = ${JSON.stringify(config, null, 2)}`);
     return config;
 });
 exports.resolveConfig = resolveConfig;
@@ -1717,7 +1681,7 @@ const getCommitInfo = (git, repositoryURL) => __awaiter(void 0, void 0, void 0, 
     return new interfaces_1.CommitInfo(hash, remote, trackedFiles);
 });
 exports.getCommitInfo = getCommitInfo;
-
+//# sourceMappingURL=git.js.map
 
 /***/ }),
 
@@ -1738,7 +1702,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __exportStar(__nccwpck_require__(1118), exports);
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -1788,7 +1752,7 @@ class CommitInfo {
     }
 }
 exports.CommitInfo = CommitInfo;
-
+//# sourceMappingURL=interfaces.js.map
 
 /***/ }),
 
@@ -1864,7 +1828,7 @@ const uploadRepository = (requestBuilder, libraryVersion) => (commitInfo, opts) 
     return upload_1.upload(requestBuilder)(payload, opts);
 });
 exports.uploadRepository = uploadRepository;
-
+//# sourceMappingURL=library.js.map
 
 /***/ }),
 
@@ -1897,7 +1861,8 @@ class EndpointError extends Error {
 }
 exports.EndpointError = EndpointError;
 const formatBackendErrors = (requestError) => {
-    if (requestError.response && requestError.response.data.errors) {
+    var _a, _b;
+    if ((_b = (_a = requestError.response) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.errors) {
         const serverHead = `query on ${requestError.config.baseURL}${requestError.config.url} returned:`;
         const errors = requestError.response.data.errors;
         if (errors.length > 1) {
@@ -1908,7 +1873,7 @@ const formatBackendErrors = (requestError) => {
             return `${serverHead} "${errors[0]}"`;
         }
         else {
-            return `error querying ${requestError.config.baseURL}${requestError.config.url}`;
+            return `error querying ${requestError.config.baseURL} ${requestError.config.url}`;
         }
     }
     return requestError.message;
@@ -1938,6 +1903,14 @@ const searchTests = (request) => (query) => __awaiter(void 0, void 0, void 0, fu
     }, request);
     return resp.data;
 });
+const getBatch = (request) => (batchId) => __awaiter(void 0, void 0, void 0, function* () {
+    const resp = yield retryRequest({ url: `/synthetics/ci/batch/${batchId}` }, request);
+    const serverBatch = resp.data.data;
+    return {
+        results: serverBatch.results.filter((r) => r.status !== 'skipped'),
+        status: serverBatch.status,
+    };
+});
 const pollResults = (request) => (resultIds) => __awaiter(void 0, void 0, void 0, function* () {
     const resp = yield retryRequest({
         params: {
@@ -1945,7 +1918,7 @@ const pollResults = (request) => (resultIds) => __awaiter(void 0, void 0, void 0
         },
         url: '/synthetics/tests/poll_results',
     }, request);
-    return resp.data;
+    return resp.data.results;
 });
 const getPresignedURL = (request) => (testIds) => __awaiter(void 0, void 0, void 0, function* () {
     const resp = yield retryRequest({
@@ -1979,6 +1952,7 @@ const apiConstructor = (configuration) => {
     const request = utils_1.getRequestBuilder(Object.assign(Object.assign({}, baseOptions), { baseUrl }));
     const requestIntake = utils_1.getRequestBuilder(Object.assign(Object.assign({}, baseOptions), { baseUrl: baseIntakeUrl }));
     return {
+        getBatch: getBatch(request),
         getPresignedURL: getPresignedURL(requestIntake),
         getTest: getTest(request),
         pollResults: pollResults(request),
@@ -1987,7 +1961,7 @@ const apiConstructor = (configuration) => {
     };
 };
 exports.apiConstructor = apiConstructor;
-
+//# sourceMappingURL=api.js.map
 
 /***/ }),
 
@@ -2042,7 +2016,7 @@ const parseSSHKey = (key) => {
     return parsedKey;
 };
 exports.parseSSHKey = parseSSHKey;
-
+//# sourceMappingURL=crypto.js.map
 
 /***/ }),
 
@@ -2054,7 +2028,7 @@ exports.parseSSHKey = parseSSHKey;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CriticalError = exports.CiError = void 0;
 /* tslint:disable:max-classes-per-file */
-const nonCriticalErrorCodes = (/* unused pure expression or super */ null && (['NO_TESTS_TO_RUN', 'NO_RESULTS_TO_POLL']));
+const nonCriticalErrorCodes = (/* unused pure expression or super */ null && (['NO_TESTS_TO_RUN']));
 const criticalErrorCodes = (/* unused pure expression or super */ null && ([
     'AUTHORIZATION_ERROR',
     'MISSING_API_KEY',
@@ -2066,20 +2040,20 @@ const criticalErrorCodes = (/* unused pure expression or super */ null && ([
     'UNAVAILABLE_TUNNEL_CONFIG',
 ]));
 class CiError extends Error {
-    constructor(code) {
-        super();
+    constructor(code, message) {
+        super(message);
         this.code = code;
     }
 }
 exports.CiError = CiError;
 class CriticalError extends CiError {
-    constructor(code) {
-        super(code);
+    constructor(code, message) {
+        super(code, message);
         this.code = code;
     }
 }
 exports.CriticalError = CriticalError;
-
+//# sourceMappingURL=errors.js.map
 
 /***/ }),
 
@@ -2121,7 +2095,7 @@ Object.defineProperty(exports, "DefaultReporter", ({ enumerable: true, get: func
 var run_test_1 = __nccwpck_require__(6391);
 Object.defineProperty(exports, "executeTests", ({ enumerable: true, get: function () { return run_test_1.executeTests; } }));
 exports.utils = __importStar(__nccwpck_require__(7208));
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -2131,13 +2105,7 @@ exports.utils = __importStar(__nccwpck_require__(7208));
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ExecutionRule = exports.Operator = exports.ERRORS = void 0;
-var ERRORS;
-(function (ERRORS) {
-    ERRORS["TIMEOUT"] = "Timeout";
-    ERRORS["ENDPOINT"] = "Endpoint Failure";
-    ERRORS["TUNNEL"] = "Tunnel Failure";
-})(ERRORS = exports.ERRORS || (exports.ERRORS = {}));
+exports.ExecutionRule = exports.Operator = void 0;
 var Operator;
 (function (Operator) {
     Operator["contains"] = "contains";
@@ -2161,7 +2129,7 @@ var ExecutionRule;
     ExecutionRule["NON_BLOCKING"] = "non_blocking";
     ExecutionRule["SKIPPED"] = "skipped";
 })(ExecutionRule = exports.ExecutionRule || (exports.ExecutionRule = {}));
-
+//# sourceMappingURL=interfaces.js.map
 
 /***/ }),
 
@@ -2194,6 +2162,7 @@ const renderStepDuration = (duration) => {
 };
 const ICONS = {
     FAILED: chalk_1.default.bold.red('✖'),
+    FAILED_NON_BLOCKING: chalk_1.default.bold.yellow('✖'),
     SKIPPED: chalk_1.default.bold.yellow('⇢'),
     SUCCESS: chalk_1.default.bold.green('✓'),
 };
@@ -2209,9 +2178,18 @@ const renderStepIcon = (step) => {
 const renderStep = (step) => {
     const duration = renderStepDuration(step.duration);
     const icon = renderStepIcon(step);
-    const value = step.value ? `\n      ${chalk_1.default.dim(step.value)}` : '';
-    const error = step.error ? `\n      ${chalk_1.default.red.dim(step.error)}` : '';
+    const value = step.value ? `\n    ${chalk_1.default.dim(step.value)}` : '';
+    const error = step.error ? `\n    ${chalk_1.default.red.dim(step.error)}` : '';
     return `    ${icon} | ${duration} - ${step.description}${value}${error}`;
+};
+const renderSkippedSteps = (steps) => {
+    if (!steps.length) {
+        return;
+    }
+    if (steps.length === 1) {
+        return renderStep(steps[0]);
+    }
+    return `    ${ICONS.SKIPPED} | ${steps.length} skipped steps`;
 };
 const readableOperation = {
     [interfaces_1.Operator.contains]: 'should contain',
@@ -2233,47 +2211,52 @@ const renderApiError = (errorCode, errorMessage, color) => {
     if (errorCode === 'INCORRECT_ASSERTION') {
         try {
             const assertionsErrors = JSON.parse(errorMessage);
-            const output = [' - Assertion(s) failed:'];
+            const output = ['  - Assertion(s) failed:'];
             output.push(...assertionsErrors.map((error) => {
                 const expected = chalk_1.default.underline(`${error.target}`);
                 const actual = chalk_1.default.underline(`${error.actual}`);
                 return `▶ ${error.type} ${readableOperation[error.operator]} ${expected}. Actual: ${actual}`;
             }));
-            return color(output.join('\n      '));
+            return color(output.join('\n    '));
         }
         catch (e) {
             // JSON parsing failed, do nothing to return the raw error
         }
     }
-    return chalk_1.default.red(`      [${chalk_1.default.bold(errorCode)}] - ${chalk_1.default.dim(errorMessage)}`);
+    return chalk_1.default.red(`    [${chalk_1.default.bold(errorCode)}] - ${chalk_1.default.dim(errorMessage)}`);
 };
 // Test execution rendering
-const renderResultOutcome = (result, test, icon, color, failOnCriticalErrors, failOnTimeout) => {
-    // Only display critical errors if failure is not filled.
-    if (result.error && !(result.failure || result.errorMessage)) {
-        return `    ${chalk_1.default.bold(`${ICONS.FAILED} | ${result.error}`)}`;
-    }
+const renderResultOutcome = (result, test, icon, color) => {
     if (result.unhealthy) {
-        const errorMessage = result.failure ? result.failure.message : result.errorMessage;
-        const errorName = errorMessage && errorMessage !== 'Unknown error' ? errorMessage : 'General Error';
+        const error = result.failure && result.failure.message !== 'Unknown error' ? result.failure.message : 'General Error';
         return [
-            `    ${chalk_1.default.yellow(` ${ICONS.SKIPPED} | ${errorName}`)}`,
-            `    ${chalk_1.default.yellow('We had an error during the execution of this test. The result will be ignored')}`,
+            `  ${chalk_1.default.yellow(`${ICONS.SKIPPED} | ${error}`)}`,
+            `  ${chalk_1.default.yellow('We had an error during the execution of this test. The result will be ignored')}`,
         ].join('\n');
     }
     if (test.type === 'api') {
         const requestDescription = renderApiRequestDescription(test.subtype, test.config);
-        if (result.failure || (result.errorCode && result.errorMessage)) {
-            const errorCode = result.failure ? result.failure.code : result.errorCode;
-            const errorMessage = result.failure ? result.failure.message : result.errorMessage;
-            return [`    ${icon} ${color(requestDescription)}`, renderApiError(errorCode, errorMessage, color)].join('\n');
+        if (result.failure) {
+            return [
+                `  ${icon} ${color(requestDescription)}`,
+                renderApiError(result.failure.code, result.failure.message, color),
+            ].join('\n');
         }
-        return `    ${icon} ${color(requestDescription)}`;
+        return `  ${icon} ${color(requestDescription)}`;
     }
     if (test.type === 'browser') {
-        if (!utils_1.hasResultPassed(result, failOnCriticalErrors, failOnTimeout) && 'stepDetails' in result) {
-            // We render the step only if the test hasn't passed to avoid cluttering the output.
-            return result.stepDetails.map(renderStep).join('\n');
+        // We render the step only if the test hasn't passed to avoid cluttering the output.
+        if (!result.passed && 'stepDetails' in result) {
+            const criticalFailedStepIndex = result.stepDetails.findIndex((s) => s.error && !s.allowFailure) + 1;
+            const stepsDisplay = result.stepDetails.slice(0, criticalFailedStepIndex).map(renderStep);
+            const skippedStepDisplay = renderSkippedSteps(result.stepDetails.slice(criticalFailedStepIndex));
+            if (skippedStepDisplay) {
+                stepsDisplay.push(skippedStepDisplay);
+            }
+            return stepsDisplay.join('\n');
+        }
+        if (result.failure) {
+            return chalk_1.default.red(`    [${chalk_1.default.bold(result.failure.code)}] - ${chalk_1.default.dim(result.failure.message)}`);
         }
         return '';
     }
@@ -2314,49 +2297,42 @@ const getResultUrl = (baseUrl, test, resultId) => {
     }
     return `${testDetailUrl}?resultId=${resultId}&${ciQueryParam}`;
 };
-const renderExecutionResult = (test, execution, baseUrl, locationNames, failOnCriticalErrors, failOnTimeout) => {
-    var _a;
-    const { check: overridedTest, dc_id, resultID, result } = execution;
-    const isSuccess = utils_1.hasResultPassed(result, failOnCriticalErrors, failOnTimeout);
-    const color = getTestResultColor(isSuccess, ((_a = test.options.ci) === null || _a === void 0 ? void 0 : _a.executionRule) === interfaces_1.ExecutionRule.NON_BLOCKING);
-    const icon = isSuccess ? ICONS.SUCCESS : ICONS.FAILED;
-    const locationName = !!result.tunnel ? 'Tunneled' : locationNames[dc_id] || dc_id.toString();
-    const device = test.type === 'browser' && 'device' in result ? ` - device: ${chalk_1.default.bold(result.device.id)}` : '';
-    const resultIdentification = color(`  ${icon} location: ${chalk_1.default.bold(locationName)}${device}`);
+const getBatchUrl = (baseUrl, batchId) => `${baseUrl}synthetics/explorer/ci?batchResultId=${batchId}`;
+const renderExecutionResult = (test, execution, baseUrl) => {
+    const { executionRule, test: overriddenTest, resultId, result, timedOut } = execution;
+    const resultOutcome = utils_1.getResultOutcome(execution);
+    const [icon, setColor] = getResultIconAndColor(resultOutcome);
+    const executionRuleText = ["passed" /* Passed */, "passed-non-blocking" /* PassedNonBlocking */].includes(resultOutcome)
+        ? ''
+        : `[${setColor(executionRule === interfaces_1.ExecutionRule.BLOCKING ? 'blocking' : 'non-blocking')}] `;
+    const testLabel = `${executionRuleText}[${chalk_1.default.bold.dim(test.public_id)}] ${chalk_1.default.bold(test.name)}`;
+    const location = setColor(`location: ${chalk_1.default.bold(execution.location)}`);
+    const device = test.type === 'browser' && 'device' in result ? ` - ${setColor(`device: ${chalk_1.default.bold(result.device.id)}`)}` : '';
+    const resultIdentification = `${icon} ${testLabel} - ${location}${device}`;
     const outputLines = [resultIdentification];
     // Unhealthy test results don't have a duration or result URL
     if (!result.unhealthy) {
         const duration = utils_1.getResultDuration(result);
-        const durationText = duration ? `  total duration: ${duration} ms -` : '';
-        const resultUrl = getResultUrl(baseUrl, test, resultID);
-        const resultUrlStatus = result.error === interfaces_1.ERRORS.TIMEOUT ? '(not yet received)' : '';
-        const resultInfo = `    ⎋${durationText} result url: ${chalk_1.default.dim.cyan(resultUrl)} ${resultUrlStatus}`;
+        const durationText = duration ? ` Total duration: ${duration} ms -` : '';
+        const resultUrl = getResultUrl(baseUrl, test, resultId);
+        const resultUrlStatus = timedOut ? '(not yet received)' : '';
+        const resultInfo = `  ⎋${durationText} Result URL: ${chalk_1.default.dim.cyan(resultUrl)} ${resultUrlStatus}`;
         outputLines.push(resultInfo);
     }
-    const resultOutcome = renderResultOutcome(result, overridedTest || test, icon, color, failOnCriticalErrors, failOnTimeout);
-    if (resultOutcome) {
-        outputLines.push(resultOutcome);
+    const resultOutcomeText = renderResultOutcome(result, overriddenTest || test, icon, setColor);
+    if (resultOutcomeText) {
+        outputLines.push(resultOutcomeText);
     }
     return outputLines.join('\n');
 };
-// Results of all tests rendering
-const renderResultIcon = (success, isNonBlocking) => {
-    if (success) {
-        return ICONS.SUCCESS;
+const getResultIconAndColor = (resultOutcome) => {
+    if (resultOutcome === "passed" /* Passed */ || resultOutcome === "passed-non-blocking" /* PassedNonBlocking */) {
+        return [ICONS.SUCCESS, chalk_1.default.bold.green];
     }
-    if (isNonBlocking) {
-        return ICONS.SKIPPED;
+    if (resultOutcome === "failed-non-blocking" /* FailedNonBlocking */) {
+        return [ICONS.FAILED_NON_BLOCKING, chalk_1.default.bold.yellow];
     }
-    return ICONS.FAILED;
-};
-const getTestResultColor = (success, isNonBlocking) => {
-    if (success) {
-        return chalk_1.default.bold.green;
-    }
-    if (isNonBlocking) {
-        return chalk_1.default.bold.yellow;
-    }
-    return chalk_1.default.bold.red;
+    return [ICONS.FAILED, chalk_1.default.bold.red];
 };
 class DefaultReporter {
     constructor({ context }) {
@@ -2375,40 +2351,39 @@ class DefaultReporter {
         const delay = (Date.now() - timings.startTime).toString();
         this.write(['', chalk_1.default.bold.cyan('=== REPORT ==='), `Took ${chalk_1.default.bold(delay)}ms`, '\n'].join('\n'));
     }
-    runEnd(summary) {
-        const summaries = [
-            chalk_1.default.green(`${chalk_1.default.bold(summary.passed)} passed`),
-            chalk_1.default.red(`${chalk_1.default.bold(summary.failed)} failed`),
-        ];
+    resultEnd(result, baseUrl) {
+        this.write(renderExecutionResult(result.test, result, baseUrl) + '\n\n');
+    }
+    resultReceived(result) {
+        return;
+    }
+    runEnd(summary, baseUrl) {
+        const { bold: b, gray, green, red, yellow } = chalk_1.default;
+        const lines = [];
+        const runSummary = [green(`${b(summary.passed)} passed`), red(`${b(summary.failed)} failed`)];
+        if (summary.failedNonBlocking) {
+            runSummary.push(yellow(`${b(summary.failedNonBlocking)} failed (non-blocking)`));
+        }
         if (summary.skipped) {
-            summaries.push(`${chalk_1.default.bold(summary.skipped)} skipped`);
+            runSummary.push(`${b(summary.skipped)} skipped`);
         }
         if (summary.testsNotFound.size > 0) {
-            const testsNotFoundStr = chalk_1.default.gray(`(${[...summary.testsNotFound].join(', ')})`);
-            summaries.push(`${chalk_1.default.yellow(`${chalk_1.default.bold(summary.testsNotFound.size)} not found`)} ${testsNotFoundStr}`);
+            const testsNotFoundListStr = gray(`(${[...summary.testsNotFound].join(', ')})`);
+            lines.push(`${yellow(`${b(summary.testsNotFound.size)} ${pluralize('test', summary.testsNotFound.size)} not found`)} ${testsNotFoundListStr}`);
         }
         const extraInfo = [];
         if (summary.timedOut) {
-            extraInfo.push(chalk_1.default.yellow(`${chalk_1.default.bold(summary.timedOut)} timed out`));
+            extraInfo.push(yellow(`${b(summary.timedOut)} timed out`));
         }
         if (summary.criticalErrors) {
-            extraInfo.push(chalk_1.default.red(`${chalk_1.default.bold(summary.criticalErrors)} critical errors`));
+            extraInfo.push(red(`${b(summary.criticalErrors)} critical errors`));
         }
-        this.write(`${chalk_1.default.bold('Tests execution summary:')} ${summaries.join(', ')}${extraInfo.length ? ' (' + extraInfo.join(', ') + ')' : ''}\n`);
-    }
-    testEnd(test, results, baseUrl, locationNames, failOnCriticalErrors, failOnTimeout) {
-        var _a;
-        const success = utils_1.hasTestSucceeded(results, failOnCriticalErrors, failOnTimeout);
-        const isNonBlocking = ((_a = test.options.ci) === null || _a === void 0 ? void 0 : _a.executionRule) === interfaces_1.ExecutionRule.NON_BLOCKING;
-        const icon = renderResultIcon(success, isNonBlocking);
-        const idDisplay = `[${chalk_1.default.bold.dim(test.public_id)}]`;
-        const nameColor = getTestResultColor(success, isNonBlocking);
-        const nonBlockingText = !success && isNonBlocking ? '[NON-BLOCKING]' : '';
-        const testResultsText = results
-            .map((r) => renderExecutionResult(test, r, baseUrl, locationNames, failOnCriticalErrors, failOnTimeout))
-            .join('\n\n')
-            .concat('\n\n');
-        this.write([`${icon} ${idDisplay}${nonBlockingText} | ${nameColor(test.name)}`, testResultsText].join('\n'));
+        const extraInfoStr = extraInfo.length ? ' (' + extraInfo.join(', ') + ')' : '';
+        if (summary.batchId) {
+            lines.push('Results URL: ' + chalk_1.default.dim.cyan(getBatchUrl(baseUrl, summary.batchId)));
+        }
+        lines.push(`${b('Run summary:')} ${runSummary.join(', ')}${extraInfoStr}\n\n`);
+        this.write(lines.join('\n'));
     }
     testsWait(tests) {
         const testsList = tests.map((t) => t.public_id);
@@ -2417,7 +2392,7 @@ class DefaultReporter {
             testsList.push('…');
         }
         const testsDisplay = chalk_1.default.gray(`(${testsList.join(', ')})`);
-        this.write(`Waiting for ${chalk_1.default.bold.cyan(tests.length)} test result${tests.length > 1 ? 's' : ''} ${testsDisplay}…\n`);
+        this.write(`Waiting for ${chalk_1.default.bold.cyan(tests.length)} test ${pluralize('result', tests.length)} ${testsDisplay}…\n`);
     }
     testTrigger(test, testId, executionRule, config) {
         const idDisplay = `[${chalk_1.default.bold.dim(testId)}]`;
@@ -2437,14 +2412,22 @@ class DefaultReporter {
             }
             return `Found test "${chalk_1.default.green.bold(test.name)}"`;
         };
-        this.write(`${idDisplay} ${getMessage()}\n`);
+        const getConfigOverridesPart = () => {
+            const nbConfigsOverridden = Object.keys(config).length;
+            if (nbConfigsOverridden === 0 || executionRule === interfaces_1.ExecutionRule.SKIPPED) {
+                return '';
+            }
+            return ' ' + chalk_1.default.gray(`(${nbConfigsOverridden} config ${pluralize('override', nbConfigsOverridden)})`);
+        };
+        this.write(`${idDisplay} ${getMessage()}${getConfigOverridesPart()}\n`);
     }
     testWait(test) {
         return;
     }
 }
 exports.DefaultReporter = DefaultReporter;
-
+const pluralize = (word, count) => (count === 1 ? word : `${word}s`);
+//# sourceMappingURL=default.js.map
 
 /***/ }),
 
@@ -2468,9 +2451,15 @@ const api_1 = __nccwpck_require__(6380);
 const errors_1 = __nccwpck_require__(7488);
 const tunnel_1 = __nccwpck_require__(5006);
 const utils_1 = __nccwpck_require__(7208);
-const executeTests = (reporter, config) => __awaiter(void 0, void 0, void 0, function* () {
+const executeTests = (reporter, config, suites) => __awaiter(void 0, void 0, void 0, function* () {
     const api = exports.getApiHelper(config);
-    const publicIdsFromCli = config.publicIds.map((id) => ({ config: config.global, id }));
+    const publicIdsFromCli = config.publicIds.map((id) => {
+        var _a;
+        return ({
+            config: Object.assign(Object.assign({}, config.global), (((_a = config.locations) === null || _a === void 0 ? void 0 : _a.length) ? { locations: config.locations } : {})),
+            id,
+        });
+    });
     let testsToTrigger;
     let tunnel;
     const stopTunnel = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -2483,10 +2472,10 @@ const executeTests = (reporter, config) => __awaiter(void 0, void 0, void 0, fun
     }
     else {
         try {
-            testsToTrigger = yield exports.getTestsList(api, config, reporter);
+            testsToTrigger = yield exports.getTestsList(api, config, reporter, suites);
         }
         catch (error) {
-            throw new errors_1.CriticalError(api_1.isForbiddenError(error) ? 'AUTHORIZATION_ERROR' : 'UNAVAILABLE_TEST_CONFIG');
+            throw new errors_1.CriticalError(api_1.isForbiddenError(error) ? 'AUTHORIZATION_ERROR' : 'UNAVAILABLE_TEST_CONFIG', error.message);
         }
     }
     if (!testsToTrigger.length) {
@@ -2500,7 +2489,7 @@ const executeTests = (reporter, config) => __awaiter(void 0, void 0, void 0, fun
         if (error instanceof errors_1.CiError) {
             throw error;
         }
-        throw new errors_1.CriticalError(api_1.isForbiddenError(error) ? 'AUTHORIZATION_ERROR' : 'UNAVAILABLE_TEST_CONFIG');
+        throw new errors_1.CriticalError(api_1.isForbiddenError(error) ? 'AUTHORIZATION_ERROR' : 'UNAVAILABLE_TEST_CONFIG', error.message);
     }
     const { tests, overriddenTestsToTrigger, summary } = testsToTriggerResult;
     // All tests have been skipped or are missing.
@@ -2515,7 +2504,7 @@ const executeTests = (reporter, config) => __awaiter(void 0, void 0, void 0, fun
             presignedURL = (yield api.getPresignedURL(publicIdsToTrigger)).url;
         }
         catch (error) {
-            throw new errors_1.CriticalError('UNAVAILABLE_TUNNEL_CONFIG');
+            throw new errors_1.CriticalError('UNAVAILABLE_TUNNEL_CONFIG', error.message);
         }
         // Open a tunnel to Datadog
         try {
@@ -2527,38 +2516,38 @@ const executeTests = (reporter, config) => __awaiter(void 0, void 0, void 0, fun
         }
         catch (error) {
             yield stopTunnel();
-            throw new errors_1.CriticalError('TUNNEL_START_FAILED');
+            throw new errors_1.CriticalError('TUNNEL_START_FAILED', error.message);
         }
     }
-    let triggers;
+    let trigger;
     try {
-        triggers = yield utils_1.runTests(api, overriddenTestsToTrigger);
+        trigger = yield utils_1.runTests(api, overriddenTestsToTrigger);
+        summary.batchId = trigger.batch_id;
     }
     catch (error) {
         yield stopTunnel();
-        throw new errors_1.CriticalError('TRIGGER_TESTS_FAILED');
+        throw new errors_1.CriticalError('TRIGGER_TESTS_FAILED', error.message);
     }
-    if (!triggers.results) {
-        yield stopTunnel();
-        throw new errors_1.CiError('NO_RESULTS_TO_POLL');
-    }
-    const results = {};
     try {
-        // Poll the results.
-        const resultPolled = yield utils_1.waitForResults(api, triggers.results, config.pollingTimeout, testsToTrigger, tunnel, config.failOnCriticalErrors);
-        Object.assign(results, resultPolled);
+        const maxPollingTimeout = Math.max(...testsToTrigger.map((t) => t.config.pollingTimeout || config.pollingTimeout));
+        const results = yield utils_1.waitForResults(api, trigger, tests, {
+            failOnCriticalErrors: config.failOnCriticalErrors,
+            failOnTimeout: config.failOnTimeout,
+            maxPollingTimeout,
+        }, reporter, tunnel);
+        return { results, summary };
     }
     catch (error) {
-        throw new errors_1.CriticalError('POLL_RESULTS_FAILED');
+        throw new errors_1.CriticalError('POLL_RESULTS_FAILED', error.message);
     }
     finally {
         yield stopTunnel();
     }
-    return { results, summary, tests, triggers };
 });
 exports.executeTests = executeTests;
-const getTestsList = (api, config, reporter) => __awaiter(void 0, void 0, void 0, function* () {
+const getTestsList = (api, config, reporter, suites = []) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    // If "testSearchQuery" is provided, always default to running it.
     if (config.testSearchQuery) {
         const testSearchResults = yield api.searchTests(config.testSearchQuery);
         return testSearchResults.tests.map((test) => ({
@@ -2567,9 +2556,10 @@ const getTestsList = (api, config, reporter) => __awaiter(void 0, void 0, void 0
             suite: `Query: ${config.testSearchQuery}`,
         }));
     }
-    const suites = (yield Promise.all(config.files.map((glob) => utils_1.getSuites(glob, reporter))))
+    const suitesFromFiles = (yield Promise.all(config.files.map((glob) => utils_1.getSuites(glob, reporter))))
         .reduce((acc, val) => acc.concat(val), [])
         .filter((suite) => !!suite.content.tests);
+    suites.push(...suitesFromFiles);
     const configFromEnvironment = ((_a = config.locations) === null || _a === void 0 ? void 0 : _a.length) ? { locations: config.locations } : {};
     const testsToTrigger = suites
         .map((suite) => suite.content.tests.map((test) => ({
@@ -2610,7 +2600,7 @@ const getDatadogHost = (useIntake = false, config) => {
     return `${host}/${apiPath}`;
 };
 exports.getDatadogHost = getDatadogHost;
-
+//# sourceMappingURL=run-test.js.map
 
 /***/ }),
 
@@ -2917,7 +2907,7 @@ class Tunnel {
     }
 }
 exports.Tunnel = Tunnel;
-
+//# sourceMappingURL=tunnel.js.map
 
 /***/ }),
 
@@ -2958,7 +2948,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseVariablesFromCli = exports.retry = exports.runTests = exports.getTestsToTrigger = exports.getReporter = exports.getResultDuration = exports.createSummary = exports.createTriggerResultMap = exports.waitForResults = exports.wait = exports.getSuites = exports.hasTestSucceeded = exports.hasResultPassed = exports.isCriticalError = exports.getStrictestExecutionRule = exports.getExecutionRule = exports.setCiTriggerApp = exports.handleConfig = exports.ciTriggerApp = void 0;
+exports.renderResults = exports.sortResultsByOutcome = exports.getAppBaseURL = exports.parseVariablesFromCli = exports.retry = exports.fetchTest = exports.runTests = exports.getTestsToTrigger = exports.getReporter = exports.getResultDuration = exports.createSummary = exports.waitForResults = exports.wait = exports.getSuites = exports.getResultOutcome = exports.hasResultPassed = exports.getStrictestExecutionRule = exports.getExecutionRule = exports.setCiTriggerApp = exports.handleConfig = exports.ciTriggerApp = void 0;
+const deep_extend_1 = __importDefault(__nccwpck_require__(1705));
 const fs = __importStar(__nccwpck_require__(5747));
 const path = __importStar(__nccwpck_require__(5622));
 const url_1 = __nccwpck_require__(8835);
@@ -2966,16 +2957,18 @@ const util_1 = __nccwpck_require__(1669);
 const chalk_1 = __importDefault(__nccwpck_require__(6656));
 const glob_1 = __importDefault(__nccwpck_require__(8514));
 const ci_1 = __nccwpck_require__(9176);
+const tags_1 = __nccwpck_require__(5249);
 const utils_1 = __nccwpck_require__(7094);
 const api_1 = __nccwpck_require__(6380);
 const errors_1 = __nccwpck_require__(7488);
 const interfaces_1 = __nccwpck_require__(4247);
+const run_test_1 = __nccwpck_require__(6391);
 const POLLING_INTERVAL = 5000; // In ms
 const PUBLIC_ID_REGEX = /^[\d\w]{3}-[\d\w]{3}-[\d\w]{3}$/;
 const SUBDOMAIN_REGEX = /(.*?)\.(?=[^\/]*\..{2,5})/;
 const TEMPLATE_REGEX = /{{\s*([^{}]*?)\s*}}/g;
 const template = (st, context) => st.replace(TEMPLATE_REGEX, (match, p1) => (p1 in context ? context[p1] : match));
-exports.ciTriggerApp = 'npm_package';
+exports.ciTriggerApp = process.env.DATADOG_SYNTHETICS_CI_TRIGGER_APP || 'npm_package';
 const handleConfig = (test, publicId, reporter, config) => {
     const executionRule = exports.getExecutionRule(test, config);
     let handledConfig = {
@@ -3069,9 +3062,9 @@ const warnOnReservedEnvVarNames = (context, reporter) => {
 const getExecutionRule = (test, configOverride) => {
     var _a, _b, _c, _d;
     if (configOverride && configOverride.executionRule) {
-        return exports.getStrictestExecutionRule(configOverride.executionRule, (_b = (_a = test.options) === null || _a === void 0 ? void 0 : _a.ci) === null || _b === void 0 ? void 0 : _b.executionRule);
+        return exports.getStrictestExecutionRule(configOverride.executionRule, (_b = (_a = test === null || test === void 0 ? void 0 : test.options) === null || _a === void 0 ? void 0 : _a.ci) === null || _b === void 0 ? void 0 : _b.executionRule);
     }
-    return ((_d = (_c = test.options) === null || _c === void 0 ? void 0 : _c.ci) === null || _d === void 0 ? void 0 : _d.executionRule) || interfaces_1.ExecutionRule.BLOCKING;
+    return ((_d = (_c = test === null || test === void 0 ? void 0 : test.options) === null || _c === void 0 ? void 0 : _c.ci) === null || _d === void 0 ? void 0 : _d.executionRule) || interfaces_1.ExecutionRule.BLOCKING;
 };
 exports.getExecutionRule = getExecutionRule;
 const getStrictestExecutionRule = (configRule, testRule) => {
@@ -3087,26 +3080,36 @@ const getStrictestExecutionRule = (configRule, testRule) => {
     return interfaces_1.ExecutionRule.BLOCKING;
 };
 exports.getStrictestExecutionRule = getStrictestExecutionRule;
-const isCriticalError = (result) => result.unhealthy || result.error === interfaces_1.ERRORS.ENDPOINT;
-exports.isCriticalError = isCriticalError;
-const hasResultPassed = (result, failOnCriticalErrors, failOnTimeout) => {
-    if (exports.isCriticalError(result) && !failOnCriticalErrors) {
+const hasResultPassed = (result, hasTimedOut, failOnCriticalErrors, failOnTimeout) => {
+    if (result.unhealthy && !failOnCriticalErrors) {
         return true;
     }
-    if (result.error === interfaces_1.ERRORS.TIMEOUT && !failOnTimeout) {
+    if (hasTimedOut && !failOnTimeout) {
         return true;
     }
     if (typeof result.passed !== 'undefined') {
         return result.passed;
     }
-    if (typeof result.errorCode !== 'undefined') {
+    if (typeof result.failure !== 'undefined') {
         return false;
     }
     return true;
 };
 exports.hasResultPassed = hasResultPassed;
-const hasTestSucceeded = (results, failOnCriticalErrors, failOnTimeout) => results.every((pollResult) => exports.hasResultPassed(pollResult.result, failOnCriticalErrors, failOnTimeout));
-exports.hasTestSucceeded = hasTestSucceeded;
+const getResultOutcome = (result) => {
+    const executionRule = result.executionRule;
+    if (result.passed) {
+        if (executionRule === interfaces_1.ExecutionRule.NON_BLOCKING) {
+            return "passed-non-blocking" /* PassedNonBlocking */;
+        }
+        return "passed" /* Passed */;
+    }
+    if (executionRule === interfaces_1.ExecutionRule.NON_BLOCKING) {
+        return "failed-non-blocking" /* FailedNonBlocking */;
+    }
+    return "failed" /* Failed */;
+};
+exports.getResultOutcome = getResultOutcome;
 const getSuites = (GLOB, reporter) => __awaiter(void 0, void 0, void 0, function* () {
     reporter.log(`Finding files in ${path.join(process.cwd(), GLOB)}\n`);
     const files = yield util_1.promisify(glob_1.default)(GLOB);
@@ -3129,11 +3132,8 @@ const getSuites = (GLOB, reporter) => __awaiter(void 0, void 0, void 0, function
 exports.getSuites = getSuites;
 const wait = (duration) => __awaiter(void 0, void 0, void 0, function* () { return new Promise((resolve) => setTimeout(resolve, duration)); });
 exports.wait = wait;
-const waitForResults = (api, triggerResponses, defaultTimeout, triggerConfigs, tunnel, failOnCriticalErrors) => __awaiter(void 0, void 0, void 0, function* () {
-    const triggerResultMap = exports.createTriggerResultMap(triggerResponses, defaultTimeout, triggerConfigs);
-    const triggerResults = [...triggerResultMap.values()];
-    const maxPollingTimeout = Math.max(...triggerResults.map((tr) => tr.pollingTimeout));
-    const pollingStartDate = new Date().getTime();
+const waitForResults = (api, trigger, tests, options, reporter, tunnel) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     let isTunnelConnected = true;
     if (tunnel) {
         tunnel
@@ -3141,90 +3141,80 @@ const waitForResults = (api, triggerResponses, defaultTimeout, triggerConfigs, t
             .then(() => (isTunnelConnected = false))
             .catch(() => (isTunnelConnected = false));
     }
-    while (triggerResults.filter((tr) => !tr.result).length) {
-        const pollingDuration = new Date().getTime() - pollingStartDate;
-        // Remove test which exceeded their pollingTimeout
-        for (const triggerResult of triggerResults.filter((tr) => !tr.result)) {
-            if (pollingDuration >= triggerResult.pollingTimeout) {
-                triggerResult.result = createFailingResult(interfaces_1.ERRORS.TIMEOUT, triggerResult.result_id, triggerResult.device, triggerResult.location, !!tunnel);
-            }
-        }
-        if (tunnel && !isTunnelConnected) {
-            for (const triggerResult of triggerResults.filter((tr) => !tr.result)) {
-                triggerResult.result = createFailingResult(interfaces_1.ERRORS.TUNNEL, triggerResult.result_id, triggerResult.device, triggerResult.location, !!tunnel);
-            }
-        }
-        if (pollingDuration >= maxPollingTimeout) {
-            break;
-        }
-        let polledResults;
-        const triggerResultsSucceed = triggerResults.filter((tr) => !tr.result);
-        try {
-            polledResults = (yield api.pollResults(triggerResultsSucceed.map((tr) => tr.result_id))).results;
-        }
-        catch (error) {
-            if (api_1.is5xxError(error) && !failOnCriticalErrors) {
-                polledResults = [];
-                for (const triggerResult of triggerResultsSucceed) {
-                    triggerResult.result = createFailingResult(interfaces_1.ERRORS.ENDPOINT, triggerResult.result_id, triggerResult.device, triggerResult.location, !!tunnel);
-                }
-            }
-            else {
-                throw error;
-            }
-        }
-        for (const polledResult of polledResults) {
-            if (polledResult.result.eventType === 'finished') {
-                const triggeredResult = triggerResultMap.get(polledResult.resultID);
-                if (triggeredResult) {
-                    triggeredResult.result = polledResult;
-                }
-            }
-        }
-        if (!triggerResults.filter((tr) => !tr.result).length) {
-            break;
-        }
-        yield exports.wait(POLLING_INTERVAL);
-    }
-    // Bundle results by public id
-    return triggerResults.reduce((resultsByPublicId, triggerResult) => {
-        const result = triggerResult.result; // The result exists, as either polled or filled with a timeout result
-        resultsByPublicId[triggerResult.public_id] = [...(resultsByPublicId[triggerResult.public_id] || []), result];
-        return resultsByPublicId;
+    const locationNames = trigger.locations.reduce((mapping, location) => {
+        mapping[location.name] = location.display_name;
+        return mapping;
     }, {});
+    const getLocation = (dcId, test) => {
+        const hasTunnel = !!tunnel && (test.type === 'browser' || test.subtype === 'http');
+        return hasTunnel ? 'Tunneled' : locationNames[dcId] || dcId;
+    };
+    const getTest = (id) => tests.find((t) => t.public_id === id);
+    const maxPollingDate = Date.now() + options.maxPollingTimeout;
+    const emittedResultIndexes = new Set();
+    const processBatch = () => __awaiter(void 0, void 0, void 0, function* () {
+        var _b;
+        try {
+            const currentBatch = yield api.getBatch(trigger.batch_id);
+            for (const [index, result] of currentBatch.results.entries()) {
+                if (result.status !== 'in_progress' && !emittedResultIndexes.has(index)) {
+                    emittedResultIndexes.add(index);
+                    reporter.resultReceived(result);
+                }
+            }
+            return currentBatch;
+        }
+        catch (e) {
+            throw new api_1.EndpointError(`Failed to get batch: ${api_1.formatBackendErrors(e)}\n`, (_b = e.response) === null || _b === void 0 ? void 0 : _b.status);
+        }
+    });
+    let batch = yield processBatch();
+    // In theory polling the batch is enough, but in case something goes wrong backend-side
+    // let's add a check to ensure it eventually times out.
+    let hasExceededMaxPollingDate = Date.now() >= maxPollingDate;
+    while (batch.status === 'in_progress' && !hasExceededMaxPollingDate) {
+        yield exports.wait(POLLING_INTERVAL);
+        batch = yield processBatch();
+        hasExceededMaxPollingDate = Date.now() >= maxPollingDate;
+    }
+    if (tunnel && !isTunnelConnected) {
+        reporter.error('The tunnel has stopped working, this may have affected the results.');
+    }
+    const results = [];
+    const pollResultMap = {};
+    try {
+        const pollResults = yield api.pollResults(batch.results.map((r) => r.result_id));
+        pollResults.forEach((r) => (pollResultMap[r.resultID] = r));
+    }
+    catch (e) {
+        throw new api_1.EndpointError(`Failed to poll results: ${api_1.formatBackendErrors(e)}\n`, (_a = e.response) === null || _a === void 0 ? void 0 : _a.status);
+    }
+    for (const resultInBatch of batch.results) {
+        const pollResult = pollResultMap[resultInBatch.result_id];
+        const hasTimeout = resultInBatch.timed_out || (hasExceededMaxPollingDate && resultInBatch.timed_out !== false);
+        if (hasTimeout) {
+            pollResult.result.failure = { code: 'TIMEOUT', message: 'Result timed out' };
+            pollResult.result.passed = false;
+        }
+        const test = getTest(resultInBatch.test_public_id);
+        results.push({
+            executionRule: resultInBatch.execution_rule,
+            location: getLocation(resultInBatch.location, test),
+            passed: exports.hasResultPassed(pollResult.result, hasTimeout, options.failOnCriticalErrors, options.failOnTimeout),
+            result: pollResult.result,
+            resultId: resultInBatch.result_id,
+            test: deep_extend_1.default(test, pollResult.check),
+            timedOut: hasTimeout,
+            timestamp: pollResult.timestamp,
+        });
+    }
+    return results;
 });
 exports.waitForResults = waitForResults;
-const createTriggerResultMap = (triggerResponses, defaultTimeout, triggerConfigs) => {
-    var _a, _b;
-    const timeoutByPublicId = {};
-    for (const trigger of triggerConfigs) {
-        timeoutByPublicId[trigger.id] = (_a = trigger.config.pollingTimeout) !== null && _a !== void 0 ? _a : defaultTimeout;
-    }
-    const triggerResultMap = new Map();
-    for (const triggerResponse of triggerResponses) {
-        triggerResultMap.set(triggerResponse.result_id, Object.assign(Object.assign({}, triggerResponse), { pollingTimeout: (_b = timeoutByPublicId[triggerResponse.public_id]) !== null && _b !== void 0 ? _b : defaultTimeout }));
-    }
-    return triggerResultMap;
-};
-exports.createTriggerResultMap = createTriggerResultMap;
-const createFailingResult = (errorMessage, resultId, deviceId, dcId, tunnel) => ({
-    dc_id: dcId,
-    result: {
-        device: { height: 0, id: deviceId, width: 0 },
-        duration: 0,
-        error: errorMessage,
-        eventType: 'finished',
-        passed: false,
-        startUrl: '',
-        stepDetails: [],
-        tunnel,
-    },
-    resultID: resultId,
-    timestamp: 0,
-});
 const createSummary = () => ({
     criticalErrors: 0,
     failed: 0,
+    failedNonBlocking: 0,
     passed: 0,
     skipped: 0,
     testsNotFound: new Set(),
@@ -3270,17 +3260,24 @@ const getReporter = (reporters) => ({
             }
         }
     },
-    runEnd: (summary) => {
+    resultEnd: (result, baseUrl) => {
         for (const reporter of reporters) {
-            if (typeof reporter.runEnd === 'function') {
-                reporter.runEnd(summary);
+            if (typeof reporter.resultEnd === 'function') {
+                reporter.resultEnd(result, baseUrl);
             }
         }
     },
-    testEnd: (test, results, baseUrl, locationNames, failOnCriticalErrors, failOnTimeout) => {
+    resultReceived: (result) => {
         for (const reporter of reporters) {
-            if (typeof reporter.testEnd === 'function') {
-                reporter.testEnd(test, results, baseUrl, locationNames, failOnCriticalErrors, failOnTimeout);
+            if (typeof reporter.resultReceived === 'function') {
+                reporter.resultReceived(result);
+            }
+        }
+    },
+    runEnd: (summary, baseUrl) => {
+        for (const reporter of reporters) {
+            if (typeof reporter.runEnd === 'function') {
+                reporter.runEnd(summary, baseUrl);
             }
         }
     },
@@ -3351,7 +3348,10 @@ const getTestsToTrigger = (api, triggerConfigs, reporter) => __awaiter(void 0, v
 exports.getTestsToTrigger = getTestsToTrigger;
 const runTests = (api, testsToTrigger) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = { tests: testsToTrigger };
-    const ciMetadata = ci_1.getCIMetadata();
+    const tagsToLimit = {
+        [tags_1.GIT_COMMIT_MESSAGE]: 500,
+    };
+    const ciMetadata = ci_1.getCIMetadata(tagsToLimit);
     if (ciMetadata) {
         payload.metadata = ciMetadata;
     }
@@ -3366,6 +3366,11 @@ const runTests = (api, testsToTrigger) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.runTests = runTests;
+const fetchTest = (publicId, config) => __awaiter(void 0, void 0, void 0, function* () {
+    const apiHelper = run_test_1.getApiHelper(config);
+    return apiHelper.getTest(publicId);
+});
+exports.fetchTest = fetchTest;
 const definedTypeGuard = (o) => !!o;
 const retry = (func, shouldRetryAfterWait) => __awaiter(void 0, void 0, void 0, function* () {
     const trier = (retries = 0) => __awaiter(void 0, void 0, void 0, function* () {
@@ -3403,7 +3408,63 @@ const parseVariablesFromCli = (variableArguments = [], logFunction) => {
     return Object.keys(variables).length > 0 ? variables : undefined;
 };
 exports.parseVariablesFromCli = parseVariablesFromCli;
-
+const getAppBaseURL = ({ datadogSite, subdomain }) => `https://${subdomain}.${datadogSite}/`;
+exports.getAppBaseURL = getAppBaseURL;
+/**
+ * Sort results with the following rules:
+ * - Passed results come first
+ * - Then non-blocking failed results
+ * - And finally failed results
+ */
+const sortResultsByOutcome = () => {
+    const outcomeWeight = {
+        ["passed-non-blocking" /* PassedNonBlocking */]: 1,
+        ["passed" /* Passed */]: 2,
+        ["failed-non-blocking" /* FailedNonBlocking */]: 3,
+        ["failed" /* Failed */]: 4,
+    };
+    return (r1, r2) => outcomeWeight[exports.getResultOutcome(r1)] - outcomeWeight[exports.getResultOutcome(r2)];
+};
+exports.sortResultsByOutcome = sortResultsByOutcome;
+const renderResults = ({ config, reporter, results, startTime, summary, }) => {
+    reporter.reportStart({ startTime });
+    if (!config.failOnTimeout) {
+        if (!summary.timedOut) {
+            summary.timedOut = 0;
+        }
+    }
+    if (!config.failOnCriticalErrors) {
+        if (!summary.criticalErrors) {
+            summary.criticalErrors = 0;
+        }
+    }
+    let hasSucceeded = true; // Determine if all the tests have succeeded
+    const sortedResults = results.sort(exports.sortResultsByOutcome());
+    for (const result of sortedResults) {
+        if (!config.failOnTimeout && result.timedOut) {
+            summary.timedOut++;
+        }
+        if (result.result.unhealthy && !config.failOnCriticalErrors) {
+            summary.criticalErrors++;
+        }
+        const resultOutcome = exports.getResultOutcome(result);
+        if (["passed" /* Passed */, "passed-non-blocking" /* PassedNonBlocking */].includes(resultOutcome)) {
+            summary.passed++;
+        }
+        else if (resultOutcome === "failed-non-blocking" /* FailedNonBlocking */) {
+            summary.failedNonBlocking++;
+        }
+        else {
+            summary.failed++;
+            hasSucceeded = false;
+        }
+        reporter.resultEnd(result, exports.getAppBaseURL(config));
+    }
+    reporter.runEnd(summary, exports.getAppBaseURL(config));
+    return hasSucceeded ? 0 : 1;
+};
+exports.renderResults = renderResults;
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
@@ -3563,7 +3624,7 @@ class WebSocket extends events_1.EventEmitter {
     }
 }
 exports.WebSocket = WebSocket;
-
+//# sourceMappingURL=websocket.js.map
 
 /***/ }),
 
@@ -3648,7 +3709,7 @@ class ApiKeyValidatorImplem {
         });
     }
 }
-
+//# sourceMappingURL=apikey.js.map
 
 /***/ }),
 
@@ -3658,7 +3719,7 @@ class ApiKeyValidatorImplem {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCIMetadata = exports.getCISpanTags = exports.CI_ENGINES = void 0;
+exports.getCIEnv = exports.getCIMetadata = exports.getCISpanTags = exports.CI_ENGINES = void 0;
 const url_1 = __nccwpck_require__(8835);
 const tags_1 = __nccwpck_require__(5249);
 const user_provided_git_1 = __nccwpck_require__(1769);
@@ -3945,10 +4006,19 @@ const getCISpanTags = () => {
     return utils_1.removeEmptyValues(tags);
 };
 exports.getCISpanTags = getCISpanTags;
-const getCIMetadata = () => {
+const getCIMetadata = (tagSizeLimits) => {
     const tags = Object.assign(Object.assign(Object.assign({}, exports.getCISpanTags()), user_provided_git_1.getUserCISpanTags()), user_provided_git_1.getUserGitSpanTags());
     if (!tags || !Object.keys(tags).length) {
         return;
+    }
+    if (tagSizeLimits) {
+        for (const key of Object.keys(tagSizeLimits)) {
+            const tagToLimit = key;
+            const originalTag = tags[tagToLimit];
+            if (!!originalTag) {
+                tags[tagToLimit] = originalTag.substring(0, tagSizeLimits[tagToLimit]);
+            }
+        }
     }
     const metadata = {
         ci: utils_1.removeUndefinedValues({
@@ -3999,7 +4069,38 @@ const parsePipelineNumber = (pipelineNumberStr) => {
         return isFinite(pipelineNumber) ? pipelineNumber : undefined;
     }
 };
-
+const getCIEnv = () => {
+    if (process.env.CIRCLECI) {
+        return {
+            ciEnv: getEnvVars('CIRCLE_'),
+            provider: 'circleci',
+        };
+    }
+    if (process.env.GITLAB_CI) {
+        return {
+            ciEnv: getEnvVars('CI_'),
+            provider: 'gitlab',
+        };
+    }
+    if (process.env.GITHUB_ACTIONS || process.env.GITHUB_ACTION) {
+        return {
+            ciEnv: getEnvVars('GITHUB_'),
+            provider: 'github',
+        };
+    }
+    if (process.env.BUILDKITE) {
+        return {
+            ciEnv: getEnvVars('BUILDKITE_'),
+            provider: 'buildkite',
+        };
+    }
+    throw new Error('Only providers [GitHub, GitLab, CircleCI, Buildkite] are supported');
+};
+exports.getCIEnv = getCIEnv;
+const getEnvVars = (prefix) => Object.entries(process.env)
+    .filter(([key, value]) => key.startsWith(prefix) && !/(PASS)|(TOKEN)|(SECRET)|(KEY)/i.test(key))
+    .reduce((accum, [key, value]) => (Object.assign(Object.assign({}, accum), { [key]: value })), {});
+//# sourceMappingURL=ci.js.map
 
 /***/ }),
 
@@ -4013,7 +4114,7 @@ exports.InvalidConfigurationError = void 0;
 class InvalidConfigurationError extends Error {
 }
 exports.InvalidConfigurationError = InvalidConfigurationError;
-
+//# sourceMappingURL=errors.js.map
 
 /***/ }),
 
@@ -4059,7 +4160,7 @@ const retryRequest = (requestPerformer, retryOpts) => __awaiter(void 0, void 0, 
     return async_retry_1.default(doRequest, retryOpts);
 });
 exports.retryRequest = retryRequest;
-
+//# sourceMappingURL=retry.js.map
 
 /***/ }),
 
@@ -4107,7 +4208,9 @@ const parseTags = (tags) => {
             if (!keyValuePair.includes(':')) {
                 return acc;
             }
-            const [key, value] = keyValuePair.split(':');
+            const firstColon = keyValuePair.indexOf(':');
+            const key = keyValuePair.substring(0, firstColon);
+            const value = keyValuePair.substring(firstColon + 1);
             return Object.assign(Object.assign({}, acc), { [key]: value });
         }, {});
     }
@@ -4116,7 +4219,7 @@ const parseTags = (tags) => {
     }
 };
 exports.parseTags = parseTags;
-
+//# sourceMappingURL=tags.js.map
 
 /***/ }),
 
@@ -4193,7 +4296,7 @@ const uploadMultipart = (request, payload) => __awaiter(void 0, void 0, void 0, 
         url: 'v1/input',
     });
 });
-
+//# sourceMappingURL=upload.js.map
 
 /***/ }),
 
@@ -4247,7 +4350,7 @@ const getUserCISpanTags = () => {
     });
 };
 exports.getUserCISpanTags = getUserCISpanTags;
-
+//# sourceMappingURL=user-provided-git.js.map
 
 /***/ }),
 
@@ -4404,7 +4507,7 @@ const normalizeRef = (ref) => {
     return ref.replace(/origin\/|refs\/heads\/|tags\//gm, '');
 };
 exports.normalizeRef = normalizeRef;
-
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
@@ -4440,7 +4543,7 @@ const synthetics = __importStar(__nccwpck_require__(974));
 exports.synthetics = synthetics;
 const utils = __importStar(__nccwpck_require__(7094));
 exports.utils = utils;
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -13918,7 +14021,7 @@ Axios.prototype.request = function request(config) {
     var chain = [dispatchRequest, undefined];
 
     Array.prototype.unshift.apply(chain, requestInterceptorChain);
-    chain.concat(responseInterceptorChain);
+    chain = chain.concat(responseInterceptorChain);
 
     promise = Promise.resolve(config);
     while (chain.length) {
@@ -14433,6 +14536,21 @@ function getDefaultAdapter() {
   return adapter;
 }
 
+function stringifySafely(rawValue, parser, encoder) {
+  if (utils.isString(rawValue)) {
+    try {
+      (parser || JSON.parse)(rawValue);
+      return utils.trim(rawValue);
+    } catch (e) {
+      if (e.name !== 'SyntaxError') {
+        throw e;
+      }
+    }
+  }
+
+  return (encoder || JSON.stringify)(rawValue);
+}
+
 var defaults = {
 
   transitional: {
@@ -14465,7 +14583,7 @@ var defaults = {
     }
     if (utils.isObject(data) || (headers && headers['Content-Type'] === 'application/json')) {
       setContentTypeIfUnset(headers, 'application/json');
-      return JSON.stringify(data);
+      return stringifySafely(data);
     }
     return data;
   }],
@@ -18398,6 +18516,9 @@ function objectToString(o) {
 
 /***/ 4137:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
 
 const binding = __nccwpck_require__(4240);
 
@@ -52742,7 +52863,7 @@ var init_StatusSummary = __esm({
       }]
     ]);
     parseStatusSummary = function(text) {
-      const lines = text.trim().split("\n");
+      const lines = text.trim().split(NULL);
       const status = new StatusSummary();
       for (let i = 0, l = lines.length; i < l; i++) {
         splitLine(status, lines[i]);
@@ -52754,17 +52875,27 @@ var init_StatusSummary = __esm({
 
 // src/lib/tasks/status.ts
 function statusTask(customArgs) {
+  const commands = [
+    "status",
+    "--porcelain",
+    "-b",
+    "-u",
+    "--null",
+    ...customArgs.filter((arg) => !ignoredOptions.includes(arg))
+  ];
   return {
     format: "utf-8",
-    commands: ["status", "--porcelain", "-b", "-u", ...customArgs],
+    commands,
     parser(text) {
       return parseStatusSummary(text);
     }
   };
 }
+var ignoredOptions;
 var init_status = __esm({
   "src/lib/tasks/status.ts"() {
     init_StatusSummary();
+    ignoredOptions = ["--null", "-z"];
   }
 });
 
@@ -53146,13 +53277,16 @@ __export(clone_exports, {
   cloneMirrorTask: () => cloneMirrorTask,
   cloneTask: () => cloneTask
 });
+function disallowedCommand(command) {
+  return /^--upload-pack(=|$)/.test(command);
+}
 function cloneTask(repo, directory, customArgs) {
   const commands = ["clone", ...customArgs];
-  if (typeof repo === "string") {
-    commands.push(repo);
-  }
-  if (typeof directory === "string") {
-    commands.push(directory);
+  filterString(repo) && commands.push(repo);
+  filterString(directory) && commands.push(directory);
+  const banned = commands.find(disallowedCommand);
+  if (banned) {
+    return configurationErrorTask(`git.fetch: potential exploit argument blocked.`);
   }
   return straightThroughStringTask(commands);
 }
@@ -53301,7 +53435,7 @@ var fetch_exports = {};
 __export(fetch_exports, {
   fetchTask: () => fetchTask
 });
-function disallowedCommand(command) {
+function disallowedCommand2(command) {
   return /^--upload-pack(=|$)/.test(command);
 }
 function fetchTask(remote, branch, customArgs) {
@@ -53309,7 +53443,7 @@ function fetchTask(remote, branch, customArgs) {
   if (remote && branch) {
     commands.push(remote, branch);
   }
-  const banned = commands.find(disallowedCommand);
+  const banned = commands.find(disallowedCommand2);
   if (banned) {
     return configurationErrorTask(`git.fetch: potential exploit argument blocked.`);
   }
@@ -61222,6 +61356,7 @@ class Channel extends DuplexStream {
   destroy() {
     this.end();
     this.close();
+    return this;
   }
 
   // Session type-specific methods =============================================
@@ -63148,6 +63283,7 @@ class Client extends EventEmitter {
         this.emit('connect');
 
         cryptoInit.then(() => {
+          proto.start();
           sock.on('data', (data) => {
             try {
               proto.parse(data, 0, data.length);
@@ -64865,14 +65001,15 @@ class Protocol {
         this._debug('Custom crypto binding not available');
     }
 
-    process.nextTick(() => {
-      this._debug && this._debug(
-        `Local ident: ${inspect(this._identRaw.toString())}`
-      );
+    this._debug && this._debug(
+      `Local ident: ${inspect(this._identRaw.toString())}`
+    );
+    this.start = () => {
+      this.start = undefined;
       if (greeting)
         this._onWrite(greeting);
       this._onWrite(sentIdent);
-    });
+    };
   }
   _destruct(reason) {
     this._packetRW.read.cleanup();
@@ -69282,14 +69419,13 @@ const CLIENT_HANDLERS = {
     */
     const errorCode = bufferParser.readUInt32BE();
     const errorMsg = bufferParser.readString(true);
-    const lang = bufferParser.skipString();
     bufferParser.clear();
 
-    if (lang === undefined) {
-      if (reqID !== undefined)
-        delete sftp._requests[reqID];
-      return doFatalSFTPError(sftp, 'Malformed STATUS packet');
-    }
+    // Note: we avoid checking that the error message and language tag are in
+    // the packet because there are some broken implementations that incorrectly
+    // omit them. The language tag in general was never really used amongst ssh
+    // implementations, so in the case of a missing error message we just
+    // default to something sensible.
 
     if (sftp._debug) {
       const jsonMsg = JSON.stringify(errorMsg);
@@ -70482,7 +70618,7 @@ try {
   cpuInfo = __nccwpck_require__(4137)();
 } catch {}
 
-const { bindingAvailable } = __nccwpck_require__(5708);
+const { bindingAvailable, CIPHER_INFO, MAC_INFO } = __nccwpck_require__(5708);
 
 const eddsaSupported = (() => {
   if (typeof crypto.sign === 'function'
@@ -70551,11 +70687,13 @@ const SUPPORTED_SERVER_HOST_KEY = DEFAULT_SERVER_HOST_KEY.concat([
 ]);
 
 
-const DEFAULT_CIPHER = [
+const canUseCipher = (() => {
+  const ciphers = crypto.getCiphers();
+  return (name) => ciphers.includes(CIPHER_INFO[name].sslName);
+})();
+let DEFAULT_CIPHER = [
   // http://tools.ietf.org/html/rfc5647
-  'aes128-gcm',
   'aes128-gcm@openssh.com',
-  'aes256-gcm',
   'aes256-gcm@openssh.com',
 
   // http://tools.ietf.org/html/rfc4344#section-4
@@ -70576,12 +70714,15 @@ if (cpuInfo && cpuInfo.flags && !cpuInfo.flags.aes) {
 } else {
   DEFAULT_CIPHER.push('chacha20-poly1305@openssh.com');
 }
+DEFAULT_CIPHER = DEFAULT_CIPHER.filter(canUseCipher);
 const SUPPORTED_CIPHER = DEFAULT_CIPHER.concat([
   'aes256-cbc',
   'aes192-cbc',
   'aes128-cbc',
   'blowfish-cbc',
   '3des-cbc',
+  'aes128-gcm',
+  'aes256-gcm',
 
   // http://tools.ietf.org/html/rfc4345#section-4:
   'arcfour256',
@@ -70589,9 +70730,13 @@ const SUPPORTED_CIPHER = DEFAULT_CIPHER.concat([
 
   'cast128-cbc',
   'arcfour',
-]);
+].filter(canUseCipher));
 
 
+const canUseMAC = (() => {
+  const hashes = crypto.getHashes();
+  return (name) => hashes.includes(MAC_INFO[name].sslName);
+})();
 const DEFAULT_MAC = [
   'hmac-sha2-256-etm@openssh.com',
   'hmac-sha2-512-etm@openssh.com',
@@ -70599,7 +70744,7 @@ const DEFAULT_MAC = [
   'hmac-sha2-256',
   'hmac-sha2-512',
   'hmac-sha1',
-];
+].filter(canUseMAC);
 const SUPPORTED_MAC = DEFAULT_MAC.concat([
   'hmac-md5',
   'hmac-sha2-256-96', // first 96 bits of HMAC-SHA256
@@ -70607,7 +70752,7 @@ const SUPPORTED_MAC = DEFAULT_MAC.concat([
   'hmac-ripemd160',
   'hmac-sha1-96',     // first 96 bits of HMAC-SHA1
   'hmac-md5-96',      // first 96 bits of HMAC-MD5
-]);
+].filter(canUseMAC));
 
 const DEFAULT_COMPRESSION = [
   'none',
@@ -71403,22 +71548,17 @@ class NullDecipher {
       // Read padding length, payload, and padding
       if (this._packetPos < this._len) {
         const nb = Math.min(this._len - this._packetPos, dataLen - p);
-        if (p !== 0 || nb !== dataLen) {
-          if (nb === this._len) {
-            this._packet = new FastBuffer(data.buffer, data.byteOffset + p, nb);
-          } else {
-            this._packet = Buffer.allocUnsafe(this._len);
-            this._packet.set(
-              new Uint8Array(data.buffer, data.byteOffset + p, nb),
-              this._packetPos
-            );
-          }
-        } else if (nb === this._len) {
-          this._packet = data;
+        let chunk;
+        if (p !== 0 || nb !== dataLen)
+          chunk = new Uint8Array(data.buffer, data.byteOffset + p, nb);
+        else
+          chunk = data;
+        if (nb === this._len) {
+          this._packet = chunk;
         } else {
           if (!this._packet)
             this._packet = Buffer.allocUnsafe(this._len);
-          this._packet.set(data, this._packetPos);
+          this._packet.set(chunk, this._packetPos);
         }
         p += nb;
         this._packetPos += nb;
@@ -73814,7 +73954,7 @@ function kexinit(self) {
     let kex = entry.array;
     let found = false;
     for (let i = 0; i < kex.length; ++i) {
-      if (kex[i].indexOf('group-exchange') !== -1) {
+      if (kex[i].includes('group-exchange')) {
         if (!found) {
           found = true;
           // Copy array lazily
@@ -73836,9 +73976,9 @@ function kexinit(self) {
       );
 
       payload = Buffer.allocUnsafe(len);
-      writeUInt32BE(payload, newKexBuf.length, 0);
-      payload.set(newKexBuf, 4);
-      payload.set(rest, 4 + newKexBuf.length);
+      writeUInt32BE(payload, newKexBuf.length, 17);
+      payload.set(newKexBuf, 17 + 4);
+      payload.set(rest, 17 + 4 + newKexBuf.length);
     }
   }
 
@@ -76169,6 +76309,8 @@ OpenSSH_Private.prototype = BaseKey;
     } else {
       ret = [];
     }
+    if (ret instanceof Error)
+      return ret;
     // This will need to change if/when OpenSSH ever starts storing multiple
     // keys in their key files
     return ret[0];
@@ -77357,7 +77499,7 @@ module.exports = {
   doFatalError: (protocol, msg, level, reason) => {
     let err;
     if (DISCONNECT_REASON === undefined)
-      ({ DISCONNECT_REASON } = __nccwpck_require__(9475));
+      ({ DISCONNECT_REASON } = __nccwpck_require__(6832));
     if (msg instanceof Error) {
       // doFatalError(protocol, err[, reason])
       err = msg;
@@ -78002,6 +78144,7 @@ class Session extends EventEmitter {
 
     this.type = 'session';
     this.subtype = undefined;
+    this.server = true;
     this._ending = false;
     this._channel = undefined;
     this._chanInfo = {
@@ -78369,6 +78512,8 @@ class Client extends EventEmitter {
                 reason = CHANNEL_OPEN_FAILURE.CONNECT_FAILED;
             }
 
+            if (localChan !== -1)
+              this._chanMgr.remove(localChan);
             proto.channelOpenFail(info.sender, reason, '');
           };
           const reserveChannel = () => {
@@ -79011,6 +79156,7 @@ class Client extends EventEmitter {
 
     socket.pause();
     cryptoInit.then(() => {
+      proto.start();
       socket.on('data', (data) => {
         try {
           proto.parse(data, 0, data.length);
@@ -79216,11 +79362,17 @@ function onCHANNEL_CLOSE(self, recipient, channel, err, dead) {
     onChannelOpenFailure(self, recipient, err, channel);
     return;
   }
-  if (typeof channel !== 'object'
-      || channel === null
-      || channel.incoming.state === 'closed') {
+
+  if (typeof channel !== 'object' || channel === null)
     return;
-  }
+
+  if (channel.incoming && channel.incoming.state === 'closed')
+    return;
+
+  self._chanMgr.remove(recipient);
+
+  if (channel.server && channel.constructor.name === 'Session')
+    return;
 
   channel.incoming.state = 'closed';
 
@@ -79241,8 +79393,6 @@ function onCHANNEL_CLOSE(self, recipient, channel, err, dead) {
   }
   if (channel.outgoing.state === 'closing')
     channel.outgoing.state = 'closed';
-
-  self._chanMgr.remove(recipient);
 
   const readState = channel._readableState;
   const writeState = channel._writableState;
@@ -106741,7 +106891,7 @@ module.exports = eval("require")("utf-8-validate");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.2","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
 
 /***/ }),
 
@@ -106837,7 +106987,7 @@ module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.4.0"};
+module.exports = {"i8":"1.9.0"};
 
 /***/ }),
 
@@ -106853,7 +107003,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.3.1"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.4.0"}');
 
 /***/ }),
 
