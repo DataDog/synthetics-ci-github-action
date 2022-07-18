@@ -45,9 +45,30 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
+  test('Variable strings input set in the config when defined', async () => {
+    process.env = {
+      ...process.env,
+      INPUT_VARIABLES: 'START_URL=https://example.org,MY_VARIABLE=My title',
+    }
+
+    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+      variableStrings: ['START_URL=https://example.org', 'MY_VARIABLE=My title'],
+    })
+
+    delete process.env.INPUT_VARIABLES
+
+    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+    })
+  })
+
   test('getDefinedInput returns undefined if Github Action input not set', async () => {
     expect(resolveConfig.getDefinedInput('foobar')).toBeUndefined()
   })
+
   test('core.getInputs throws if required params not defined', async () => {
     process.env = {}
     await expect(resolveConfig.resolveConfig()).rejects.toThrowError()

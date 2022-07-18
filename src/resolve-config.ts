@@ -42,6 +42,9 @@ export const resolveConfig = async (): Promise<synthetics.CommandConfig> => {
     .map((file: string) => file.trim())
   const testSearchQuery = getDefinedInput('test_search_query')
   const subdomain = getDefinedInput('subdomain')
+  const variableStrings = getDefinedInput('variables')
+    ?.split(',')
+    .map((variableString: string) => variableString.trim())
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
@@ -67,6 +70,7 @@ export const resolveConfig = async (): Promise<synthetics.CommandConfig> => {
       publicIds,
       subdomain,
       testSearchQuery,
+      variableStrings,
     })
   )
 
