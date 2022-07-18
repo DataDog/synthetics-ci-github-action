@@ -220,7 +220,7 @@ const DEFAULT_CONFIG = {
     variableStrings: [],
 };
 const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a, _b;
     let apiKey;
     let appKey;
     try {
@@ -237,14 +237,12 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     const files = (_b = (0, exports.getDefinedInput)('files')) === null || _b === void 0 ? void 0 : _b.split(',').map((file) => file.trim());
     const testSearchQuery = (0, exports.getDefinedInput)('test_search_query');
     const subdomain = (0, exports.getDefinedInput)('subdomain');
-    const variableStrings = (_c = (0, exports.getDefinedInput)('variable_strings')) === null || _c === void 0 ? void 0 : _c.split(',').map((variableString) => variableString.trim());
     let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
     // Override with file config variables
     try {
         config = yield datadog_ci_1.utils.parseConfigFile(config, configPath !== null && configPath !== void 0 ? configPath : DEFAULT_CONFIG.configPath);
     }
     catch (error) {
-        console.log(`>>>parse config error = ${JSON.stringify(error)}`);
         if (configPath) {
             core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`);
             throw error;
@@ -261,9 +259,7 @@ const resolveConfig = () => __awaiter(void 0, void 0, void 0, function* () {
         publicIds,
         subdomain,
         testSearchQuery,
-        variableStrings,
     }));
-    console.log(`>>>config = ${JSON.stringify(config, null, 2)}`);
     return config;
 });
 exports.resolveConfig = resolveConfig;
@@ -107003,7 +106999,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.4.0"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.4.1"}');
 
 /***/ }),
 
