@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.4.1
+        uses: DataDog/synthetics-ci-github-action@v0.5.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.4.1
+        uses: DataDog/synthetics-ci-github-action@v0.5.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.4.1
+        uses: DataDog/synthetics-ci-github-action@v0.5.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -81,7 +81,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.4.1
+        uses: DataDog/synthetics-ci-github-action@v0.5.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -91,7 +91,7 @@ jobs:
 ## Inputs
 
 | Name                | Type   | Requirement | Description                                                                                                                                                                                              |
-|---------------------|--------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------- | ------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `api_key`           | string | _required_  | Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                                    |
 | `app_key`           | string | _required_  | Your Datadog Application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                            |
 | `public_ids`        | string | _optional_  | Comma-separated list of public IDs for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`. **Default:** none.                         |

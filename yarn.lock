@@ -323,10 +323,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@datadog/datadog-ci@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@datadog/datadog-ci/-/datadog-ci-1.8.0.tgz#3a91ce867e9eeef7dfdbc28360dd8141b1cd6746"
-  integrity sha512-02StMSacleyg8iJKHZOM8RuqLsjUvQJ1gMmF3yBYLuOpYUcZG1LSJ+EnHaOz6E3dqB2HB2aE0veqFYZgy3VHfA==
+"@datadog/datadog-ci@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@datadog/datadog-ci/-/datadog-ci-1.10.0.tgz#5de38edae644b3fea018ca66a35fb788dacc7171"
+  integrity sha512-4PLt1E8PiLUm2nJ49aqmAuW6sFFgqJTVzNpQvXybeklr8a8buggXaTL8lbafD4iWObWssnUu/8zJWBTRyawGHg==
   dependencies:
     "@types/datadog-metrics" "0.6.1"
     async-retry "1.3.1"
