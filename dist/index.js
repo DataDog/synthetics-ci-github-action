@@ -5,7 +5,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /***/ ((module) => {
 
 "use strict";
-module.exports = {"i8":"1.10.0"};
+module.exports = {"i8":"1.11.0"};
 
 /***/ }),
 
@@ -66,10 +66,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             resultSummary.failed > 0 ||
             resultSummary.timedOut > 0 ||
             resultSummary.testsNotFound.size > 0) {
-            core.setFailed(`Datadog Synthetics tests failed : ${(0, exports.printSummary)(resultSummary)}`);
+            core.setFailed(`Datadog Synthetics tests failed : ${(0, exports.printSummary)(resultSummary, config)}`);
         }
         else {
-            core.info(`Datadog Synthetics tests succeeded : ${(0, exports.printSummary)(resultSummary)}`);
+            core.info(`Datadog Synthetics tests succeeded : ${(0, exports.printSummary)(resultSummary, config)}`);
         }
     }
     catch (error) {
@@ -82,7 +82,12 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         core.setFailed('Running Datadog Synthetics tests failed.');
     }
 });
-const printSummary = (summary) => `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`;
+const printSummary = (summary, config) => {
+    const baseUrl = datadog_ci_1.synthetics.utils.getAppBaseURL(config);
+    const batchUrl = datadog_ci_1.synthetics.utils.getBatchUrl(baseUrl, String(summary.batchId));
+    return (`criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}\n` +
+        `Results URL: ${batchUrl}`);
+};
 exports.printSummary = printSummary;
 if (require.main === require.cache[eval('__filename')]) {
     run();
@@ -2496,15 +2501,6 @@ const renderApiRequestDescription = (subType, config) => {
     }
     return `${chalk_1.default.bold(subType)} test`;
 };
-const getResultUrl = (baseUrl, test, resultId) => {
-    const ciQueryParam = 'from_ci=true';
-    const testDetailUrl = `${baseUrl}synthetics/details/${test.public_id}`;
-    if (test.type === 'browser') {
-        return `${testDetailUrl}/result/${resultId}?${ciQueryParam}`;
-    }
-    return `${testDetailUrl}?resultId=${resultId}&${ciQueryParam}`;
-};
-const getBatchUrl = (baseUrl, batchId) => `${baseUrl}synthetics/explorer/ci?batchResultId=${batchId}`;
 const renderExecutionResult = (test, execution, baseUrl) => {
     const { executionRule, test: overriddenTest, resultId, result, timedOut } = execution;
     const resultOutcome = utils_1.getResultOutcome(execution);
@@ -2521,7 +2517,7 @@ const renderExecutionResult = (test, execution, baseUrl) => {
     if (!result.unhealthy) {
         const duration = utils_1.getResultDuration(result);
         const durationText = duration ? ` Total duration: ${duration} ms -` : '';
-        const resultUrl = getResultUrl(baseUrl, test, resultId);
+        const resultUrl = utils_1.getResultUrl(baseUrl, test, resultId);
         const resultUrlStatus = timedOut ? '(not yet received)' : '';
         const resultInfo = `  ⎋${durationText} Result URL: ${chalk_1.default.dim.cyan(resultUrl)} ${resultUrlStatus}`;
         outputLines.push(resultInfo);
@@ -2587,7 +2583,8 @@ class DefaultReporter {
         }
         const extraInfoStr = extraInfo.length ? ' (' + extraInfo.join(', ') + ')' : '';
         if (summary.batchId) {
-            lines.push('Results URL: ' + chalk_1.default.dim.cyan(getBatchUrl(baseUrl, summary.batchId)));
+            const batchUrl = utils_1.getBatchUrl(baseUrl, summary.batchId);
+            lines.push('Results URL: ' + chalk_1.default.dim.cyan(batchUrl));
         }
         lines.push(`${b('Run summary:')} ${runSummary.join(', ')}${extraInfoStr}\n\n`);
         this.write(lines.join('\n'));
@@ -2706,7 +2703,7 @@ class JUnitReporter {
         }
         // Update stats for the suite.
         suiteRun.$ = Object.assign(Object.assign({}, suiteRun.$), this.getResultStats(result, getStats(suiteRun.$)));
-        const testCase = this.getTestCase(result);
+        const testCase = this.getTestCase(result, baseUrl);
         // Timeout errors are only reported at the top level.
         if (result.timedOut) {
             testCase.error.push({
@@ -2734,9 +2731,12 @@ class JUnitReporter {
         }
         suiteRun.testcase.push(testCase);
     }
-    runEnd(summary) {
+    runEnd(summary, baseUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             this.json.testsuites.$.batch_id = summary.batchId;
+            if (summary.batchId) {
+                this.json.testsuites.$.batch_url = utils_1.getBatchUrl(baseUrl, summary.batchId);
+            }
             // Write the file
             try {
                 const xml = this.builder.buildObject(this.json);
@@ -2867,10 +2867,11 @@ class JUnitReporter {
         }
         return stats;
     }
-    getTestCase(result) {
+    getTestCase(result, baseUrl) {
         var _a;
         const test = result.test;
         const resultOutcome = utils_1.getResultOutcome(result);
+        const resultUrl = utils_1.getResultUrl(baseUrl, test, result.resultId);
         const passed = ["passed" /* Passed */, "passed-non-blocking" /* PassedNonBlocking */].includes(resultOutcome);
         return {
             $: Object.assign({ name: test.name, time: utils_1.getResultDuration(result.result) / 1000, timestamp: new Date(result.timestamp).toISOString() }, this.getResultStats(result)),
@@ -2894,6 +2895,7 @@ class JUnitReporter {
                     { $: { name: 'passed', value: `${passed}` } },
                     { $: { name: 'public_id', value: test.public_id } },
                     { $: { name: 'result_id', value: result.resultId } },
+                    { $: { name: 'result_url', value: resultUrl } },
                     ...('startUrl' in result.result ? [{ $: { name: 'start_url', value: result.result.startUrl } }] : []),
                     { $: { name: 'status', value: test.status } },
                     { $: { name: 'tags', value: test.tags.join(',') } },
@@ -3433,7 +3435,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.renderResults = exports.sortResultsByOutcome = exports.getAppBaseURL = exports.parseVariablesFromCli = exports.retry = exports.fetchTest = exports.runTests = exports.getTestsToTrigger = exports.getReporter = exports.getResultDuration = exports.createSummary = exports.waitForResults = exports.wait = exports.getSuites = exports.getResultOutcome = exports.hasResultPassed = exports.getStrictestExecutionRule = exports.getExecutionRule = exports.setCiTriggerApp = exports.handleConfig = exports.ciTriggerApp = void 0;
+exports.renderResults = exports.sortResultsByOutcome = exports.getResultUrl = exports.getBatchUrl = exports.getAppBaseURL = exports.parseVariablesFromCli = exports.retry = exports.fetchTest = exports.runTests = exports.getTestsToTrigger = exports.getReporter = exports.getResultDuration = exports.createSummary = exports.waitForResults = exports.wait = exports.getSuites = exports.getResultOutcome = exports.hasResultPassed = exports.getStrictestExecutionRule = exports.getExecutionRule = exports.setCiTriggerApp = exports.handleConfig = exports.ciTriggerApp = void 0;
 const deep_extend_1 = __importDefault(__nccwpck_require__(1705));
 const fs = __importStar(__nccwpck_require__(5747));
 const path = __importStar(__nccwpck_require__(5622));
@@ -3907,6 +3909,17 @@ const parseVariablesFromCli = (variableArguments = [], logFunction) => {
 exports.parseVariablesFromCli = parseVariablesFromCli;
 const getAppBaseURL = ({ datadogSite, subdomain }) => `https://${subdomain}.${datadogSite}/`;
 exports.getAppBaseURL = getAppBaseURL;
+const getBatchUrl = (baseUrl, batchId) => `${baseUrl}synthetics/explorer/ci?batchResultId=${batchId}`;
+exports.getBatchUrl = getBatchUrl;
+const getResultUrl = (baseUrl, test, resultId) => {
+    const ciQueryParam = 'from_ci=true';
+    const testDetailUrl = `${baseUrl}synthetics/details/${test.public_id}`;
+    if (test.type === 'browser') {
+        return `${testDetailUrl}/result/${resultId}?${ciQueryParam}`;
+    }
+    return `${testDetailUrl}?resultId=${resultId}&${ciQueryParam}`;
+};
+exports.getResultUrl = getResultUrl;
 /**
  * Sort results with the following rules:
  * - Passed results come first
@@ -117424,7 +117437,7 @@ module.exports = JSON.parse('{"100":"Continue","101":"Switching Protocols","102"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.5.0"}');
+module.exports = JSON.parse('{"u2":"datadog-synthetics-github-action","i8":"0.6.0"}');
 
 /***/ }),
 
