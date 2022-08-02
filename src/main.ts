@@ -26,9 +26,9 @@ const run = async (): Promise<void> => {
       resultSummary.timedOut > 0 ||
       resultSummary.testsNotFound.size > 0
     ) {
-      core.setFailed(`Datadog Synthetics tests failed : ${printSummary(resultSummary)}`)
+      core.setFailed(`Datadog Synthetics tests failed : ${printSummary(resultSummary, config)}`)
     } else {
-      core.info(`Datadog Synthetics tests succeeded : ${printSummary(resultSummary)}`)
+      core.info(`Datadog Synthetics tests succeeded : ${printSummary(resultSummary, config)}`)
     }
   } catch (error) {
     if (error instanceof synthetics.CiError) {
@@ -40,8 +40,14 @@ const run = async (): Promise<void> => {
   }
 }
 
-export const printSummary = (summary: synthetics.Summary): string =>
-  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}`
+export const printSummary = (summary: synthetics.Summary, config: synthetics.SyntheticsCIConfig): string => {
+  const baseUrl = synthetics.utils.getAppBaseURL(config)
+  const batchUrl = synthetics.utils.getBatchUrl(baseUrl, String(summary.batchId))
+  return (
+    `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}\n` +
+    `Results URL: ${batchUrl}`
+  )
+}
 
 if (require.main === module) {
   run()

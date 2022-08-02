@@ -17,6 +17,7 @@ const emptySummary: synthetics.Summary = {
   skipped: 0,
   testsNotFound: new Set(),
   timedOut: 0,
+  batchId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
 }
 
 const inputs = {
@@ -106,7 +107,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -116,7 +118,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -128,7 +131,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0`
+        `Datadog Synthetics tests failed : criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
