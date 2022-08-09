@@ -70,6 +70,25 @@ jobs:
           test_search_query: 'tag:e2e-tests'
 ```
 
+### Example workflow using the `test_search_query` and variable overrides
+
+```yaml
+name: Run Synthetics tests by test tag
+jobs:
+  e2e_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run Datadog Synthetics tests
+        uses: DataDog/synthetics-ci-github-action@v0.6.0
+        with:
+          api_key: ${{secrets.DD_API_KEY}}
+          app_key: ${{secrets.DD_APP_KEY}}
+          test_search_query: 'tag:e2e-tests'
+          variables: 'START_URL=https://staging.website.com,PASSWORD=stagingpassword'
+```
+
 ### Example workflow using a global configuration override with `config_path`
 
 ```yaml
