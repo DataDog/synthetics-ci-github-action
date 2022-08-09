@@ -73,7 +73,7 @@ jobs:
 ### Example workflow using the `test_search_query` and variable overrides
 
 ```yaml
-name: Run Synthetics tests by test tag
+name: Run Synthetics tests using search query
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
