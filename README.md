@@ -126,7 +126,7 @@ jobs:
 ```bash
 
 # Run the tests
-yarn jest
+yarn test
 
 # Build project
 yarn build
