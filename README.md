@@ -152,7 +152,7 @@ To release a new version of `synthetics-ci-github-action`:
 
 Once the release is created, the new version of the Github Action is available as a workflow.
 
-## Further Reading
+## Further reading
 
 Additional helpful documentation, links, and articles:
 
@@ -161,6 +161,6 @@ Additional helpful documentation, links, and articles:
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
-[4]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#setup-a-client
+[4]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#setup-a-client
 [5]: https://docs.datadoghq.com/synthetics/search/#search
-[6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
+[6]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration
