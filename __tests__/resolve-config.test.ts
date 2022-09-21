@@ -1,11 +1,8 @@
-import {readFile} from 'fs'
+import fs from 'fs'
 
 import {expect, test} from '@jest/globals'
 import * as resolveConfig from '../src/resolve-config'
 import {config} from '../src/fixtures'
-
-jest.mock('fs')
-const mockedReadFile = readFile as unknown as jest.MockedFunction<typeof readFile>
 
 const requiredInputs = {
   apiKey: 'xxx',
@@ -29,8 +26,8 @@ describe('Resolves Config', () => {
       callback: (error: NodeJS.ErrnoException | null, data: Buffer) => void
     ) => {
       callback(null, Buffer.from(JSON.stringify({files: ['foobar.synthetics.json']})))
-    }) as typeof readFile
-    mockedReadFile.mockImplementation(fakeReadFile)
+    }) as typeof fs.readFile
+    jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
     await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
@@ -40,8 +37,8 @@ describe('Resolves Config', () => {
 
   test('Default configuration applied if global configuration empty', async () => {
     const fakeReadFile = ((path: string, cb: (error: NodeJS.ErrnoException | null, data?: Buffer) => void) =>
-      cb({code: 'ENOENT'} as NodeJS.ErrnoException)) as typeof readFile
-    mockedReadFile.mockImplementation(fakeReadFile)
+      cb({code: 'ENOENT'} as NodeJS.ErrnoException)) as typeof fs.readFile
+    jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
     await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
