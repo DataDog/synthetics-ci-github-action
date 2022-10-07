@@ -69,6 +69,29 @@ describe('Run Github Action', () => {
         publicIds,
       })
     })
+
+    test('Github Action parses out variables string', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_VARIABLES: 'START_URL=https://example.org,MY_VARIABLE=My title',
+      }
+
+      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
+
+      await run()
+      expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
+        ...config,
+        ...inputs,
+        global: {
+          variables: {
+            START_URL: 'https://example.org',
+            MY_VARIABLE: 'My title',
+          },
+        },
+      })
+
+      delete process.env.INPUT_VARIABLES
+    })
   })
 
   describe('Handle invalid input parameters', () => {
