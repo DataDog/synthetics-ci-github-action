@@ -22,7 +22,7 @@ const DEFAULT_CONFIG: synthetics.CommandConfig = {
   variableStrings: [],
 }
 
-export const resolveConfig = async (): Promise<synthetics.CommandConfig> => {
+export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<synthetics.CommandConfig> => {
   let apiKey
   let appKey
   try {
@@ -70,7 +70,12 @@ export const resolveConfig = async (): Promise<synthetics.CommandConfig> => {
       publicIds,
       subdomain,
       testSearchQuery,
-      variableStrings,
+      global: deepExtend(
+        config.global,
+        removeUndefinedValues({
+          variables: synthetics.utils.parseVariablesFromCli(variableStrings, reporter.log.bind(reporter)),
+        })
+      ),
     })
   )
 

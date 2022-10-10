@@ -3,10 +3,24 @@ import fs from 'fs'
 import {expect, test} from '@jest/globals'
 import * as resolveConfig from '../src/resolve-config'
 import {config} from '../src/fixtures'
+import type {synthetics} from '@datadog/datadog-ci'
 
 const requiredInputs = {
   apiKey: 'xxx',
   appKey: 'yyy',
+}
+
+const mockReporter: synthetics.MainReporter = {
+  error: jest.fn(),
+  initErrors: jest.fn(),
+  log: jest.fn(),
+  reportStart: jest.fn(),
+  resultEnd: jest.fn(),
+  resultReceived: jest.fn(),
+  runEnd: jest.fn(),
+  testTrigger: jest.fn(),
+  testWait: jest.fn(),
+  testsWait: jest.fn(),
 }
 
 describe('Resolves Config', () => {
@@ -28,7 +42,7 @@ describe('Resolves Config', () => {
       callback(null, Buffer.from(JSON.stringify({files: ['foobar.synthetics.json']})))
     }) as typeof fs.readFile
     jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
       files: ['foobar.synthetics.json'],
@@ -39,7 +53,7 @@ describe('Resolves Config', () => {
     const fakeReadFile = ((path: string, cb: (error: NodeJS.ErrnoException | null, data?: Buffer) => void) =>
       cb({code: 'ENOENT'} as NodeJS.ErrnoException)) as typeof fs.readFile
     jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({...config, ...requiredInputs})
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
   test('Variable strings input set in the config when defined', async () => {
@@ -48,15 +62,17 @@ describe('Resolves Config', () => {
       INPUT_VARIABLES: 'START_URL=https://example.org,MY_VARIABLE=My title',
     }
 
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      variableStrings: ['START_URL=https://example.org', 'MY_VARIABLE=My title'],
+      global: {
+        variables: {START_URL: 'https://example.org', MY_VARIABLE: 'My title'},
+      },
     })
 
     delete process.env.INPUT_VARIABLES
 
-    await expect(resolveConfig.resolveConfig()).resolves.toStrictEqual({
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
     })
@@ -68,6 +84,6 @@ describe('Resolves Config', () => {
 
   test('core.getInputs throws if required params not defined', async () => {
     process.env = {}
-    await expect(resolveConfig.resolveConfig()).rejects.toThrowError()
+    await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrowError()
   })
 })

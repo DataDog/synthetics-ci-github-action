@@ -14,7 +14,7 @@ const run = async (): Promise<void> => {
 
   synthetics.utils.setCiTriggerApp('github_action')
   const reporter = synthetics.utils.getReporter([new synthetics.DefaultReporter({context})])
-  const config = await resolveConfig()
+  const config = await resolveConfig(reporter)
 
   try {
     const startTime = Date.now()
