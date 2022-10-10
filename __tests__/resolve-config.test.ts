@@ -33,7 +33,7 @@ describe('Resolves Config', () => {
     }
   })
 
-  test('Default configuration parameters get overriden by global configuration file ', async () => {
+  test('Default configuration parameters get overriden by global configuration file', async () => {
     const fakeReadFile = ((
       path: string,
       encoding: string,
@@ -41,6 +41,7 @@ describe('Resolves Config', () => {
     ) => {
       callback(null, Buffer.from(JSON.stringify({files: ['foobar.synthetics.json']})))
     }) as typeof fs.readFile
+    jest.spyOn(fs, 'existsSync').mockImplementation(() => true)
     jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
@@ -50,9 +51,7 @@ describe('Resolves Config', () => {
   })
 
   test('Default configuration applied if global configuration empty', async () => {
-    const fakeReadFile = ((path: string, cb: (error: NodeJS.ErrnoException | null, data?: Buffer) => void) =>
-      cb({code: 'ENOENT'} as NodeJS.ErrnoException)) as typeof fs.readFile
-    jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
+    jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({...config, ...requiredInputs})
   })
 
