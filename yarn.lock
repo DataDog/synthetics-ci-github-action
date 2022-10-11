@@ -324,7 +324,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@datadog/datadog-ci@1.16.0":
+"@datadog/datadog-ci@^1.16.0":
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/@datadog/datadog-ci/-/datadog-ci-1.16.0.tgz#0ac3420922757959dcd3d00387b95c0dff982345"
   integrity sha512-fDFV4GRqEeUk9lTib5CJlXNFyx8gp7QxiZOhoWDrY74CBFejBSacnGkarl04ZeoCSw26hhZdeCsRtvAPAhKN2Q==
