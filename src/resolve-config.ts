@@ -10,6 +10,7 @@ const DEFAULT_CONFIG: synthetics.CommandConfig = {
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
   failOnCriticalErrors: false,
+  failOnMissingTests: false,
   failOnTimeout: false,
   files: ['{,!(node_modules)/**/}*.synthetics.json'],
   global: {},
@@ -49,7 +50,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
   try {
-    config = await utils.parseConfigFile(config, configPath ?? DEFAULT_CONFIG.configPath)
+    config = await utils.resolveConfigFromFile(config, {configPath, defaultConfigPath: DEFAULT_CONFIG.configPath})
   } catch (error) {
     if (configPath) {
       core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)

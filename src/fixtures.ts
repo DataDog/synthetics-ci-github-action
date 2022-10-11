@@ -6,6 +6,7 @@ export const config: synthetics.CommandConfig = {
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
   failOnCriticalErrors: false,
+  failOnMissingTests: false,
   failOnTimeout: false,
   files: ['{,!(node_modules)/**/}*.synthetics.json'],
   global: {},
