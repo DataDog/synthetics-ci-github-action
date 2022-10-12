@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.7.0
+        uses: DataDog/synthetics-ci-github-action@v0.7.1
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.7.0
+        uses: DataDog/synthetics-ci-github-action@v0.7.1
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.7.0
+        uses: DataDog/synthetics-ci-github-action@v0.7.1
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -81,7 +81,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.7.0
+        uses: DataDog/synthetics-ci-github-action@v0.7.1
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -100,7 +100,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.7.0
+        uses: DataDog/synthetics-ci-github-action@v0.7.1
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -140,15 +140,14 @@ yarn package
 To release a new version of `synthetics-ci-github-action`:
 
 1. Create a new branch for the version upgrade.
-2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes.
-   - See [Semantic Versioning](https://semver.org/#summary) to determine what you need to increment.
-   - Rebuild and package the project before release. Remember to update the `README.md` example versions.
-3. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
-   - Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
-4. Merge the pull request.
-5. Create a GitHub Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of your changes.
+2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes. See [Semantic Versioning](https://semver.org/#summary) to determine what you need to increment. Once the `yarn version` command is done, a new commit `vX.Y.Z` along with a new tag should be added to the Git tree.
+3. Update the `README.md` example versions, and build + package the project with `yarn build && yarn package`. :warning: Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. Feel free to use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
+4. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
+   - Create a pull-request with the changes introduced in the description. This pull-request requires at least one approval.
+5. Merge the pull-request.
+6. Create a GitHub Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of your changes.
 
-⚠️ Ensure the release version follows the expected format `vX.X.X`.
+⚠️ Ensure the release version follows the expected format `vX.Y.Z`.
 
 Once the release is created, the new version of the Github Action is available as a workflow.
 
