@@ -140,26 +140,33 @@ yarn package
 To release a new version of `synthetics-ci-github-action`:
 
 1. Create a new branch for the version upgrade.
-2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes. See [Semantic Versioning](https://semver.org/#summary) to determine what you need to increment. Once the `yarn version` command is done, a new commit `vX.Y.Z` along with a new tag should be added to the Git tree.
-3. Update the `README.md` example versions, and build + package the project with `yarn build && yarn package`. :warning: Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. Feel free to use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
+2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes. See [Semantic Versioning][7] to determine what you need to increment. Once the `yarn version` command is done, a new commit `vX.Y.Z` along with a new tag should be added to the Git tree.
+3. Update the `README.md` example versions, and build + package the project with `yarn build && yarn package`.
+
+   Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. You can use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
+
 4. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
-   - Create a pull-request with the changes introduced in the description. This pull-request requires at least one approval.
-5. Merge the pull-request.
-6. Create a GitHub Release from the [Tags page](https://github.com/DataDog/synthetics-ci-github-action/tags) with the description of your changes.
+   
+   Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
+
+5. Merge the pull request.
+6. Create a GitHub Release from the [Tags page][8] with a description of your changes.
 
 ⚠️ Ensure the release version follows the expected format `vX.Y.Z`.
 
 Once the release is created, the new version of the Github Action is available as a workflow.
 
-## Further Reading
+## Further reading
 
 Additional helpful documentation, links, and articles:
 
-- [CI/CD Integrations Configuration][6]
+- [Continuous Testing and CI/CD Configuration][6]
 
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
-[4]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration/?tab=npm#setup-a-client
+[4]: https://docs.datadoghq.com/continous_testing/cicd_integrations/configuration/?tab=npm#setup-a-client
 [5]: https://docs.datadoghq.com/synthetics/search/#search
-[6]: https://docs.datadoghq.com/synthetics/cicd_integrations/configuration
+[6]: https://docs.datadoghq.com/continous_testing/cicd_integrations/configuration
+[7]: https://semver.org/#summary
+[8]: https://github.com/DataDog/synthetics-ci-github-action/tags
