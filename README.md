@@ -141,7 +141,7 @@ To release a new version of `synthetics-ci-github-action`:
 
 1. Create a new branch for the version upgrade.
 2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes. See [Semantic Versioning][7] to determine what you need to increment. Once the `yarn version` command is done, a new commit `vX.Y.Z` along with a new tag should be added to the Git tree.
-3. Update the `README.md` example versions, and build + package the project with `yarn build && yarn package`.
+3. Update the `README.md` example versions, and build and package the project with `yarn build && yarn package`.
 
    Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. You can use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
 
