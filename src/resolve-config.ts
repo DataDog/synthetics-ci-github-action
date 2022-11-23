@@ -46,6 +46,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   const variableStrings = getDefinedInput('variables')
     ?.split(',')
     .map((variableString: string) => variableString.trim())
+  const tunnel = getDefinedBoolean('tunnel')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
@@ -71,6 +72,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       publicIds,
       subdomain,
       testSearchQuery,
+      tunnel,
       global: deepExtend(
         config.global,
         removeUndefinedValues({
@@ -87,4 +89,11 @@ export const getDefinedInput = (name: string): string | undefined => {
   const input = core.getInput(name)
 
   return input !== '' ? input : undefined
+}
+
+export const getDefinedBoolean = (name: string): boolean | undefined => {
+  if (!getDefinedInput(name)) {
+    return undefined
+  }
+  return core.getBooleanInput(name)
 }
