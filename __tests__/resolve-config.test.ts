@@ -85,4 +85,24 @@ describe('Resolves Config', () => {
     process.env = {}
     await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrowError()
   })
+
+  describe('parses boolean', () => {
+    test('but throws if incorrect value', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_TUNNEL: 'not_a_bool',
+      }
+      await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrow(
+        /Input does not meet YAML 1.2 \"Core Schema\" specification: tunnel/
+      )
+    })
+
+    test('if value meets YAML 1.2', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_TUNNEL: 'True',
+      }
+      expect(await resolveConfig.resolveConfig(mockReporter)).toBeTruthy()
+    })
+  })
 })
