@@ -102,7 +102,7 @@ describe('Resolves Config', () => {
         ...process.env,
         INPUT_TUNNEL: 'True',
       }
-      expect(await resolveConfig.resolveConfig(mockReporter)).toBeTruthy()
+      expect((await resolveConfig.resolveConfig(mockReporter)).tunnel).toBe(true)
     })
   })
 })

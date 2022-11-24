@@ -120,8 +120,7 @@ jobs:
 | `datadog_site`      | string | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
 | `config_path`       | string | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 | `variables`         | string | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
-| `tunnel`            | boolean| _optional_  | Enable tunnel to interact with Datadog API. **Default:** `false`.                                                                                                                                        |
-
+| `tunnel`            | boolean| _optional_  | Use the [secure tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                             |
 ## Development
 
 ```bash
@@ -171,3 +170,4 @@ Additional helpful documentation, links, and articles:
 [6]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration
 [7]: https://semver.org/#summary
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
+[9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/

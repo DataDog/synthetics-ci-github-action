@@ -92,8 +92,13 @@ export const getDefinedInput = (name: string): string | undefined => {
 }
 
 export const getDefinedBoolean = (name: string): boolean | undefined => {
-  if (!getDefinedInput(name)) {
-    return undefined
+  try {
+    if (!getDefinedInput(name)) {
+      return undefined
+    }
+    return core.getBooleanInput(name)
+  } catch (error) {
+    core.setFailed(String(error))
+    throw error
   }
-  return core.getBooleanInput(name)
 }
