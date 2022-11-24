@@ -119,7 +119,7 @@ jobs:
 | `files`             | string | _optional_  | Glob pattern to detect Synthetic tests config files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                             |
 | `datadog_site`      | string | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
 | `config_path`       | string | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
-| `variables`         | string | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`                                                |
+| `variables`         | string | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
 | `tunnel`            | boolean| _optional_  | Enable tunnel to interact with Datadog API. **Default:** `false`.                                                                                                                                        |
 
 ## Development
