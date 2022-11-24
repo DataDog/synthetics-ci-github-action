@@ -26,6 +26,10 @@ inputs:
   test_search_query:
     required: false
     description: 'Search query to trigger tests.'
+  tunnel:
+    required: false
+    description: 'Enable tunnel to interact with Datadog API.'
+    default: false
   variables:
     required: false
     description: 'Comma-separated list of variable_name=variable_value pairs.'
