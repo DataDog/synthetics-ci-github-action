@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.8.1
+        uses: DataDog/synthetics-ci-github-action@v0.9.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.8.1
+        uses: DataDog/synthetics-ci-github-action@v0.9.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.8.1
+        uses: DataDog/synthetics-ci-github-action@v0.9.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -81,7 +81,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.8.1
+        uses: DataDog/synthetics-ci-github-action@v0.9.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -100,7 +100,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Datadog Synthetics tests
-        uses: DataDog/synthetics-ci-github-action@v0.8.1
+        uses: DataDog/synthetics-ci-github-action@v0.9.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -146,7 +146,7 @@ To release a new version of `synthetics-ci-github-action`:
    Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. You can use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
 
 4. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
-   
+
    Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
 
 5. Merge the pull request.
