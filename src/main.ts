@@ -21,7 +21,7 @@ const run = async (): Promise<void> => {
     const {results, summary} = await synthetics.executeTests(reporter, config)
     const resultSummary = renderResults({config, reporter, results, startTime, summary})
     if (
-      (resultSummary.criticalErrors > 0 && config.failOnCriticalErrors) ||
+      resultSummary.criticalErrors > 0 ||
       resultSummary.failed > 0 ||
       (resultSummary.timedOut > 0 && config.failOnTimeout) ||
       resultSummary.testsNotFound.size > 0
