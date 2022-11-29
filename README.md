@@ -149,7 +149,7 @@ To release a new version of `synthetics-ci-github-action`:
 
    Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
 
-5. **Merge** (do not use "Squash and Merge") the pull request.
+5. Merge the pull request.
 6. Create a GitHub Release from the [Tags page][8] with a description of your changes.
 
 ⚠️ Ensure the release version follows the expected format `vX.Y.Z`.
