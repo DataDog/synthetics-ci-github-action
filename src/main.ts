@@ -23,12 +23,12 @@ const run = async (): Promise<void> => {
     if (
       resultSummary.criticalErrors > 0 ||
       resultSummary.failed > 0 ||
-      resultSummary.timedOut > 0 ||
+      (resultSummary.timedOut > 0 && config.failOnTimeout) ||
       resultSummary.testsNotFound.size > 0
     ) {
-      core.setFailed(`Datadog Synthetics tests failed : ${printSummary(resultSummary, config)}`)
+      core.setFailed(`Datadog Synthetics tests failed: ${printSummary(resultSummary, config)}`)
     } else {
-      core.info(`Datadog Synthetics tests succeeded : ${printSummary(resultSummary, config)}`)
+      core.info(`Datadog Synthetics tests succeeded: ${printSummary(resultSummary, config)}`)
     }
   } catch (error) {
     if (error instanceof synthetics.CiError) {
