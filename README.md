@@ -161,6 +161,7 @@ Once the release is created, the new version of the Github Action is available a
 Additional helpful documentation, links, and articles:
 
 - [Continuous Testing and CI/CD Configuration][6]
+- [Best practices for continuous testing with Datadog][10]
 
 [1]: https://github.com/DataDog/datadog-ci
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
@@ -171,3 +172,4 @@ Additional helpful documentation, links, and articles:
 [7]: https://semver.org/#summary
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
 [9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/
+[10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
