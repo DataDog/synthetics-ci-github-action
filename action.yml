@@ -33,6 +33,9 @@ inputs:
   variables:
     required: false
     description: 'Comma-separated list of variable_name=variable_value pairs.'
+  junit_report:
+    required: false
+    description: 'The filename for a JUnit report if you want to generate one.'
 
 runs:
   using: 'node16'

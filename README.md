@@ -120,6 +120,7 @@ jobs:
 | `datadog_site`      | string  | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
 | `config_path`       | string  | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 | `variables`         | string  | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
+| `junit_report`      | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                          |
 | `tunnel`            | boolean | _optional_  | Use the [secure tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                             |
 ## Development
 
