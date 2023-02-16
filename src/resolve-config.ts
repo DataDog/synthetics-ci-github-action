@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 import {synthetics, utils} from '@datadog/datadog-ci'
+import {BaseContext} from 'clipanion'
+import {Reporter} from '@datadog/datadog-ci/dist/commands/synthetics'
 import deepExtend from 'deep-extend'
-
-import {removeUndefinedValues} from './utils'
 
 const DEFAULT_CONFIG: synthetics.CommandConfig = {
   apiKey: '',
@@ -63,7 +63,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   // Override with GithubAction inputs
   config = deepExtend(
     config,
-    removeUndefinedValues({
+    utils.removeUndefinedValues({
       apiKey,
       appKey,
       configPath,
@@ -75,7 +75,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       tunnel,
       global: deepExtend(
         config.global,
-        removeUndefinedValues({
+        utils.removeUndefinedValues({
           variables: synthetics.utils.parseVariablesFromCli(variableStrings, reporter.log.bind(reporter)),
         })
       ),
@@ -101,4 +101,21 @@ export const getDefinedBoolean = (name: string): boolean | undefined => {
     core.setFailed(String(error))
     throw error
   }
+}
+
+export const getReporter = (): synthetics.MainReporter => {
+  const context: BaseContext = {
+    stdin: process.stdin,
+    stdout: process.stdout,
+    stderr: process.stderr,
+  }
+
+  const reporters: Reporter[] = [new synthetics.DefaultReporter({context})]
+
+  const jUnitReportFilename = getDefinedInput('junit_report')
+  if (jUnitReportFilename) {
+    reporters.push(new synthetics.JUnitReporter({context, jUnitReport: jUnitReportFilename}))
+  }
+
+  return synthetics.utils.getReporter(reporters)
 }

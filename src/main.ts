@@ -1,19 +1,13 @@
 import * as core from '@actions/core'
-import {BaseContext} from 'clipanion'
+import {getReporter, resolveConfig} from './resolve-config'
 import {renderResults} from './process-results'
 import {reportCiError} from './report-ci-error'
-import {resolveConfig} from './resolve-config'
 import {synthetics} from '@datadog/datadog-ci'
 
 const run = async (): Promise<void> => {
-  const context: BaseContext = {
-    stdin: process.stdin,
-    stdout: process.stdout,
-    stderr: process.stderr,
-  }
-
   synthetics.utils.setCiTriggerApp('github_action')
-  const reporter = synthetics.utils.getReporter([new synthetics.DefaultReporter({context})])
+
+  const reporter = getReporter()
   const config = await resolveConfig(reporter)
 
   try {

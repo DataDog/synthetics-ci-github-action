@@ -5,10 +5,11 @@ import {expect, test} from '@jest/globals'
 import {execFile} from 'child_process'
 import * as path from 'path'
 
-import {config} from '../src/fixtures'
+import {config, EMPTY_SUMMARY} from '../src/fixtures'
 import run from '../src/main'
 import * as resolveConfigModule from '../src/resolve-config'
 import * as processResults from '../src/process-results'
+import * as fs from 'fs'
 
 const emptySummary: synthetics.Summary = {
   criticalErrors: 0,
@@ -92,6 +93,32 @@ describe('Run Github Action', () => {
       })
 
       delete process.env.INPUT_VARIABLES
+    })
+
+    test('Github Action generates a jUnit report', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_JUNIT_REPORT: 'reports/TEST-1.xml',
+      }
+
+      jest.spyOn(synthetics, 'executeTests').mockResolvedValue({
+        results: [],
+        summary: EMPTY_SUMMARY,
+      })
+
+      await run()
+      expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
+        ...config,
+        ...inputs,
+      })
+
+      expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
+
+      // Cleaning
+      fs.unlinkSync('./reports/TEST-1.xml')
+      fs.rmdirSync('./reports')
+
+      delete process.env.JUNIT_REPORT
     })
   })
 
