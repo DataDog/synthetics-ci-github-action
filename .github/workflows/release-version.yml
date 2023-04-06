@@ -1,0 +1,96 @@
+# This workflow automatically creates a release PR for the CI integration.
+
+name: Create Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      semver:
+        description: 'Semver argument for the version bump to do on the CI integration'
+        required: true
+        default: 'minor'
+        type: choice
+        options:
+          - 'patch'
+          - 'minor'
+          - 'major'
+      upgrade_datadog_ci:
+        description: 'Whether or not to upgrade datadog-ci'
+        required: true
+        type: boolean
+      datadog_ci_version:
+        description: 'Version of datadog-ci to install'
+        type: string
+        default: 'latest'
+
+jobs:
+  prepare-branch:
+    name: Prepare the release branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      - name: Create release branch
+        run: git checkout -b release/local-branch
+      - name: Set git user
+        run: |
+          git config user.name "Release Automation"
+          git config user.email noreply@github.com
+      - name: Install dependencies
+        run: yarn install
+      - name: Bump CI integration version
+        run: yarn version --${{ github.events.inputs.semver }}
+      - name: Update build files
+        run: yarn build && yarn package
+      - name: Amend version commit
+        id: amend-version-commit
+        run: |
+          VERSION_TAG=$(git tag --points-at HEAD) 
+          git commit --amend --no-edit
+          git tag --force $VERSION_TAG
+          echo "::set-output name=version_tag::$VERSION_TAG"
+      - name: Push the branch (with tags)
+        run: git push --follow-tags origin release/v${{ steps.amend-version-commit.outputs.version_tag }}
+
+  create-pull-request:
+    name: Create pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create pull request
+        id: create-pull-request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: pullRequest } = octokit.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: 'main',
+              base: 'release/v${{ steps.amend-version-commit.outputs.version_tag }}',
+            })
+
+            return pullRequest.number
+      - name: Generate release notes
+        id: generate-release-notes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: releaseNotes } = await octokit.rest.repos.generateReleaseNotes({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: '${{ steps.amend-version-commit.outputs.version_tag }}',
+            })
+
+            return releaseNotes.body
+      - name: Generate release notes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{steps.create-pull-request.outputs.result}},
+              body: '${{steps.generate-release-notes.outputs.result}}'
+            })
