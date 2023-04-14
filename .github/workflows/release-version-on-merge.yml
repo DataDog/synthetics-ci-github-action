@@ -1,0 +1,27 @@
+name: On Release PR merged
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  contents: write
+
+jobs:
+  release-version-on-merge:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '[release:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const tagName = '${{ github.event.pull_request.head.ref }}'.replace('release/', '')
+
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tagName,
+              name: tagName,
+              body: ${{ toJSON(github.event.pull_request.body) }}
+            });
