@@ -1,0 +1,77 @@
+# This workflow automatically creates a release PR for the CI integration.
+
+name: Bump Datadog CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      datadog_ci_version:
+        description: "Version of datadog-ci to install (`latest` or `A.B.C`)"
+        type: string
+        default: "latest"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-datadog-ci:
+    runs-on: ubuntu-latest
+    steps:
+      # Do the changes
+      - uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: Create release branch
+        run: git checkout -b local-branch
+      - name: Set git user
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email noreply@github.com
+      - name: Install dependencies
+        run: yarn install
+      - name: Bump datadog-ci
+        id: bump-datadog-ci
+        run: |
+          VERSION=${{ github.event.inputs.datadog_ci_version }}
+          if [ "$VERSION" = "latest" ]; then
+            VERSION=$(npm view @datadog/datadog-ci --json | jq -r '.version')
+          fi
+
+          yarn add @datadog/datadog-ci@^$VERSION
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+      - name: Create bump commit
+        run: git commit -a --message '[dep] Bump datadog-ci to `${{ steps.bump-datadog-ci.outputs.VERSION }}`'
+      - name: Push the branch
+        run: git push -u origin local-branch:bump-datadog-ci/${{ steps.bump-datadog-ci.outputs.VERSION }}
+
+      # Create the pull request
+      - name: Create pull request
+        id: create-pull-request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: pullRequest } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: 'main',
+              head: 'bump-datadog-ci/${{ steps.bump-datadog-ci.outputs.VERSION }}',
+              title: '[dep] Bump datadog-ci to `${{ steps.bump-datadog-ci.outputs.VERSION }}`',
+              body: 'This PR bumps [datadog-ci](https://github.com/DataDog/datadog-ci) to version [`${{ steps.bump-datadog-ci.outputs.VERSION }}`](https://github.com/DataDog/datadog-ci/releases/tag/v${{ steps.bump-datadog-ci.outputs.VERSION }})'
+            })
+
+            return pullRequest.number
+      - name: Create comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { bumpDatadogCiComment } = require('./ci/pull-request-comments')
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{steps.create-pull-request.outputs.result}},
+              body: bumpDatadogCiComment,
+            })
