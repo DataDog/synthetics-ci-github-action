@@ -7,13 +7,10 @@ on:
     inputs:
       semver:
         description: "Semver argument for the version bump to do on the CI integration"
-        required: true
         default: "minor"
         type: choice
         options:
-          # - "patch"
           - "minor"
-          # - "major"
 
 permissions:
   contents: write
