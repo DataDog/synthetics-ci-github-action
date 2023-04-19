@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       datadog_ci_version:
-        description: "Version of datadog-ci to install (`latest` or `A.B.C`)"
+        description: 'Version of datadog-ci to install (`latest` or `A.B.C`)'
         type: string
-        default: "latest"
+        default: 'latest'
 
 permissions:
   contents: write
@@ -23,7 +23,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version: 'lts/*'
       - name: Create release branch
         run: git checkout -b local-branch
       - name: Set git user

@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
     inputs:
       semver:
-        description: "Semver argument for the version bump to do on the CI integration"
-        default: "minor"
+        description: 'Semver argument for the version bump to do on the CI integration'
+        default: 'minor'
         type: choice
         options:
-          - "minor"
+          - 'minor'
 
 permissions:
   contents: write
@@ -25,7 +25,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: '16'
       - name: Create release branch
         run: git checkout -b local-branch
       - name: Set git user
