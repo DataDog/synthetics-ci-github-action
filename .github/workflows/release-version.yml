@@ -61,7 +61,7 @@ jobs:
               tag_name: '${{ steps.amend-version-commit.outputs.VERSION_TAG }}',
             })
 
-            return releaseNotes.body
+            core.setOutput('RELEASE_NOTES', releaseNotes.body)
       - name: Create pull request
         id: create-pull-request
         uses: actions/github-script@v6
@@ -73,10 +73,10 @@ jobs:
               base: 'main',
               head: 'release/${{ steps.amend-version-commit.outputs.VERSION_TAG }}',
               title: '[release:${{ github.event.inputs.semver }}] `${{ steps.amend-version-commit.outputs.VERSION_TAG }}`',
-              body: ${{ steps.generate-release-notes.outputs.result }}
+              body: ${{ toJSON(steps.generate-release-notes.outputs.RELEASE_NOTES) }}
             })
 
-            return pullRequest.number
+            core.setOutput('PULL_REQUEST_NUMBER', pullRequest.number)
       - name: Create comment
         uses: actions/github-script@v6
         with:
@@ -86,6 +86,6 @@ jobs:
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: ${{steps.create-pull-request.outputs.result}},
+              issue_number: ${{ steps.create-pull-request.outputs.PULL_REQUEST_NUMBER }},
               body: releaseVersionComment,
             })

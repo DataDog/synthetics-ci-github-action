@@ -62,7 +62,7 @@ jobs:
               body: 'This PR bumps [datadog-ci](https://github.com/DataDog/datadog-ci) to version [`${{ steps.bump-datadog-ci.outputs.VERSION }}`](https://github.com/DataDog/datadog-ci/releases/tag/v${{ steps.bump-datadog-ci.outputs.VERSION }})'
             })
 
-            return pullRequest.number
+            core.setOutput('PULL_REQUEST_NUMBER', pullRequest.number)
       - name: Create comment
         uses: actions/github-script@v6
         with:
@@ -72,6 +72,6 @@ jobs:
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: ${{steps.create-pull-request.outputs.result}},
+              issue_number: ${{steps.create-pull-request.outputs.PULL_REQUEST_NUMBER}},
               body: bumpDatadogCiComment,
             })
