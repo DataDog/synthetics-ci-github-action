@@ -1,6 +1,10 @@
-# This workflow automatically creates a release PR for the CI integration.
+# This workflow automatically creates a PR bumping datadog-ci in the CI integration.
 
 name: Bump Datadog CI
+
+env:
+  GIT_AUTHOR_EMAIL: 'packages@datadoghq.com'
+  GIT_AUTHOR_NAME: 'ci.datadog-ci'
 
 on:
   workflow_dispatch:
@@ -10,26 +14,32 @@ on:
         type: string
         default: 'latest'
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   bump-datadog-ci:
     runs-on: ubuntu-latest
     steps:
       # Do the changes
+      - name: Get GitHub App token
+        id: get_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_ID }}
+          private_key: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ steps.get_token.outputs.token }}
       - name: Install node
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
+          cache: 'yarn'
       - name: Create release branch
         run: git checkout -b local-branch
       - name: Set git user
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email noreply@github.com
+          git config user.name "${GIT_AUTHOR_NAME}"
+          git config user.email "${GIT_AUTHOR_EMAIL}"
       - name: Install dependencies
         run: yarn install
       - name: Bump datadog-ci
@@ -52,6 +62,7 @@ jobs:
         id: create-pull-request
         uses: actions/github-script@v6
         with:
+          github-token: ${{ steps.get_token.outputs.token }}
           script: |
             const { data: pullRequest } = await github.rest.pulls.create({
               owner: context.repo.owner,
@@ -66,6 +77,7 @@ jobs:
       - name: Create comment
         uses: actions/github-script@v6
         with:
+          github-token: ${{ steps.get_token.outputs.token }}
           script: |
             const { bumpDatadogCiComment } = require('./ci/pull-request-comments')
 
