@@ -4,7 +4,7 @@ import {BaseContext} from 'clipanion'
 import {Reporter} from '@datadog/datadog-ci/dist/commands/synthetics'
 import deepExtend from 'deep-extend'
 
-const DEFAULT_CONFIG: synthetics.CommandConfig = {
+export const DEFAULT_CONFIG: synthetics.CommandConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
