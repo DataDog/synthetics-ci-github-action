@@ -8,19 +8,7 @@ import * as path from 'path'
 import {config, EMPTY_SUMMARY} from '../src/fixtures'
 import run from '../src/main'
 import * as resolveConfigModule from '../src/resolve-config'
-import * as processResults from '../src/process-results'
 import * as fs from 'fs'
-
-const emptySummary: synthetics.Summary = {
-  criticalErrors: 0,
-  passed: 0,
-  failed: 0,
-  failedNonBlocking: 0,
-  skipped: 0,
-  testsNotFound: new Set(),
-  timedOut: 0,
-  batchId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-}
 
 const inputs = {
   apiKey: 'xxx',
@@ -156,7 +144,7 @@ describe('Run Github Action', () => {
 
     test('Github Action fails if Synthetics tests fail', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, failed: 1})
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...EMPTY_SUMMARY, failed: 1})
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -167,7 +155,7 @@ describe('Run Github Action', () => {
 
     test('Github Action fails if Synthetics tests timed out and config.failOnTimeout = true', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, timedOut: 1})
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...EMPTY_SUMMARY, timedOut: 1})
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -186,7 +174,7 @@ describe('Run Github Action', () => {
 
       const setFailedMock = jest.spyOn(core, 'setFailed')
       const infoMock = jest.spyOn(core, 'info')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, timedOut: 1})
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...EMPTY_SUMMARY, timedOut: 1})
 
       await run()
       expect(setFailedMock).not.toHaveBeenCalled()
@@ -200,7 +188,7 @@ describe('Run Github Action', () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       jest
         .spyOn(processResults, 'renderResults')
-        .mockReturnValue({...emptySummary, testsNotFound: new Set([''])} as any)
+        .mockReturnValue({...EMPTY_SUMMARY, testsNotFound: new Set([''])} as any)
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
@@ -211,7 +199,7 @@ describe('Run Github Action', () => {
 
     test('Github Action succeeds if Synthetics tests do not fail', async () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      jest.spyOn(processResults, 'renderResults').mockReturnValue({...emptySummary, passed: 1})
+      jest.spyOn(processResults, 'renderResults').mockReturnValue({...EMPTY_SUMMARY, passed: 1})
 
       await run()
       expect(setFailedMock).not.toHaveBeenCalled()
