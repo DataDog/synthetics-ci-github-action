@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
@@ -98,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
