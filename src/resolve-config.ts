@@ -4,7 +4,7 @@ import {BaseContext} from 'clipanion'
 import {Reporter} from '@datadog/datadog-ci/dist/commands/synthetics'
 import deepExtend from 'deep-extend'
 
-const DEFAULT_CONFIG: synthetics.CommandConfig = {
+export const DEFAULT_CONFIG: synthetics.CommandConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
@@ -51,7 +51,10 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
   try {
-    config = await utils.resolveConfigFromFile(config, {configPath, defaultConfigPath: DEFAULT_CONFIG.configPath})
+    config = await utils.resolveConfigFromFile(config, {
+      configPath,
+      defaultConfigPaths: [DEFAULT_CONFIG.configPath],
+    })
   } catch (error) {
     if (configPath) {
       core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)

@@ -33,8 +33,7 @@
   "packageManager": "yarn@3.4.1",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@datadog/datadog-ci": "^2.4.1",
-    "chalk": "4.1.2",
+    "@datadog/datadog-ci": "^2.9.1",
     "clipanion": "^3.0.1",
     "deep-extend": "0.6.0"
   },

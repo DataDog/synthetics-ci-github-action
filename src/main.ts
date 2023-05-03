@@ -1,7 +1,5 @@
 import * as core from '@actions/core'
 import {getReporter, resolveConfig} from './resolve-config'
-import {renderResults} from './process-results'
-import {reportCiError} from './report-ci-error'
 import {synthetics} from '@datadog/datadog-ci'
 
 const run = async (): Promise<void> => {
@@ -9,34 +7,42 @@ const run = async (): Promise<void> => {
 
   const reporter = getReporter()
   const config = await resolveConfig(reporter)
+  const startTime = Date.now()
 
   try {
-    const startTime = Date.now()
     const {results, summary} = await synthetics.executeTests(reporter, config)
-    const resultSummary = renderResults({config, reporter, results, startTime, summary})
-    if (
-      resultSummary.criticalErrors > 0 ||
-      resultSummary.failed > 0 ||
-      (resultSummary.timedOut > 0 && config.failOnTimeout) ||
-      resultSummary.testsNotFound.size > 0
-    ) {
-      core.setFailed(`Datadog Synthetics tests failed: ${printSummary(resultSummary, config)}`)
+    const orgSettings = await synthetics.utils.getOrgSettings(reporter, config)
+
+    synthetics.utils.renderResults({
+      config,
+      orgSettings,
+      reporter,
+      results,
+      startTime,
+      summary,
+    })
+
+    synthetics.utils.reportExitLogs(reporter, config, {results})
+
+    const exitReason = synthetics.utils.getExitReason(config, {results})
+    if (exitReason !== 'passed') {
+      core.setFailed(`Datadog Synthetics tests failed: ${printSummary(summary, config)}`)
     } else {
-      core.info(`Datadog Synthetics tests succeeded: ${printSummary(resultSummary, config)}`)
+      core.info(`Datadog Synthetics tests succeeded: ${printSummary(summary, config)}`)
     }
   } catch (error) {
-    if (error instanceof synthetics.CiError) {
-      reportCiError(error, reporter)
-    } else {
-      core.info(`Internal error: ${String(error)}`)
+    synthetics.utils.reportExitLogs(reporter, config, {error})
+
+    const exitReason = synthetics.utils.getExitReason(config, {error})
+    if (exitReason !== 'passed') {
+      core.setFailed('Running Datadog Synthetics tests failed.')
     }
-    core.setFailed('Running Datadog Synthetics tests failed.')
   }
 }
 
 export const printSummary = (summary: synthetics.Summary, config: synthetics.SyntheticsCIConfig): string => {
   const baseUrl = synthetics.utils.getAppBaseURL(config)
-  const batchUrl = synthetics.utils.getBatchUrl(baseUrl, String(summary.batchId))
+  const batchUrl = synthetics.utils.getBatchUrl(baseUrl, summary.batchId)
   return (
     `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}\n` +
     `Results URL: ${batchUrl}`
