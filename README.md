@@ -16,14 +16,14 @@ Your workflow can be [simple](#simple-workflows) or [complex](#complex-workflows
 ### Example workflow using public IDs
 
 ```yaml
-name: Run Synthetics tests using the test public IDs
+name: Run Synthetic tests using the test public IDs
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Datadog Synthetics tests
+      - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
@@ -34,35 +34,35 @@ jobs:
 ### Example workflow using an existing `synthetics.json` file
 
 ```yaml
-name: Run Synthetics tests using an existing synthetics.json file
+name: Run Synthetic tests using an existing synthetics.json file
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Datadog Synthetics tests
+      - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
 ```
 
-**Note**: By default, this workflow runs all the tests listed in `{,!(node_modules)/**/}*.synthetics.json` files (every file ending with `.synthetics.json` except for those in the `node_modules` folder). You can also trigger a list of Synthetics tests by specifying a `public_id` or using a search query.
+**Note**: By default, this workflow runs all the tests listed in `{,!(node_modules)/**/}*.synthetics.json` files (every file ending with `.synthetics.json` except for those in the `node_modules` folder). You can also trigger a list of Synthetic tests by specifying a `public_id` or using a search query.
 
 ## Complex workflows
 
 ### Example workflow using the `test_search_query`
 
 ```yaml
-name: Run Synthetics tests by test tag
+name: Run Synthetic tests by test tag
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Datadog Synthetics tests
+      - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
@@ -73,14 +73,14 @@ jobs:
 ### Example workflow using a test search query and variable overrides
 
 ```yaml
-name: Run Synthetics tests using search query
+name: Run Synthetic tests using search query
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Datadog Synthetics tests
+      - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
@@ -92,14 +92,14 @@ jobs:
 ### Example workflow using a global configuration override with `config_path`
 
 ```yaml
-name: Run Synthetics tests with custom config
+name: Run Synthetic tests with custom config
 jobs:
   e2e_testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Datadog Synthetics tests
+      - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@v0.10.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
@@ -117,7 +117,7 @@ jobs:
 | `test_search_query` | string  | _optional_  | Trigger tests corresponding to a [search][5] query. **Default:** none.                                                                                                                                   |
 | `subdomain`         | string  | _optional_  | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`. |
 | `files`             | string  | _optional_  | Glob pattern to detect Synthetic tests config files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                             |
-| `datadog_site`      | string  | _optional_  | The Datadog site. For users in the EU, set to `datadoghq.eu`. For example: `datadoghq.com` or `datadoghq.eu`. **Default:** `datadoghq.com`.                                                              |
+| `datadog_site`      | string  | _optional_  | The [Datadog site][11] to send data to. **Default:** `datadoghq.com`.                                                              |
 | `config_path`       | string  | _optional_  | The global JSON configuration is used when launching tests. See the [example configuration][4] for more details. **Default:** `datadog-ci.json`.                                                         |
 | `variables`         | string  | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
 | `junit_report`      | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                          |
@@ -174,3 +174,4 @@ Additional helpful documentation, links, and articles:
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
 [9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/
 [10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
+[11]: https://docs.datadoghq.com/getting_started/site
