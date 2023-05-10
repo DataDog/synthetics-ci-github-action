@@ -45,16 +45,17 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Bump CI integration version
-        run: yarn version --${{ github.event.inputs.semver }}
+        # In Yarn 3, the `version` plugin doesn't create a bump commit, nor a tag.
+        run: yarn version ${{ github.event.inputs.semver }}
       - name: Update build files
         run: yarn build && yarn package
       - name: Amend version commit
         id: amend-version-commit
         run: |
-          VERSION_TAG=$(git tag --points-at HEAD)
+          VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.1.0
           git add --all
-          git commit --amend --no-edit
-          git tag --force $VERSION_TAG
+          git commit -m $VERSION_TAG
+          git tag $VERSION_TAG
           echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
       - name: Push the branch (with tags)
         run: git push --follow-tags -u origin local-branch:release/${{ steps.amend-version-commit.outputs.VERSION_TAG }}
