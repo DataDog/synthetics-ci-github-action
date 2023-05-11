@@ -8,4 +8,7 @@ lib
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
-!.yarn/versions
+
+# We are only using the `version` command to bump the version in package.json.
+# We don't need the entire https://yarnpkg.com/features/release-workflow feature set.
+.yarn/versions
