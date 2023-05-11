@@ -57,7 +57,7 @@ jobs:
           git commit -m $VERSION_TAG
           echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
       - name: Push the branch
-        run: git push -u origin local-branch:release/${{ steps.amend-version-commit.outputs.VERSION_TAG }}
+        run: git push -u origin local-branch:release/${{ steps.commit-new-version.outputs.VERSION_TAG }}
 
       # Create the pull request
       - name: Generate release notes
