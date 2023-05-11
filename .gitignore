@@ -9,6 +9,6 @@ lib
 !.yarn/releases
 !.yarn/sdks
 
-# We are using the `version` plugin just to do a bump commit.
+# We are only using the `version` command to bump the version in package.json.
 # We don't need the entire https://yarnpkg.com/features/release-workflow feature set.
 .yarn/versions

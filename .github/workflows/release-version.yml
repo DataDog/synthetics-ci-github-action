@@ -45,12 +45,12 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Bump CI integration version
-        # In Yarn 3, the `version` plugin doesn't create a bump commit, nor a tag.
+        # The `version` command only bumps the version in package.json. It doesn't commit nor tag.
         run: yarn version ${{ github.event.inputs.semver }}
       - name: Update build files
         run: yarn build && yarn package
-      - name: Amend version commit
-        id: amend-version-commit
+      - name: Commit new version
+        id: commit-new-version
         run: |
           VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.1.0
           git add --all
@@ -69,7 +69,7 @@ jobs:
             const { data: releaseNotes } = await github.rest.repos.generateReleaseNotes({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: '${{ steps.amend-version-commit.outputs.VERSION_TAG }}',
+              tag_name: '${{ steps.commit-new-version.outputs.VERSION_TAG }}',
             })
 
             core.setOutput('RELEASE_NOTES', releaseNotes.body)
@@ -83,8 +83,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               base: 'main',
-              head: 'release/${{ steps.amend-version-commit.outputs.VERSION_TAG }}',
-              title: '[release:${{ github.event.inputs.semver }}] `${{ steps.amend-version-commit.outputs.VERSION_TAG }}`',
+              head: 'release/${{ steps.commit-new-version.outputs.VERSION_TAG }}',
+              title: '[release:${{ github.event.inputs.semver }}] `${{ steps.commit-new-version.outputs.VERSION_TAG }}`',
               body: ${{ toJSON(steps.generate-release-notes.outputs.RELEASE_NOTES) }}
             })
 
