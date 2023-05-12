@@ -33,7 +33,7 @@ describe('Resolves Config', () => {
     }
   })
 
-  test('Default configuration parameters get overriden by global configuration file', async () => {
+  test('Default configuration parameters get overridden by global configuration file', async () => {
     const fakeReadFile = ((
       path: string,
       encoding: string,
@@ -103,6 +103,38 @@ describe('Resolves Config', () => {
         INPUT_TUNNEL: 'True',
       }
       expect((await resolveConfig.resolveConfig(mockReporter)).tunnel).toBe(true)
+    })
+  })
+
+  describe('parses integer', () => {
+    test('falls back to default if input is not set', async () => {
+      expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
+      expect((await resolveConfig.resolveConfig(mockReporter)).pollingTimeout).toStrictEqual(30 * 60 * 1000)
+    })
+
+    test('falls back to default if input is an empty value', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_POLLING_TIMEOUT: '',
+      }
+      expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
+      expect((await resolveConfig.resolveConfig(mockReporter)).pollingTimeout).toStrictEqual(30 * 60 * 1000)
+    })
+
+    test('throws if input is a float', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_POLLING_TIMEOUT: '1.2',
+      }
+      await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrow('1.2 is not an integer')
+    })
+
+    test('returns the value if input is an integer', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_POLLING_TIMEOUT: '1',
+      }
+      expect((await resolveConfig.resolveConfig(mockReporter)).pollingTimeout).toStrictEqual(1)
     })
   })
 })

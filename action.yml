@@ -36,6 +36,9 @@ inputs:
   junit_report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
+  polling_timeout:
+    required: false
+    description: The duration (in milliseconds) after which the orb stops polling for test results.
 
 runs:
   using: 'node16'
