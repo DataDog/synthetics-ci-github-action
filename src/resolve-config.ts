@@ -114,7 +114,7 @@ export const getDefinedInteger = (name: string): number | undefined => {
 
   const number = parseFloat(input)
   if (!Number.isInteger(number)) {
-    const error = Error(`${number} is not an integer`)
+    const error = Error(`Invalid value for ${name}: ${number} is not an integer`)
     core.setFailed(error)
     throw error
   }
