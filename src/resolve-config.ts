@@ -45,6 +45,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     ?.split(',')
     .map((variableString: string) => variableString.trim())
   const tunnel = getDefinedBoolean('tunnel')
+  const pollingTimeout = getDefinedInteger('polling_timeout')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
@@ -55,7 +56,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     })
   } catch (error) {
     if (configPath) {
-      core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)
+      core.setFailed(`Unable to parse config file! Please verify config path: ${configPath}`)
       throw error
     }
     // Here, if configPath is not present it means that default config file does not exist: in this case it's expected for the github action to be silent.
@@ -70,6 +71,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       configPath,
       datadogSite,
       files,
+      pollingTimeout,
       publicIds,
       subdomain,
       testSearchQuery,
@@ -102,6 +104,22 @@ export const getDefinedBoolean = (name: string): boolean | undefined => {
     core.setFailed(String(error))
     throw error
   }
+}
+
+export const getDefinedInteger = (name: string): number | undefined => {
+  const input = getDefinedInput(name)
+  if (!input) {
+    return undefined
+  }
+
+  const number = parseFloat(input)
+  if (!Number.isInteger(number)) {
+    const error = Error(`Invalid value for ${name}: ${number} is not an integer`)
+    core.setFailed(error)
+    throw error
+  }
+
+  return number
 }
 
 export const getReporter = (): synthetics.MainReporter => {

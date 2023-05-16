@@ -122,6 +122,8 @@ jobs:
 | `variables`         | string  | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
 | `junit_report`      | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                          |
 | `tunnel`            | boolean | _optional_  | Use the [secure tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                             |
+| `polling_timeout`   | number  | _optional_  | The duration (in milliseconds) after which the action stops polling for test results. At the CI level, test results completed after this duration are considered failed. **Default:** 30 minutes.        |
+
 ## Development
 
 ```bash
