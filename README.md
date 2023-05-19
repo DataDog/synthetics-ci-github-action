@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
-        uses: DataDog/synthetics-ci-github-action@v0.10.0
+        uses: DataDog/synthetics-ci-github-action@v0.12.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -40,9 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
-        uses: DataDog/synthetics-ci-github-action@v0.10.0
+        uses: DataDog/synthetics-ci-github-action@v0.12.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -63,9 +63,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
-        uses: DataDog/synthetics-ci-github-action@v0.10.0
+        uses: DataDog/synthetics-ci-github-action@v0.12.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -81,9 +81,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
-        uses: DataDog/synthetics-ci-github-action@v0.10.0
+        uses: DataDog/synthetics-ci-github-action@v0.12.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -102,9 +102,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run Datadog Synthetic tests
-        uses: DataDog/synthetics-ci-github-action@v0.10.0
+        uses: DataDog/synthetics-ci-github-action@v0.12.0
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
@@ -122,12 +122,14 @@ For an example test file, see this [`global.config.json` file][13].
 | `public_ids`        | string  | _optional_  | Comma-separated list of public IDs for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`. **Default:** none.                         |
 | `test_search_query` | string  | _optional_  | Trigger tests corresponding to a [search query][5]. **Default:** none.                                                                                                                                   |
 | `subdomain`         | string  | _optional_  | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`. |
-| `files`             | string  | _optional_  | Glob pattern to detect Synthetic test configuration files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                             |
-| `datadog_site`      | string  | _optional_  | The [Datadog site][11] to send data to. **Default:** `datadoghq.com`.                                                              |
-| `config_path`       | string  | _optional_  | The [global JSON configuration][4] to be used when launching tests. See the [example configuration file][13] for more details. **Default:** `datadog-ci.json`.                                                         |
+| `files`             | string  | _optional_  | Glob pattern to detect Synthetic test configuration files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                       |
+| `datadog_site`      | string  | _optional_  | The [Datadog site][11] to send data to. **Default:** `datadoghq.com`.                                                                                                                                    |
+| `config_path`       | string  | _optional_  | The [global JSON configuration][4] to be used when launching tests. See the [example configuration file][13] for more details. **Default:** `datadog-ci.json`.                                           |
 | `variables`         | string  | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                               |
 | `junit_report`      | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                          |
-| `tunnel`            | boolean | _optional_  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                             |
+| `tunnel`            | boolean | _optional_  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                 |
+| `polling_timeout`   | number  | _optional_  | The duration (in milliseconds) after which the action stops polling for test results. At the CI level, test results completed after this duration are considered failed. **Default:** 30 minutes.        |
+
 ## Development
 
 ```bash

@@ -1,10 +1,8 @@
 import * as core from '@actions/core'
 import {synthetics, utils} from '@datadog/datadog-ci'
-import {BaseContext} from 'clipanion'
-import {Reporter} from '@datadog/datadog-ci/dist/commands/synthetics'
 import deepExtend from 'deep-extend'
 
-const DEFAULT_CONFIG: synthetics.CommandConfig = {
+export const DEFAULT_CONFIG: synthetics.CommandConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
@@ -47,14 +45,18 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     ?.split(',')
     .map((variableString: string) => variableString.trim())
   const tunnel = getDefinedBoolean('tunnel')
+  const pollingTimeout = getDefinedInteger('polling_timeout')
 
   let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
   // Override with file config variables
   try {
-    config = await utils.resolveConfigFromFile(config, {configPath, defaultConfigPath: DEFAULT_CONFIG.configPath})
+    config = await utils.resolveConfigFromFile(config, {
+      configPath,
+      defaultConfigPaths: [DEFAULT_CONFIG.configPath],
+    })
   } catch (error) {
     if (configPath) {
-      core.setFailed(`Unable to parse config file! Please verify config path : ${configPath}`)
+      core.setFailed(`Unable to parse config file! Please verify config path: ${configPath}`)
       throw error
     }
     // Here, if configPath is not present it means that default config file does not exist: in this case it's expected for the github action to be silent.
@@ -69,6 +71,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       configPath,
       datadogSite,
       files,
+      pollingTimeout,
       publicIds,
       subdomain,
       testSearchQuery,
@@ -103,18 +106,28 @@ export const getDefinedBoolean = (name: string): boolean | undefined => {
   }
 }
 
-export const getReporter = (): synthetics.MainReporter => {
-  const context: BaseContext = {
-    stdin: process.stdin,
-    stdout: process.stdout,
-    stderr: process.stderr,
+export const getDefinedInteger = (name: string): number | undefined => {
+  const input = getDefinedInput(name)
+  if (!input) {
+    return undefined
   }
 
-  const reporters: Reporter[] = [new synthetics.DefaultReporter({context})]
+  const number = parseFloat(input)
+  if (!Number.isInteger(number)) {
+    const error = Error(`Invalid value for ${name}: ${number} is not an integer`)
+    core.setFailed(error)
+    throw error
+  }
+
+  return number
+}
+
+export const getReporter = (): synthetics.MainReporter => {
+  const reporters: synthetics.Reporter[] = [new synthetics.DefaultReporter({context: process})]
 
   const jUnitReportFilename = getDefinedInput('junit_report')
   if (jUnitReportFilename) {
-    reporters.push(new synthetics.JUnitReporter({context, jUnitReport: jUnitReportFilename}))
+    reporters.push(new synthetics.JUnitReporter({context: process, jUnitReport: jUnitReportFilename}))
   }
 
   return synthetics.utils.getReporter(reporters)

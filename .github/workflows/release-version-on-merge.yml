@@ -1,0 +1,33 @@
+# This workflow automatically creates a GitHub release when a release PR is merged.
+
+name: On Release PR merged
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  release-version-on-merge:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '[release:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get GitHub App token
+        id: get-token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_ID }}
+          private_key: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_PRIVATE_KEY }}
+      - name: Create GitHub release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get-token.outputs.token }}
+          script: |
+            const tagName = '${{ github.event.pull_request.head.ref }}'.replace('release/', '')
+
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tagName,
+              name: tagName,
+              body: ${{ toJSON(github.event.pull_request.body) }}
+            });

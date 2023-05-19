@@ -1,17 +1,14 @@
-# Dependency directory
 node_modules
+lib
 
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Yarn non zero-install. See: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
 
-# Yarn Integrity file
-.yarn-integrity
-
-# OS metadata
-.DS_Store
-Thumbs.db
-
-# Ignore built ts files
-lib/**/*
+# We are only using the `version` command to bump the version in package.json.
+# We don't need the entire https://yarnpkg.com/features/release-workflow feature set.
+.yarn/versions
