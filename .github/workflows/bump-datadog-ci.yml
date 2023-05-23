@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       datadog_ci_version:
-        description: 'Version of datadog-ci to install (`latest` or `A.B.C`)'
+        description: 'Version of datadog-ci to install (`latest` or `major.minor.patch`)'
         type: string
         default: 'latest'
 
