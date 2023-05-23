@@ -47,19 +47,29 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Bump CI integration version
-        # The `version` command only bumps the version in package.json. It doesn't commit nor tag.
-        run: yarn version ${{ github.event.inputs.semver }}
-      - name: Update build files
-        run: yarn build && yarn package
-      - name: Commit new version
-        id: commit-new-version
+        id: bump-version
         run: |
-          VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.1.0
+          OLD_VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.0.0
+
+          # The `version` command only bumps the version in package.json. It doesn't commit nor tag.
+          yarn version ${{ github.event.inputs.semver }}
+
+          NEW_VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.1.0
+
+          # Update README with new version
+          sed -i "s/$OLD_VERSION_TAG/$NEW_VERSION_TAG/" README.md
+
+          echo "NEW_VERSION_TAG=$NEW_VERSION_TAG" >> $GITHUB_OUTPUT
+      - name: Update build files
+        run: |
+          yarn build
+          yarn package
+      - name: Commit new version
+        run: |
           git add --all
-          git commit -m $VERSION_TAG
-          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
+          git commit -m ${{ steps.bump-version.outputs.NEW_VERSION_TAG }}
       - name: Push the branch
-        run: git push -u origin local-branch:release/${{ steps.commit-new-version.outputs.VERSION_TAG }}
+        run: git push -u origin local-branch:release/${{ steps.bump-version.outputs.NEW_VERSION_TAG }}
 
       # Create the pull request
       - name: Generate release notes
@@ -71,7 +81,7 @@ jobs:
             const { data: releaseNotes } = await github.rest.repos.generateReleaseNotes({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: '${{ steps.commit-new-version.outputs.VERSION_TAG }}',
+              tag_name: '${{ steps.bump-version.outputs.NEW_VERSION_TAG }}',
             })
 
             core.setOutput('RELEASE_NOTES', releaseNotes.body)
@@ -85,8 +95,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               base: 'main',
-              head: 'release/${{ steps.commit-new-version.outputs.VERSION_TAG }}',
-              title: '[release:${{ github.event.inputs.semver }}] `${{ steps.commit-new-version.outputs.VERSION_TAG }}`',
+              head: 'release/${{ steps.bump-version.outputs.NEW_VERSION_TAG }}',
+              title: '[release:${{ github.event.inputs.semver }}] `${{ steps.bump-version.outputs.NEW_VERSION_TAG }}`',
               body: ${{ toJSON(steps.generate-release-notes.outputs.RELEASE_NOTES) }}
             })
 
