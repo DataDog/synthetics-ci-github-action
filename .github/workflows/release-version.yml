@@ -55,7 +55,7 @@ jobs:
           NEW_VERSION_TAG="v$(jq -r '.version' package.json)" # e.g. v1.1.0
 
           # Update README with new version
-          sed -i -E "s/$OLD_VERSION_TAG/$NEW_VERSION_TAG/" README.md
+          sed -i "s/$OLD_VERSION_TAG/$NEW_VERSION_TAG/" README.md
 
           echo "NEW_VERSION_TAG=$NEW_VERSION_TAG" >> $GITHUB_OUTPUT
       - name: Update build files
