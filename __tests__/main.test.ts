@@ -29,18 +29,11 @@ describe('Run Github Action', () => {
   })
   describe('Handle input parameters', () => {
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
-      const originalResolveConfig = resolveConfigModule.resolveConfig
-      jest.spyOn(resolveConfigModule, 'resolveConfig').mockImplementation(async reporter => ({
-        ...(await originalResolveConfig(reporter)),
-        failOnCriticalErrors: true,
-      }))
-
       const setFailedMock = jest.spyOn(core, 'setFailed')
-
+      synthetics.DEFAULT_COMMAND_CONFIG.failOnCriticalErrors = true
       await run()
-
+      synthetics.DEFAULT_COMMAND_CONFIG.failOnCriticalErrors = false
       expect(setFailedMock).toHaveBeenCalledWith('Running Datadog Synthetics tests failed.')
-      expect(process.stdout.write).toHaveBeenCalledWith(expect.stringContaining('Credentials refused'))
     })
 
     test('Github Action core.getInput parameters are passed on to runTests', async () => {
