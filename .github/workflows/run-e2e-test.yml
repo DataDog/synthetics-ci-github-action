@@ -23,4 +23,5 @@ jobs:
           INPUT_API_KEY: ${{ secrets.datadog_api_key }}
           INPUT_APP_KEY: ${{ secrets.datadog_app_key }}
           INPUT_CONFIG_PATH: './.github/workflows/e2e/global.config.json'
-          INPUT_PUBLIC_IDS: '2r9-q7u-4nn,pwd-mwg-3p5'
+          INPUT_FAIL_ON_MISSING_TESTS: true
+          INPUT_PUBLIC_IDS: '2r9-q7u-4nn,pwd-mwg-3p5,aaa-bbb-ccc,aaa-bbb-ccc'
