@@ -2,25 +2,6 @@ import * as core from '@actions/core'
 import {synthetics, utils} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
 
-export const DEFAULT_CONFIG: synthetics.CommandConfig = {
-  apiKey: '',
-  appKey: '',
-  configPath: 'datadog-ci.json',
-  datadogSite: 'datadoghq.com',
-  failOnCriticalErrors: false,
-  failOnMissingTests: false,
-  failOnTimeout: true,
-  files: ['{,!(node_modules)/**/}*.synthetics.json'],
-  global: {},
-  locations: [],
-  pollingTimeout: 30 * 60 * 1000,
-  proxy: {protocol: 'http'},
-  publicIds: [],
-  subdomain: 'app',
-  tunnel: false,
-  variableStrings: [],
-}
-
 export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<synthetics.CommandConfig> => {
   let apiKey
   let appKey
@@ -47,12 +28,12 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   const tunnel = getDefinedBoolean('tunnel')
   const pollingTimeout = getDefinedInteger('polling_timeout')
 
-  let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
+  let config = JSON.parse(JSON.stringify(synthetics.DEFAULT_COMMAND_CONFIG))
   // Override with file config variables
   try {
     config = await utils.resolveConfigFromFile(config, {
       configPath,
-      defaultConfigPaths: [DEFAULT_CONFIG.configPath],
+      defaultConfigPaths: [synthetics.DEFAULT_COMMAND_CONFIG.configPath],
     })
   } catch (error) {
     if (configPath) {
