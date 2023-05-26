@@ -27,6 +27,9 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     .map((variableString: string) => variableString.trim())
   const tunnel = getDefinedBoolean('tunnel')
   const pollingTimeout = getDefinedInteger('polling_timeout')
+  const failOnCriticalErrors = getDefinedBoolean('fail_on_critical_errors')
+  const failOnMissingTests = getDefinedBoolean('fail_on_missing_tests')
+  const failOnTimeout = getDefinedBoolean('fail_on_timeout')
 
   let config = JSON.parse(JSON.stringify(synthetics.DEFAULT_COMMAND_CONFIG))
   // Override with file config variables
@@ -51,6 +54,9 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       appKey,
       configPath,
       datadogSite,
+      failOnCriticalErrors,
+      failOnMissingTests,
+      failOnTimeout,
       files,
       pollingTimeout,
       publicIds,
