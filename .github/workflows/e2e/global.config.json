@@ -1,6 +1,8 @@
 {
   "global": {
-    "headers": {"X-Fake-Header": "fake value"}
-  },
-  "timeout": 240000
+    "headers": {
+      "X-Fake-Header": "fake value"
+    },
+    "pollingTimeout": 240000
+  }
 }
