@@ -47,12 +47,23 @@ describe('Resolves Config', () => {
       ...config,
       ...requiredInputs,
       files: ['foobar.synthetics.json'],
+      global: {
+        ...config.global,
+        pollingTimeout: config.pollingTimeout,
+      },
     })
   })
 
   test('Default configuration applied if global configuration empty', async () => {
     jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
-    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({...config, ...requiredInputs})
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+      global: {
+        ...config.global,
+        pollingTimeout: config.pollingTimeout,
+      },
+    })
   })
 
   test('Variable strings input set in the config when defined', async () => {
@@ -65,6 +76,8 @@ describe('Resolves Config', () => {
       ...config,
       ...requiredInputs,
       global: {
+        ...config.global,
+        pollingTimeout: config.pollingTimeout,
         variables: {START_URL: 'https://example.org', MY_VARIABLE: 'My title'},
       },
     })
@@ -74,6 +87,10 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
+      global: {
+        ...config.global,
+        pollingTimeout: config.pollingTimeout,
+      },
     })
   })
 
@@ -107,15 +124,9 @@ describe('Resolves Config', () => {
   })
 
   describe('parses integer', () => {
-    // datadog-ci pushes pollingTimeout from root config to global config if pollingTimeout is undefined in the global config
-    // the implementation: https://github.com/DataDog/datadog-ci/blob/8000318d70fd8af22b0e377b27078762b562efb7/src/commands/synthetics/command.ts#L228
-    // the test: https://github.com/DataDog/datadog-ci/blob/65ffde5d90474af5930da4c2faf016505b70bff9/src/commands/synthetics/__tests__/cli.test.ts#L173-L186
-
     test('falls back to default if input is not set', async () => {
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      // datadog-ci overrides global.pollingTimeout with pollingTimeout if the former is undefined, see comment above
-      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).pollingTimeout).toStrictEqual(30 * 60 * 1000)
+      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toStrictEqual(30 * 60 * 1000)
     })
 
     test('falls back to default if input is an empty value', async () => {
@@ -124,9 +135,7 @@ describe('Resolves Config', () => {
         INPUT_POLLING_TIMEOUT: '',
       }
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      // datadog-ci overrides global.pollingTimeout with pollingTimeout if the former is undefined, see comment above
-      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).pollingTimeout).toStrictEqual(30 * 60 * 1000)
+      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toStrictEqual(30 * 60 * 1000)
     })
 
     test('throws if input is a float', async () => {

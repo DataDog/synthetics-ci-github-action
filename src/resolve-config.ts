@@ -52,6 +52,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       configPath,
       datadogSite,
       files,
+      pollingTimeout,
       publicIds,
       subdomain,
       testSearchQuery,
@@ -65,6 +66,9 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       ),
     })
   )
+
+  // Pass root polling timeout to global override to get it applied to all tests if not defined individually
+  config.global.pollingTimeout = config.global.pollingTimeout ?? config.pollingTimeout
 
   return config
 }
