@@ -43,6 +43,10 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
+        global: {
+          ...config.global,
+          pollingTimeout: config.pollingTimeout,
+        },
       })
     })
 
@@ -58,6 +62,10 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
+        global: {
+          ...config.global,
+          pollingTimeout: config.pollingTimeout,
+        },
         publicIds,
       })
     })
@@ -75,6 +83,8 @@ describe('Run Github Action', () => {
         ...config,
         ...inputs,
         global: {
+          ...config.global,
+          pollingTimeout: config.pollingTimeout,
           variables: {
             START_URL: 'https://example.org',
             MY_VARIABLE: 'My title',
@@ -100,6 +110,10 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
+        global: {
+          ...config.global,
+          pollingTimeout: config.pollingTimeout,
+        },
       })
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
@@ -120,6 +134,10 @@ describe('Run Github Action', () => {
         ...config,
         ...inputs,
         datadogSite: 'datadoghq.com',
+        global: {
+          ...config.global,
+          pollingTimeout: config.pollingTimeout,
+        },
       })
     })
   })
