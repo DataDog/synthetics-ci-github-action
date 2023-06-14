@@ -29,10 +29,16 @@ describe('Run Github Action', () => {
   })
   describe('Handle input parameters', () => {
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
+      process.env = {
+        ...process.env,
+        INPUT_FAIL_ON_CRITICAL_ERRORS: 'true',
+      }
+
       const setFailedMock = jest.spyOn(core, 'setFailed')
-      synthetics.DEFAULT_COMMAND_CONFIG.failOnCriticalErrors = true
       await run()
-      synthetics.DEFAULT_COMMAND_CONFIG.failOnCriticalErrors = false
+
+      delete process.env.INPUT_FAIL_ON_CRITICAL_ERRORS
+
       expect(setFailedMock).toHaveBeenCalledWith('Running Datadog Synthetics tests failed.')
     })
 
