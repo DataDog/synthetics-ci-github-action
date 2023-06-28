@@ -1,6 +1,6 @@
 import {synthetics} from '@datadog/datadog-ci'
 
-export const config: synthetics.CommandConfig = {
+export const config: synthetics.RunTestsCommandConfig = {
   apiKey: '',
   appKey: '',
   configPath: 'datadog-ci.json',
