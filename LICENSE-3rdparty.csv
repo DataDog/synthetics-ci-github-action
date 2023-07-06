@@ -10,7 +10,6 @@ eslint,dev,MIT,Copyright OpenJS Foundation and other contributors
 eslint-plugin-github,dev,MIT,"Copyright (c) 2016 GitHub, Inc."
 eslint-plugin-jest,dev,MIT,Copyright (c) 2018 Jonathan Kim
 jest,dev,MIT,"Copyright (c) Facebook, Inc. and its affiliates."
-js-yaml,dev,MIT,Copyright (C) 2011-2015 by Vitaly Puzrin
 prettier,dev,MIT,Copyright © James Long and contributors
 ts-jest,dev,MIT,Copyright (c) 2016-2018
 typescript,dev,Apache-2.0,Copyright (c) Microsoft Corporation.
