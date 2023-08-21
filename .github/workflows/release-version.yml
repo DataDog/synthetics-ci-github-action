@@ -106,11 +106,18 @@ jobs:
         with:
           github-token: ${{ steps.get-token.outputs.token }}
           script: |
-            const { releaseVersionComment } = require('./ci/pull-request-comments')
+            const body = `Once merged, this PR will automatically create a GitHub release for you.
+            The description of the release will exactly match this PR's description. Feel free to edit it.
+
+            > [!WARNING]
+            > The release will be created **but not published** on the GitHub Marketplace (because the API doesn't allow that).
+            >
+            > To publish it manually, please edit the release [here](https://github.com/DataDog/synthetics-ci-github-action/releases/edit/${{ steps.bump-version.outputs.NEW_VERSION_TAG }}).
+            > The \`Publish this Action to the GitHub Marketplace\` checkbox will be checked by default.`
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ steps.create-pull-request.outputs.PULL_REQUEST_NUMBER }},
-              body: releaseVersionComment,
+              body,
             })

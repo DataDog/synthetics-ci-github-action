@@ -79,11 +79,12 @@ jobs:
         with:
           github-token: ${{ steps.get-token.outputs.token }}
           script: |
-            const { bumpDatadogCiComment } = require('./ci/pull-request-comments')
+            const body = `This PR was automatically created because a new version of datadog-ci was published.
+            Once merged, please use [this manual workflow](../actions/workflows/release-version.yml) to release the CI integration.`
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ steps.create-pull-request.outputs.PULL_REQUEST_NUMBER }},
-              body: bumpDatadogCiComment,
+              body,
             })
