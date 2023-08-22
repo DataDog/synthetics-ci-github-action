@@ -80,7 +80,12 @@ jobs:
           github-token: ${{ steps.get-token.outputs.token }}
           script: |
             const body = `This PR was automatically created because a new version of datadog-ci was published.
-            Once merged, please use [this manual workflow](../actions/workflows/release-version.yml) to release the CI integration.`
+
+            > [!IMPORTANT]
+            > **You are not done!**
+            > 
+            > Once this PR is merged, please run the ["Create Release PR" workflow](../actions/workflows/release-version.yml).
+            > This time, it will create a **release PR** for you, which will publish the CI integration once merged.`
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
