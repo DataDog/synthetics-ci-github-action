@@ -14,6 +14,19 @@ Github issues are welcome, feel free to submit error reports and feature request
 
 If you require further assistance, you can also contact [our support](https://docs.datadoghq.com/help/).
 
+## Development
+
+```bash
+# Run the tests
+yarn test
+
+# Build project
+yarn build
+
+# Compile project and its dependencies for release
+yarn package
+```
+
 ## Submitting pull requests
 
 Have you fixed a bug or written a new feature and want to share it? Many thanks!

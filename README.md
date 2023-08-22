@@ -133,6 +133,10 @@ For an example test file, see this [`global.config.json` file][13].
 | `fail_on_missing_tests`   | boolean | _optional_  | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). **Default:** `false`. |
 | `fail_on_timeout`         | boolean | _optional_  | Fail the CI job if at least one test exceeds the default test timeout. **Default:** `true`.                                                                                                                                                  |
 
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
+
 ## Further reading
 
 Additional helpful documentation, links, and articles:
