@@ -133,40 +133,9 @@ For an example test file, see this [`global.config.json` file][13].
 | `fail_on_missing_tests`   | boolean | _optional_  | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). **Default:** `false`. |
 | `fail_on_timeout`         | boolean | _optional_  | Fail the CI job if at least one test exceeds the default test timeout. **Default:** `true`.                                                                                                                                                  |
 
-## Development
+## Contributing
 
-```bash
-
-# Run the tests
-yarn test
-
-# Build project
-yarn build
-
-# Compile project and its dependencies for release
-yarn package
-```
-
-### Release Process
-
-To release a new version of `synthetics-ci-github-action`:
-
-1. Create a new branch for the version upgrade.
-2. Update the package version using `yarn version [--patch|--minor|--major]` depending on the nature of your changes. See [Semantic Versioning][7] to determine what you need to increment. Once the `yarn version` command is done, a new commit `vX.Y.Z` along with a new tag should be added to the Git tree.
-3. Update the `README.md` example versions, and build and package the project with `yarn build && yarn package`.
-
-   Make sure to commit these changes within the **same commit that holds the `vX.Y.Z` tag**. You can use `git commit --amend` or `git rebase -i HEAD~2` to merge the changes into the same commit.
-
-4. Push the branch along with the release tag (`git push --tags`) to the upstream (GitHub).
-
-   Create a pull request with the changes introduced in the description. This pull request requires at least one approval.
-
-5. Merge the pull request.
-6. Create a GitHub Release from the [Tags page][8] with a description of your changes.
-
-⚠️ Ensure the release version follows the expected format `vX.Y.Z`.
-
-Once the release is created, the new version of the Github Action is available as a workflow.
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Further reading
 
