@@ -1,10 +1,13 @@
 import {synthetics} from '@datadog/datadog-ci'
 
 export const config: synthetics.RunTestsCommandConfig = {
+  allowedIPRanges: {4: [], 6: []},
   apiKey: '',
   appKey: '',
+  blockedIPRanges: {4: [], 6: []},
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
+  enableDefaultBlockedIPRanges: false,
   failOnCriticalErrors: false,
   failOnMissingTests: false,
   failOnTimeout: true,
@@ -14,6 +17,7 @@ export const config: synthetics.RunTestsCommandConfig = {
   pollingTimeout: 30 * 60 * 1000,
   proxy: {protocol: 'http'},
   publicIds: [],
+  selectiveRerun: false,
   subdomain: 'app',
   tunnel: false,
   variableStrings: [],
