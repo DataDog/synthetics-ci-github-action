@@ -4,6 +4,7 @@ import {expect, test} from '@jest/globals'
 import * as resolveConfig from '../src/resolve-config'
 import {config} from '../src/fixtures'
 import type {synthetics} from '@datadog/datadog-ci'
+import * as core from '@actions/core'
 
 const requiredInputs = {
   apiKey: 'xxx',
@@ -26,11 +27,14 @@ const mockReporter: synthetics.MainReporter = {
 describe('Resolves Config', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
+
     process.env = {
       ...process.env,
       INPUT_API_KEY: requiredInputs.apiKey,
       INPUT_APP_KEY: requiredInputs.appKey,
     }
+
+    jest.spyOn(core, 'setFailed').mockImplementation()
   })
 
   test('Default configuration parameters get overridden by global configuration file', async () => {
