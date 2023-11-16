@@ -7,7 +7,6 @@ import * as path from 'path'
 
 import {config, EMPTY_SUMMARY} from '../src/fixtures'
 import run from '../src/main'
-import * as resolveConfigModule from '../src/resolve-config'
 import * as fs from 'fs'
 
 const inputs = {
@@ -19,14 +18,18 @@ const inputs = {
 describe('Run Github Action', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
+
     process.env = {
       ...process.env,
       INPUT_API_KEY: inputs.apiKey,
       INPUT_APP_KEY: inputs.appKey,
       INPUT_PUBLIC_IDS: inputs.publicIds.join(', '),
     }
-    process.stdout.write = jest.fn()
+
+    jest.spyOn(process.stdout, 'write').mockImplementation()
+    jest.spyOn(core, 'setFailed').mockImplementation()
   })
+
   describe('Handle input parameters', () => {
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       process.env = {
@@ -35,6 +38,7 @@ describe('Run Github Action', () => {
       }
 
       const setFailedMock = jest.spyOn(core, 'setFailed')
+
       await run()
 
       delete process.env.INPUT_FAIL_ON_CRITICAL_ERRORS
@@ -43,7 +47,7 @@ describe('Run Github Action', () => {
     })
 
     test('Github Action core.getInput parameters are passed on to runTests', async () => {
-      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation()
 
       await run()
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
@@ -62,7 +66,7 @@ describe('Run Github Action', () => {
         ...process.env,
         INPUT_PUBLIC_IDS: publicIds.join(', '),
       }
-      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation()
 
       await run()
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
@@ -82,7 +86,7 @@ describe('Run Github Action', () => {
         INPUT_VARIABLES: 'START_URL=https://example.org,MY_VARIABLE=My title',
       }
 
-      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation()
 
       await run()
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
@@ -134,7 +138,7 @@ describe('Run Github Action', () => {
 
   describe('Handle invalid input parameters', () => {
     test('Use default configuration if Github Action input is not set', async () => {
-      jest.spyOn(synthetics, 'executeTests').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics, 'executeTests').mockImplementation()
       await run()
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
@@ -150,13 +154,13 @@ describe('Run Github Action', () => {
 
   describe('Handle configuration file', () => {
     test('Github Action fails if unable to parse config file', async () => {
-      const configPath = 'foobar'
+      const setFailedMock = jest.spyOn(core, 'setFailed')
       process.env = {
         ...process.env,
-        INPUT_CONFIG_PATH: configPath,
+        INPUT_CONFIG_PATH: 'foo',
       }
-      await expect(run()).rejects.toThrowError('Config file not found')
-      expect(process.exitCode).toBe(1)
+      await expect(run()).rejects.toThrow('Config file not found')
+      expect(setFailedMock).toHaveBeenCalled()
       process.env = {}
     })
   })
@@ -164,7 +168,7 @@ describe('Run Github Action', () => {
   describe('Handle Synthetics test results', () => {
     beforeEach(() => {
       // renderResults() does side effects on the summary: mocking it for easier testing.
-      jest.spyOn(synthetics.utils, 'renderResults').mockImplementation(() => ({} as any))
+      jest.spyOn(synthetics.utils, 'renderResults').mockImplementation()
     })
 
     test('Github Action fails if Synthetics tests fail', async () => {
