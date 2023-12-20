@@ -35,7 +35,9 @@ export const mockReporter: synthetics.MainReporter = {
 
 export const EMPTY_SUMMARY: synthetics.Summary = {
   criticalErrors: 0,
+  expected: 0,
   passed: 0,
+  previouslyPassed: 0,
   failed: 0,
   failedNonBlocking: 0,
   skipped: 0,
