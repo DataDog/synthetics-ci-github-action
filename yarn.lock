@@ -1487,9 +1487,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^2.26.0":
-  version: 2.26.0
-  resolution: "@datadog/datadog-ci@npm:2.26.0"
+"@datadog/datadog-ci@npm:^2.28.0":
+  version: 2.28.0
+  resolution: "@datadog/datadog-ci@npm:2.28.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.454.0
     "@aws-sdk/client-iam": ^3.454.0
@@ -1505,7 +1505,7 @@ __metadata:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
     async-retry: 1.3.1
-    axios: 1.6.0
+    axios: ^1.6.5
     chalk: 3.0.0
     clipanion: ^3.2.1
     datadog-metrics: 0.9.3
@@ -1538,7 +1538,7 @@ __metadata:
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: f7e3f56e7173517b55f0aebcee5b0d5d258e3b30408d3e1fdffad773ff4cdda6353ae64a36bc00fe69a88b9c47338644857c8850aa41c8bff8248a84d1e54beb
+  checksum: aecafb294a65ee47836d16186338f34976547cecbae88258168e681b4b517e68dc3a45674bf2991779523710dc8c6e06f4b4cfa02fce2aa05c6c636b1b32f74c
   languageName: node
   linkType: hard
 
@@ -3504,14 +3504,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.6.0":
-  version: 1.6.0
-  resolution: "axios@npm:1.6.0"
+"axios@npm:^1.6.5":
+  version: 1.6.5
+  resolution: "axios@npm:1.6.5"
   dependencies:
-    follow-redirects: ^1.15.0
+    follow-redirects: ^1.15.4
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
+  checksum: e28d67b2d9134cb4608c44d8068b0678cfdccc652742e619006f27264a30c7aba13b2cd19c6f1f52ae195b5232734925928fb192d5c85feea7edd2f273df206d
   languageName: node
   linkType: hard
 
@@ -4135,7 +4135,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
-    "@datadog/datadog-ci": ^2.26.0
+    "@datadog/datadog-ci": ^2.28.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^16.18.0
@@ -5142,13 +5142,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.0":
-  version: 1.15.3
-  resolution: "follow-redirects@npm:1.15.3"
+"follow-redirects@npm:^1.15.4":
+  version: 1.15.5
+  resolution: "follow-redirects@npm:1.15.5"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 584da22ec5420c837bd096559ebfb8fe69d82512d5585004e36a3b4a6ef6d5905780e0c74508c7b72f907d1fa2b7bd339e613859e9c304d0dc96af2027fd0231
+  checksum: 5ca49b5ce6f44338cbfc3546823357e7a70813cecc9b7b768158a1d32c1e62e7407c944402a918ea8c38ae2e78266312d617dc68783fac502cbb55e1047b34ec
   languageName: node
   linkType: hard
 
