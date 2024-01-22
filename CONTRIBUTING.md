@@ -52,8 +52,15 @@ The code under this repository follows a format enforced by prettier, and a styl
 
 ## Releasing a new version
 
-Whenever a new version of [datadog-ci](https://github.com/DataDog/datadog-ci) is released, this will automatically trigger a new PR to open for this repo to update to the latest version of datadog-ci and make a new release for the integration.
-When this happens, go to the PR and follow the instructions there for how to make the release.
+The integration has workflows setup to automate the release process, by creating commits, PRs, tags and releases.
+
+The PRs created as part of the release process will need to be merged manually, but each will contain instructions inside them for what needs to be done.
+
+Whenever a new version of [datadog-ci](https://github.com/DataDog/datadog-ci) is released, this will automatically trigger a new PR to open for this repo. The PR will be named `[dep] Bump datadog-ci to {version}` and will contain the changes to update to the latest version of datadog-ci and the steps you need to follow to continue the release process.
+
+After completing the steps from the **[dep]** PR, you will have a new **[release]** PR created. When this happens, go to the PR and follow the instructions there on how to finalize the release process.
+
+You can see examples of past releases [here](https://github.com/DataDog/synthetics-ci-github-action/pulls?q=is%3Apr+is%3Amerged+%28%22%5Bdep%5D+Bump+datadog-ci%22+OR+%22%5Brelease%3Aminor%5D%22%29+).
 
 ## Asking a questions
 
