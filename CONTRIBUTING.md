@@ -50,6 +50,11 @@ Our CI is not (yet) public, so it may be difficult to understand why your pull r
 
 The code under this repository follows a format enforced by prettier, and a style guide enforced by eslint.
 
+## Releasing a new version
+
+Whenever a new version of [datadog-ci](https://github.com/DataDog/datadog-ci) is released, this will automatically trigger a new PR to open for this repo to update to the latest version of datadog-ci and make a new release for the integration.
+When this happens, go to the PR and follow the instructions there for how to make the release.
+
 ## Asking a questions
 
 Need help? Contact [Datadog support](https://docs.datadoghq.com/help/).
