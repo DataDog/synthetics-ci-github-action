@@ -36,7 +36,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           cache: 'yarn'
       - name: Create release branch
         run: git checkout -b local-branch

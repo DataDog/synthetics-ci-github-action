@@ -25,10 +25,10 @@
     "test"
   ],
   "engines": {
-    "node": "16.15.0"
+    "node": "20.11.0"
   },
   "volta": {
-    "node": "16.15.0"
+    "node": "20.11.0"
   },
   "packageManager": "yarn@3.4.1",
   "dependencies": {
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/deep-extend": "0.4.32",
     "@types/jest": "^29.5.8",
-    "@types/node": "^16.18.0",
+    "@types/node": "^20.11.13",
     "@typescript-eslint/parser": "^5.3.0",
     "@vercel/ncc": "^0.31.1",
     "eslint": "^8.39.0",
