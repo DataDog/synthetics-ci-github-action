@@ -50,5 +50,5 @@ inputs:
     description: 'Fail the CI job if at least one test exceeds the default test timeout.'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'

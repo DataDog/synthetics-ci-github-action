@@ -2966,10 +2966,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.18.0":
-  version: 16.18.25
-  resolution: "@types/node@npm:16.18.25"
-  checksum: 181760ad6b54fcc498dfeb249e98bbf0be51d7c35e92e760e1a82004fa42b86e8c33a8f8dd7743b5ef872bda0753d9e6a5b8e3f0aed63e9eb79b4e65760c1fbe
+"@types/node@npm:^20.11.13":
+  version: 20.11.13
+  resolution: "@types/node@npm:20.11.13"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 76fbe4dbcce9ecb602c1e0528124bb113e9ece58d417e96710b7ba96dd67cd0bb050272218dc796be36c0d8c29d7c55da44311be429daa4253c3a00f1b3840ff
   languageName: node
   linkType: hard
 
@@ -4034,7 +4036,7 @@ __metadata:
     "@datadog/datadog-ci": ^2.30.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
-    "@types/node": ^16.18.0
+    "@types/node": ^20.11.13
     "@typescript-eslint/parser": ^5.3.0
     "@vercel/ncc": ^0.31.1
     deep-extend: 0.6.0
@@ -8578,6 +8580,13 @@ __metadata:
     has-symbols: ^1.0.2
     which-boxed-primitive: ^1.0.2
   checksum: 89d950e18fb45672bc6b3c961f1e72c07beb9640c7ceed847b571ba6f7d2af570ae1a2584cfee268b9d9ea1e3293f7e33e0bc29eaeb9f8e8a0bab057ff9e6bba
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 
