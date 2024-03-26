@@ -33,7 +33,7 @@
   "packageManager": "yarn@3.4.1",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@datadog/datadog-ci": "^2.32.1",
+    "@datadog/datadog-ci": "^2.32.2",
     "deep-extend": "0.6.0"
   },
   "devDependencies": {
