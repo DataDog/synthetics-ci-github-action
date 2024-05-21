@@ -73,7 +73,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     })
   )
 
-  // Pass root polling timeout to global override to get it applied to all tests if not defined individually
+  // Pass root polling timeout to default test overrides to get it applied to all tests if not defined individually
   config.defaultTestOverrides.pollingTimeout = config.defaultTestOverrides.pollingTimeout ?? config.pollingTimeout
 
   return config
