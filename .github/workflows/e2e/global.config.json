@@ -1,5 +1,5 @@
 {
-  "global": {
+  "defaultTestOverrides": {
     "headers": {
       "X-Fake-Header": "fake value"
     },
