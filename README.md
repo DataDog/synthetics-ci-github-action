@@ -93,9 +93,9 @@ jobs:
           variables: 'START_URL=https://staging.website.com,PASSWORD=stagingpassword'
 ```
 
-### Example workflow using a global configuration override with `config_path`
+### Example workflow using a global configuration file with `config_path`
 
-This GitHub Action overrides the path to the global `datadog-ci.config.json` file.
+By default, the path to the global configuration file is `datadog-ci.json`. You can override this path with the `config_path` input.
 
 ```yaml
 name: Run Synthetic tests with custom config
@@ -110,10 +110,10 @@ jobs:
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
-          config_path: './synthetics-config.json'
+          config_path: './global.config.json'
 ```
 
-For an example test file, see this [`global.config.json` file][13].
+For an example of global configuration file, see this [`global.config.json` file][13].
 
 ## Inputs
 
