@@ -45,26 +45,29 @@ describe('Resolves Config', () => {
     ) => {
       callback(null, Buffer.from(JSON.stringify({files: ['foobar.synthetics.json']})))
     }) as typeof fs.readFile
+
     jest.spyOn(fs, 'existsSync').mockImplementation(() => true)
     jest.spyOn(fs, 'readFile').mockImplementation(fakeReadFile)
+
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
       files: ['foobar.synthetics.json'],
-      global: {
-        ...config.global,
+      defaultTestOverrides: {
+        ...config.defaultTestOverrides,
         pollingTimeout: config.pollingTimeout,
       },
     })
   })
 
-  test('Default configuration applied if global configuration empty', async () => {
+  test('Default configuration applied if global configuration is empty', async () => {
     jest.spyOn(fs, 'existsSync').mockImplementation(() => false)
+
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      global: {
-        ...config.global,
+      defaultTestOverrides: {
+        ...config.defaultTestOverrides,
         pollingTimeout: config.pollingTimeout,
       },
     })
@@ -79,8 +82,8 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      global: {
-        ...config.global,
+      defaultTestOverrides: {
+        ...config.defaultTestOverrides,
         pollingTimeout: config.pollingTimeout,
         variables: {START_URL: 'https://example.org', MY_VARIABLE: 'My title'},
       },
@@ -91,8 +94,8 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      global: {
-        ...config.global,
+      defaultTestOverrides: {
+        ...config.defaultTestOverrides,
         pollingTimeout: config.pollingTimeout,
       },
     })
@@ -130,7 +133,9 @@ describe('Resolves Config', () => {
   describe('parses integer', () => {
     test('falls back to default if input is not set', async () => {
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toStrictEqual(30 * 60 * 1000)
+      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(
+        30 * 60 * 1000
+      )
     })
 
     test('falls back to default if input is an empty value', async () => {
@@ -139,7 +144,9 @@ describe('Resolves Config', () => {
         INPUT_POLLING_TIMEOUT: '',
       }
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toStrictEqual(30 * 60 * 1000)
+      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(
+        30 * 60 * 1000
+      )
     })
 
     test('throws if input is a float', async () => {
@@ -155,7 +162,7 @@ describe('Resolves Config', () => {
         ...process.env,
         INPUT_POLLING_TIMEOUT: '1',
       }
-      expect((await resolveConfig.resolveConfig(mockReporter)).global.pollingTimeout).toStrictEqual(1)
+      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(1)
     })
   })
 })

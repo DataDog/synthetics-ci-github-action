@@ -54,6 +54,13 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       appKey,
       configPath,
       datadogSite,
+      defaultTestOverrides: deepExtend(
+        config.defaultTestOverrides,
+        utils.removeUndefinedValues({
+          pollingTimeout,
+          variables: synthetics.utils.parseVariablesFromCli(variableStrings, reporter.log.bind(reporter)),
+        })
+      ),
       failOnCriticalErrors,
       failOnMissingTests,
       failOnTimeout,
@@ -63,18 +70,11 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       subdomain,
       testSearchQuery,
       tunnel,
-      global: deepExtend(
-        config.global,
-        utils.removeUndefinedValues({
-          pollingTimeout,
-          variables: synthetics.utils.parseVariablesFromCli(variableStrings, reporter.log.bind(reporter)),
-        })
-      ),
     })
   )
 
   // Pass root polling timeout to global override to get it applied to all tests if not defined individually
-  config.global.pollingTimeout = config.global.pollingTimeout ?? config.pollingTimeout
+  config.defaultTestOverrides.pollingTimeout = config.defaultTestOverrides.pollingTimeout ?? config.pollingTimeout
 
   return config
 }
