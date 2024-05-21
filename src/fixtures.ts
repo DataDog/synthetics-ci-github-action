@@ -5,6 +5,7 @@ export const config: synthetics.RunTestsCommandConfig = {
   appKey: '',
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
+  defaultTestOverrides: {},
   failOnCriticalErrors: false,
   failOnMissingTests: false,
   failOnTimeout: true,
