@@ -113,7 +113,7 @@ jobs:
           config_path: './global.config.json'
 ```
 
-For an example of global configuration file, see this [`global.config.json` file][13].
+For an example of a global configuration file, see this [`global.config.json` file][13].
 
 ## Inputs
 
