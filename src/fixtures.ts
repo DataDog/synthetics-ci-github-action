@@ -3,6 +3,7 @@ import {synthetics} from '@datadog/datadog-ci'
 export const config: synthetics.RunTestsCommandConfig = {
   apiKey: '',
   appKey: '',
+  batchTimeout: 30 * 60 * 1000,
   configPath: 'datadog-ci.json',
   datadogSite: 'datadoghq.com',
   defaultTestOverrides: {},
