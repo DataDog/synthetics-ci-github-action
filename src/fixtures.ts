@@ -10,7 +10,7 @@ export const config: synthetics.RunTestsCommandConfig = {
   failOnCriticalErrors: false,
   failOnMissingTests: false,
   failOnTimeout: true,
-  files: ['{,!(node_modules)/**/}*.synthetics.json'],
+  files: [],
   global: {},
   jUnitReport: '',
   locations: [],
