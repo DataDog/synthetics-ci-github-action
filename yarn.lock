@@ -1481,9 +1481,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^2.42.0":
-  version: 2.42.0
-  resolution: "@datadog/datadog-ci@npm:2.42.0"
+"@datadog/datadog-ci@npm:^2.43.0":
+  version: 2.43.0
+  resolution: "@datadog/datadog-ci@npm:2.43.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.624.0
     "@aws-sdk/client-iam": ^3.624.0
@@ -1497,7 +1497,6 @@ __metadata:
     "@smithy/property-provider": ^2.0.12
     "@smithy/util-retry": ^2.0.4
     "@types/datadog-metrics": 0.6.1
-    "@types/retry": 0.12.0
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
     async-retry: 1.3.1
@@ -1534,7 +1533,7 @@ __metadata:
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: cd318e74edb10fb0d407a6310dae5ec4480eaecf57ff2f62a182febf5171489741d4d84372fa7a52c275edbd1b5ee2f08ce81ba652d2767c28649a6712cfd68f
+  checksum: 5ff1ea4db9b23006a74d04efe52b2f0f7095c4f3874f09ce7e351cd76ff2e5dda5a7eafddf3c61d2b078914911c0d7881df859cdbfa7c7f3212995a9ff9b2957
   languageName: node
   linkType: hard
 
@@ -2976,13 +2975,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/retry@npm:0.12.0":
-  version: 0.12.0
-  resolution: "@types/retry@npm:0.12.0"
-  checksum: 61a072c7639f6e8126588bf1eb1ce8835f2cb9c2aba795c4491cf6310e013267b0c8488039857c261c387e9728c1b43205099223f160bb6a76b4374f741b5603
-  languageName: node
-  linkType: hard
-
 "@types/stack-utils@npm:^2.0.0":
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
@@ -3986,7 +3978,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
-    "@datadog/datadog-ci": ^2.42.0
+    "@datadog/datadog-ci": ^2.43.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
