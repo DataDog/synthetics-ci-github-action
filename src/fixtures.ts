@@ -1,27 +1,6 @@
 import {synthetics} from '@datadog/datadog-ci'
 
-export const config: synthetics.RunTestsCommandConfig = {
-  apiKey: '',
-  appKey: '',
-  batchTimeout: 30 * 60 * 1000,
-  configPath: 'datadog-ci.json',
-  datadogSite: 'datadoghq.com',
-  defaultTestOverrides: {},
-  failOnCriticalErrors: false,
-  failOnMissingTests: false,
-  failOnTimeout: true,
-  files: [],
-  global: {},
-  jUnitReport: '',
-  locations: [],
-  pollingTimeout: 30 * 60 * 1000,
-  proxy: {protocol: 'http'},
-  publicIds: [],
-  subdomain: 'app',
-  testSearchQuery: '',
-  tunnel: false,
-  variableStrings: [],
-}
+export const config = synthetics.DEFAULT_COMMAND_CONFIG
 
 export const mockReporter: synthetics.MainReporter = {
   error: jest.fn(),
