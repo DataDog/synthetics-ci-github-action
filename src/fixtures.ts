@@ -17,7 +17,6 @@ export const config: synthetics.RunTestsCommandConfig = {
   pollingTimeout: 30 * 60 * 1000,
   proxy: {protocol: 'http'},
   publicIds: [],
-  selectiveRerun: false,
   subdomain: 'app',
   testSearchQuery: '',
   tunnel: false,
