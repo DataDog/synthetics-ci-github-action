@@ -21,10 +21,10 @@ jobs:
       # Do the changes
       - name: Get GitHub App token
         id: get-token
-        uses: tibdex/github-app-token@v1
+        uses: actions/create-github-app-token@v1
         with:
-          app_id: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_ID }}
-          private_key: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_ID }}
+          private-key: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -83,7 +83,7 @@ jobs:
 
             > [!IMPORTANT]
             > **You are not done!**
-            > 
+            >
             > Once this PR is merged, please run the ["Create Release PR" workflow](../actions/workflows/release-version.yml).
             > This time, it will create a **release PR** for you, which will publish the CI integration once merged.`
 
