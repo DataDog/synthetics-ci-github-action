@@ -53,10 +53,6 @@ describe('Resolves Config', () => {
       ...config,
       ...requiredInputs,
       files: ['foobar.synthetics.json'],
-      defaultTestOverrides: {
-        ...config.defaultTestOverrides,
-        pollingTimeout: config.pollingTimeout,
-      },
     })
   })
 
@@ -66,10 +62,6 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      defaultTestOverrides: {
-        ...config.defaultTestOverrides,
-        pollingTimeout: config.pollingTimeout,
-      },
     })
   })
 
@@ -84,7 +76,6 @@ describe('Resolves Config', () => {
       ...requiredInputs,
       defaultTestOverrides: {
         ...config.defaultTestOverrides,
-        pollingTimeout: config.pollingTimeout,
         variables: {START_URL: 'https://example.org', MY_VARIABLE: 'My title'},
       },
     })
@@ -94,10 +85,6 @@ describe('Resolves Config', () => {
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
       ...requiredInputs,
-      defaultTestOverrides: {
-        ...config.defaultTestOverrides,
-        pollingTimeout: config.pollingTimeout,
-      },
     })
   })
 
@@ -133,9 +120,7 @@ describe('Resolves Config', () => {
   describe('parses integer', () => {
     test('falls back to default if input is not set', async () => {
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(
-        30 * 60 * 1000
-      )
+      expect((await resolveConfig.resolveConfig(mockReporter)).batchTimeout).toStrictEqual(30 * 60 * 1000)
     })
 
     test('falls back to default if input is an empty value', async () => {
@@ -144,9 +129,7 @@ describe('Resolves Config', () => {
         INPUT_POLLING_TIMEOUT: '',
       }
       expect(resolveConfig.getDefinedInteger('polling_timeout')).toBeUndefined()
-      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(
-        30 * 60 * 1000
-      )
+      expect((await resolveConfig.resolveConfig(mockReporter)).batchTimeout).toStrictEqual(30 * 60 * 1000)
     })
 
     test('throws if input is a float', async () => {
@@ -162,7 +145,7 @@ describe('Resolves Config', () => {
         ...process.env,
         INPUT_POLLING_TIMEOUT: '1',
       }
-      expect((await resolveConfig.resolveConfig(mockReporter)).defaultTestOverrides?.pollingTimeout).toStrictEqual(1)
+      expect((await resolveConfig.resolveConfig(mockReporter)).batchTimeout).toStrictEqual(1)
     })
   })
 })

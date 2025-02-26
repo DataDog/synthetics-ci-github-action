@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import {synthetics, utils} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
+import {parseVariableStrings} from './utils'
 
 export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<synthetics.RunTestsCommandConfig> => {
   let apiKey
@@ -26,7 +27,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     ?.split(',')
     .map((variableString: string) => variableString.trim())
   const tunnel = getDefinedBoolean('tunnel')
-  const pollingTimeout = getDefinedInteger('polling_timeout')
+  const batchTimeout = getDefinedInteger('polling_timeout')
   const failOnCriticalErrors = getDefinedBoolean('fail_on_critical_errors')
   const failOnMissingTests = getDefinedBoolean('fail_on_missing_tests')
   const failOnTimeout = getDefinedBoolean('fail_on_timeout')
@@ -46,35 +47,31 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     // Here, if configPath is not present it means that default config file does not exist: in this case it's expected for the github action to be silent.
   }
 
-  // Override with GithubAction inputs
+  // Override with Github Action inputs
   config = deepExtend(
     config,
     utils.removeUndefinedValues({
       apiKey,
       appKey,
+      batchTimeout,
       configPath,
       datadogSite,
       defaultTestOverrides: deepExtend(
         config.defaultTestOverrides,
         utils.removeUndefinedValues({
-          pollingTimeout,
-          variables: synthetics.utils.parseVariablesFromCli(variableStrings, reporter.log.bind(reporter)),
+          variables: parseVariableStrings(variableStrings, reporter.log.bind(reporter)),
         })
       ),
       failOnCriticalErrors,
       failOnMissingTests,
       failOnTimeout,
       files,
-      pollingTimeout,
       publicIds,
       subdomain,
       testSearchQuery,
       tunnel,
     })
   )
-
-  // Pass root polling timeout to default test overrides to get it applied to all tests if not defined individually
-  config.defaultTestOverrides.pollingTimeout = config.defaultTestOverrides.pollingTimeout ?? config.pollingTimeout
 
   return config
 }
