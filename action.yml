@@ -8,6 +8,9 @@ inputs:
   app_key:
     required: true
     description: 'Datadog Application key.'
+  batch_timeout:
+    required: false
+    description: 'The duration (in milliseconds) after which the batch fails as timed out.'
   config_path:
     required: false
     description: 'Path to global configuration JSON.'
@@ -29,9 +32,6 @@ inputs:
   junit_report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
-  polling_timeout:
-    required: false
-    description: 'The duration (in milliseconds) after which the action stops polling for test results.'
   public_ids:
     required: false
     description: 'Public IDs of Synthetic tests to run.'

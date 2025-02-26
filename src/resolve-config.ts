@@ -13,6 +13,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     core.setFailed('Missing API or APP keys to initialize datadog-ci!')
     throw error
   }
+  const batchTimeout = getDefinedInteger('batch_timeout')
   const publicIds = getDefinedInput('public_ids')
     ?.split(',')
     .map((publicId: string) => publicId.trim())
@@ -27,7 +28,6 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     ?.split(',')
     .map((variableString: string) => variableString.trim())
   const tunnel = getDefinedBoolean('tunnel')
-  const batchTimeout = getDefinedInteger('polling_timeout')
   const failOnCriticalErrors = getDefinedBoolean('fail_on_critical_errors')
   const failOnMissingTests = getDefinedBoolean('fail_on_missing_tests')
   const failOnTimeout = getDefinedBoolean('fail_on_timeout')
