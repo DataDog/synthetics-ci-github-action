@@ -53,10 +53,6 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
-        defaultTestOverrides: {
-          ...config.defaultTestOverrides,
-          pollingTimeout: config.pollingTimeout,
-        },
       })
     })
 
@@ -72,10 +68,6 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
-        defaultTestOverrides: {
-          ...config.defaultTestOverrides,
-          pollingTimeout: config.pollingTimeout,
-        },
         publicIds,
       })
     })
@@ -94,7 +86,6 @@ describe('Run Github Action', () => {
         ...inputs,
         defaultTestOverrides: {
           ...config.defaultTestOverrides,
-          pollingTimeout: config.pollingTimeout,
           variables: {
             START_URL: 'https://example.org',
             MY_VARIABLE: 'My title',
@@ -120,10 +111,6 @@ describe('Run Github Action', () => {
       expect(synthetics.executeTests).toHaveBeenCalledWith(expect.anything(), {
         ...config,
         ...inputs,
-        defaultTestOverrides: {
-          ...config.defaultTestOverrides,
-          pollingTimeout: config.pollingTimeout,
-        },
       })
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
@@ -144,10 +131,6 @@ describe('Run Github Action', () => {
         ...config,
         ...inputs,
         datadogSite: 'datadoghq.com',
-        defaultTestOverrides: {
-          ...config.defaultTestOverrides,
-          pollingTimeout: config.pollingTimeout,
-        },
       })
     })
   })

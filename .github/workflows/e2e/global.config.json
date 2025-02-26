@@ -1,8 +1,8 @@
 {
+  "batchTimeout": 240000,
   "defaultTestOverrides": {
     "headers": {
       "X-Fake-Header": "fake value"
-    },
-    "pollingTimeout": 240000
+    }
   }
 }
