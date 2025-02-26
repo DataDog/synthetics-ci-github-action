@@ -28,3 +28,7 @@ export const parseVariableStrings = (
 
   return Object.keys(variables).length > 0 ? variables : undefined
 }
+
+export const parseMultiline = (value: string | undefined): string[] | undefined => {
+  return value?.split(/,|\n/).map((variableString: string) => variableString.trim())
+}
