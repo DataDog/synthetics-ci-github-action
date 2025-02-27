@@ -30,7 +30,9 @@ jobs:
         with:
           api_key: ${{secrets.DD_API_KEY}}
           app_key: ${{secrets.DD_APP_KEY}}
-          public_ids: 'abc-d3f-ghi, jkl-mn0-pqr'
+          public_ids: |
+            abc-d3f-ghi
+            jkl-mn0-pqr
 ```
 
 ### Example workflow using an existing `synthetics.json` file
@@ -129,11 +131,11 @@ For an example of a global configuration file, see this [`global.config.json` fi
 | `fail_on_timeout`         | boolean | _optional_  | Fail the CI job if at least one test exceeds the default test timeout. **Default:** `true`.                                                                                                                                                  |
 | `files`                   | string  | _optional_  | Glob pattern to detect Synthetic test configuration files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                                                           |
 | `junit_report`            | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                                                              |
-| `public_ids`              | string  | _optional_  | Comma-separated list of public IDs for Synthetic tests you want to trigger. If no value is provided, the action looks for files named with `synthetics.json`. **Default:** none.                                                             |
+| `public_ids`              | string  | _optional_  | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files. **Default:** none.                                                                       |
 | `subdomain`               | string  | _optional_  | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`.                                     |
 | `test_search_query`       | string  | _optional_  | Trigger tests corresponding to a [search query][5]. **Default:** none.                                                                                                                                                                       |
 | `tunnel`                  | boolean | _optional_  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                                                     |
-| `variables`               | string  | _optional_  | Comma-separated list of global variables to use for Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                                                                   |
+| `variables`               | string  | _optional_  | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                                                   |
 
 ## Contributing
 

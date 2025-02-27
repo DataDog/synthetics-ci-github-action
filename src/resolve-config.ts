@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
+import {parseMultiline, parseVariableStrings} from './utils'
 import {synthetics, utils} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
-import {parseVariableStrings} from './utils'
 
 export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<synthetics.RunTestsCommandConfig> => {
   let apiKey
@@ -14,9 +14,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     throw error
   }
   const batchTimeout = getDefinedInteger('batch_timeout')
-  const publicIds = getDefinedInput('public_ids')
-    ?.split(',')
-    .map((publicId: string) => publicId.trim())
+  const publicIds = parseMultiline(getDefinedInput('public_ids'))
   const datadogSite = getDefinedInput('datadog_site')
   const configPath = getDefinedInput('config_path')
   const files = getDefinedInput('files')
@@ -24,9 +22,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     .map((file: string) => file.trim())
   const testSearchQuery = getDefinedInput('test_search_query')
   const subdomain = getDefinedInput('subdomain')
-  const variableStrings = getDefinedInput('variables')
-    ?.split(',')
-    .map((variableString: string) => variableString.trim())
+  const variableStrings = parseMultiline(getDefinedInput('variables'))
   const tunnel = getDefinedBoolean('tunnel')
   const failOnCriticalErrors = getDefinedBoolean('fail_on_critical_errors')
   const failOnMissingTests = getDefinedBoolean('fail_on_missing_tests')
