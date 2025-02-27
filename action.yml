@@ -34,7 +34,7 @@ inputs:
     description: 'The filename for a JUnit report if you want to generate one.'
   public_ids:
     required: false
-    description: 'Public IDs of Synthetic tests to run.'
+    description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files.'
   subdomain:
     required: false
     description: 'Name of your Datadog custom subdomain.'
@@ -47,7 +47,7 @@ inputs:
     default: false
   variables:
     required: false
-    description: 'Comma-separated list of variable_name=variable_value pairs.'
+    description: 'Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
 
 runs:
   using: 'node20'
