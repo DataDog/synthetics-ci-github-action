@@ -1430,9 +1430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@datadog/datadog-ci@npm:3.0.1"
+"@datadog/datadog-ci@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@datadog/datadog-ci@npm:3.2.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
@@ -1482,7 +1482,7 @@ __metadata:
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: 06981239885cc0633ae1f3f9cf7a66df2d089955e31d51897c366414f515167ca1a2dfeaa320f4f9a3ad2362355472b83022579c2783e7f2e4fa93ffee7167c9
+  checksum: d16f2fd691f8f18dc939ecff3a8cf0c6592f8255643536152b81ffbe5d299bfbfee5b554ba86d216fd8762eacccfd6d5ece27be8d8130d66e2d312fca96364f2
   languageName: node
   linkType: hard
 
@@ -3936,7 +3936,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
-    "@datadog/datadog-ci": ^3.0.1
+    "@datadog/datadog-ci": ^3.2.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
