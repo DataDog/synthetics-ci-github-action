@@ -1430,9 +1430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@datadog/datadog-ci@npm:3.0.1"
+"@datadog/datadog-ci@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@datadog/datadog-ci@npm:3.3.1"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
@@ -1449,7 +1449,7 @@ __metadata:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
     async-retry: 1.3.1
-    axios: ^1.7.4
+    axios: ^1.8.4
     chalk: 3.0.0
     clipanion: ^3.2.1
     datadog-metrics: 0.9.3
@@ -1476,13 +1476,14 @@ __metadata:
     terminal-link: 2.1.1
     tiny-async-pool: ^2.1.0
     typanion: ^3.14.0
+    upath: ^2.0.1
     uuid: ^9.0.0
     ws: ^7.5.10
     xml2js: 0.5.0
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: 06981239885cc0633ae1f3f9cf7a66df2d089955e31d51897c366414f515167ca1a2dfeaa320f4f9a3ad2362355472b83022579c2783e7f2e4fa93ffee7167c9
+  checksum: 14434e156b25558416a1f2ca148ee548cab71e2ddea6d861957daba9908ebf8713a3e46f7c98cc4fd8c8c42c49e5a0148df33ae17a28f8f066ee0eca6e93f9a0
   languageName: node
   linkType: hard
 
@@ -3343,14 +3344,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.4":
-  version: 1.7.4
-  resolution: "axios@npm:1.7.4"
+"axios@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "axios@npm:1.8.4"
   dependencies:
     follow-redirects: ^1.15.6
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: 0c17039a9acfe6a566fca8431ba5c1b455c83d30ea6157fec68a6722878fcd30f3bd32d172f6bee0c51fe75ca98e6414ddcd968a87b5606b573731629440bfaf
+  checksum: e901dc1730bdcd769839b3d93ae6d6457a53d79b19a0eb623ebfea333441259ab51e63ca118baa47a5156567401466ac739f31087b4ee5e6770ab2e227484538
   languageName: node
   linkType: hard
 
@@ -3936,7 +3937,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
-    "@datadog/datadog-ci": ^3.0.1
+    "@datadog/datadog-ci": ^3.3.1
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
@@ -8563,6 +8564,13 @@ __metadata:
   version: 0.1.2
   resolution: "universalify@npm:0.1.2"
   checksum: 40cdc60f6e61070fe658ca36016a8f4ec216b29bf04a55dce14e3710cc84c7448538ef4dad3728d0bfe29975ccd7bfb5f414c45e7b78883567fb31b246f02dff
+  languageName: node
+  linkType: hard
+
+"upath@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "upath@npm:2.0.1"
+  checksum: 2db04f24a03ef72204c7b969d6991abec9e2cb06fb4c13a1fd1c59bc33b46526b16c3325e55930a11ff86a77a8cbbcda8f6399bf914087028c5beae21ecdb33c
   languageName: node
   linkType: hard
 
