@@ -28,7 +28,8 @@
     "node": "20.11.0"
   },
   "volta": {
-    "node": "20.11.0"
+    "node": "20.11.0",
+    "yarn": "3.4.1"
   },
   "packageManager": "yarn@3.4.1",
   "dependencies": {
