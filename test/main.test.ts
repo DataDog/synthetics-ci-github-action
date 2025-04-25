@@ -240,8 +240,7 @@ describe('Run Github Action', () => {
           execFile(nodePath, [scriptPath], (error, stdout) => (error ? reject(error) : resolve(stdout.toString())))
         )
       } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        expect((error as any).code).toBe(1)
+        expect((error as NodeJS.ErrnoException).code).toBe(1)
       }
     })
   })
