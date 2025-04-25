@@ -1,0 +1,30 @@
+name: Run E2E Synthetic tests
+
+on: push
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: yarn
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn build
+          yarn package
+      - name: Run E2E Synthetic tests
+        uses: ./
+        env:
+          FORCE_COLOR: 1
+        with:
+          api_key: ${{ secrets.datadog_api_key }}
+          app_key: ${{ secrets.datadog_app_key }}
+          config_path: './.github/workflows/e2e/global.config.json'
+          public_ids: |
+            pwd-mwg-3p5
+            2r9-q7u-4nn
