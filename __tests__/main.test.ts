@@ -246,4 +246,52 @@ describe('Run Github Action', () => {
       }
     })
   })
+
+  describe('Generate outputs', () => {
+    test('all outputs are set', async () => {
+      // Make this a no-op to remove side effects on the summary.
+      jest.spyOn(synthetics.utils, 'renderResults').mockImplementation()
+      jest.spyOn(synthetics, 'executeTests').mockResolvedValue({
+        results: [
+          {passed: true, result: {startUrl: 'https://example.org'} as synthetics.ServerResult} as synthetics.Result,
+        ],
+        summary: {
+          ...EMPTY_SUMMARY,
+          batchId: 'batch-id',
+          criticalErrors: 1,
+          failed: 2,
+          failedNonBlocking: 3,
+          passed: 4,
+          previouslyPassed: 5,
+          skipped: 6,
+          testsNotFound: new Set(['test-not-found']),
+          timedOut: 7,
+        },
+      })
+
+      const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+
+      await run()
+
+      expect(setOutputMock).toHaveBeenCalledTimes(10)
+      expect(setOutputMock).toHaveBeenNthCalledWith(
+        1,
+        'batchUrl',
+        'https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=batch-id'
+      )
+      expect(setOutputMock).toHaveBeenNthCalledWith(2, 'criticalErrorsCount', 1)
+      expect(setOutputMock).toHaveBeenNthCalledWith(3, 'failedCount', 2)
+      expect(setOutputMock).toHaveBeenNthCalledWith(4, 'failedNonBlockingCount', 3)
+      expect(setOutputMock).toHaveBeenNthCalledWith(5, 'passedCount', 4)
+      expect(setOutputMock).toHaveBeenNthCalledWith(6, 'previouslyPassedCount', 5)
+      expect(setOutputMock).toHaveBeenNthCalledWith(7, 'testsNotFoundCount', 1)
+      expect(setOutputMock).toHaveBeenNthCalledWith(8, 'testsSkippedCount', 6)
+      expect(setOutputMock).toHaveBeenNthCalledWith(9, 'timedOutCount', 7)
+      expect(setOutputMock).toHaveBeenNthCalledWith(
+        10,
+        'rawResults',
+        JSON.stringify([{passed: true, result: {startUrl: 'https://example.org'}}])
+      )
+    })
+  })
 })
