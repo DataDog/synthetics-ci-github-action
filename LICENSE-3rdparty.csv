@@ -3,7 +3,8 @@
 @types/deep-extend,dev,MIT,Copyright Microsoft Corporation
 @types/jest,dev,MIT,Copyright Microsoft Corporation
 @types/node,dev,MIT,Copyright Microsoft Corporation
-@typescript-eslint/parser,dev,BSD 2-Clause License, Copyright JS Foundation and other contributors
+@typescript-eslint/eslint-plugin,dev,MIT,Copyright (c) 2019 typescript-eslint and other contributors
+@typescript-eslint/parser,dev,MIT,Copyright (c) 2019 typescript-eslint and other contributors
 @vercel/ncc,dev,MIT,"Copyright 2018 ZEIT, Inc."
 deep-extend,import,MIT,"Copyright (c) 2013-2018, Viacheslav Lotsmanov"
 eslint,dev,MIT,Copyright OpenJS Foundation and other contributors
