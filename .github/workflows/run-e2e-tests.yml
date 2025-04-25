@@ -19,6 +19,7 @@ jobs:
           yarn package
       - name: Run E2E Synthetic tests
         uses: ./
+        id: run-synthetics-tests
         env:
           FORCE_COLOR: 1
         with:
@@ -28,3 +29,50 @@ jobs:
           public_ids: |
             pwd-mwg-3p5
             2r9-q7u-4nn
+      - name: Example of using outputs
+        run: |
+          echo 'Batch URL: ${{ steps.run-synthetics-tests.outputs.batchUrl }}'
+          echo 'Critical Errors Count: ${{ steps.run-synthetics-tests.outputs.criticalErrorsCount }}'
+          echo 'Passed Count: ${{ steps.run-synthetics-tests.outputs.passedCount }}'
+          echo 'Failed Non-Blocking Count: ${{ steps.run-synthetics-tests.outputs.failedNonBlockingCount }}'
+          echo 'Failed Count: ${{ steps.run-synthetics-tests.outputs.failedCount }}'
+          echo 'Skipped Count: ${{ steps.run-synthetics-tests.outputs.skippedCount }}'
+          echo 'Not Found Count: ${{ steps.run-synthetics-tests.outputs.notFoundCount }}'
+          echo 'Timed Out Count: ${{ steps.run-synthetics-tests.outputs.timedOutCount }}'
+          echo 'Raw Results:'
+          echo '${{ steps.run-synthetics-tests.outputs.rawResults }}' | jq '.'
+      - name: Example of parsing and using raw results with JS
+        uses: actions/github-script@v6
+        env:
+          RAW_RESULTS: ${{ steps.run-synthetics-tests.outputs.rawResults }}
+        with:
+          script: |
+            const rawResults = JSON.parse(process.env.RAW_RESULTS);
+            console.log('Parsed Raw Results:', rawResults);
+
+            // Log each result
+            rawResults.forEach((result, index) => {
+              console.log(`Result ${index + 1}:`);
+              console.log(`  Test ID: ${result.test.public_id}`);
+              console.log(`  Passed: ${result.passed}`);
+              console.log(`  Location: ${result.location}`);
+              console.log(`  Duration: ${result.duration}ms`);
+              console.log(`  Timed Out: ${result.timedOut}`);
+
+              if (result.result) {
+                console.log(`  Result Details:`);
+                console.log(`    Start URL: ${result.result.startUrl || 'N/A'}`);
+                console.log(`    Duration: ${result.result.duration || 'N/A'}ms`);
+
+                if (result.result.stepDetails) {
+                  console.log(`    Steps:`);
+                  result.result.stepDetails.forEach((step, stepIndex) => {
+                    console.log(`      Step ${stepIndex + 1}:`);
+                    console.log(`        Description: ${step.description}`);
+                    console.log(`        Duration: ${step.duration}ms`);
+                    console.log(`        Skipped: ${step.skipped}`);
+                    console.log(`        Error: ${step.error || 'None'}`);
+                  });
+                }
+              }
+            });
