@@ -28,9 +28,24 @@ describe('Run Github Action', () => {
 
     jest.spyOn(process.stdout, 'write').mockImplementation()
     jest.spyOn(core, 'setFailed').mockImplementation()
+    jest.spyOn(synthetics.utils, 'getOrgSettings').mockImplementation()
   })
 
   describe('Handle input parameters', () => {
+    afterEach(() => {
+      // Cleaning
+      try {
+        if (fs.existsSync('./reports/TEST-1.xml')) {
+          fs.unlinkSync('./reports/TEST-1.xml')
+        }
+        if (fs.existsSync('./reports')) {
+          fs.rmdirSync('./reports')
+        }
+      } catch (error) {
+        // Ignore errors during cleanup
+      }
+    })
+
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       process.env = {
         ...process.env,
@@ -114,10 +129,6 @@ describe('Run Github Action', () => {
       })
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
-
-      // Cleaning
-      fs.unlinkSync('./reports/TEST-1.xml')
-      fs.rmdirSync('./reports')
 
       delete process.env.JUNIT_REPORT
     })
