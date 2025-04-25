@@ -1,15 +1,9 @@
-# This workflow installs node and run e2e Synthetics tests through the built files
+name: Run E2E Synthetic tests
 
-name: Run E2E Synthetics test on dist/ files
-
-on:
-  push:
-    paths:
-      - 'dist/**'
+on: push
 
 jobs:
-  build-and-test:
-    name: Run e2e on dist/ files
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,12 +11,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Run synthetics test - dist
-        run: node dist/index.js
+          cache: yarn
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn build
+          yarn package
+      - name: Run E2E Synthetic tests
+        uses: ./
         env:
-          INPUT_API_KEY: ${{ secrets.datadog_api_key }}
-          INPUT_APP_KEY: ${{ secrets.datadog_app_key }}
-          INPUT_CONFIG_PATH: './.github/workflows/e2e/global.config.json'
-          INPUT_PUBLIC_IDS: |
+          FORCE_COLOR: 1
+        with:
+          api_key: ${{ secrets.datadog_api_key }}
+          app_key: ${{ secrets.datadog_app_key }}
+          config_path: './.github/workflows/e2e/global.config.json'
+          public_ids: |
             pwd-mwg-3p5
             2r9-q7u-4nn
