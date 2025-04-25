@@ -7,7 +7,6 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "eslint-comments/no-use": "off",
     "import/no-namespace": "off",
     "no-unused-vars": "off",
     "i18n-text/no-en": "off",
