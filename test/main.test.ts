@@ -247,13 +247,11 @@ describe('Run Github Action', () => {
       const nodePath = process.execPath
       const scriptPath = path.join(__dirname, '..', 'lib', 'main.js')
       try {
-        const result = await new Promise<string>((resolve, reject) =>
-          execFile(nodePath, [scriptPath], (error, stdout, stderr) =>
-            error ? reject(error) : resolve(stdout.toString())
-          )
+        await new Promise<string>((resolve, reject) =>
+          execFile(nodePath, [scriptPath], (error, stdout) => (error ? reject(error) : resolve(stdout.toString())))
         )
-      } catch (error: any) {
-        expect(error.code).toBe(1)
+      } catch (error) {
+        expect((error as NodeJS.ErrnoException).code).toBe(1)
       }
     })
   })
