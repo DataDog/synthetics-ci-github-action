@@ -28,9 +28,24 @@ describe('Run Github Action', () => {
 
     jest.spyOn(process.stdout, 'write').mockImplementation()
     jest.spyOn(core, 'setFailed').mockImplementation()
+    jest.spyOn(synthetics.utils, 'getOrgSettings').mockImplementation()
   })
 
   describe('Handle input parameters', () => {
+    afterEach(() => {
+      // Cleaning
+      try {
+        if (fs.existsSync('./reports/TEST-1.xml')) {
+          fs.unlinkSync('./reports/TEST-1.xml')
+        }
+        if (fs.existsSync('./reports')) {
+          fs.rmdirSync('./reports')
+        }
+      } catch (error) {
+        // Ignore errors during cleanup
+      }
+    })
+
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       process.env = {
         ...process.env,
@@ -115,10 +130,6 @@ describe('Run Github Action', () => {
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
 
-      // Cleaning
-      fs.unlinkSync('./reports/TEST-1.xml')
-      fs.rmdirSync('./reports')
-
       delete process.env.JUNIT_REPORT
     })
   })
@@ -198,7 +209,7 @@ describe('Run Github Action', () => {
       await run()
       expect(setFailedMock).not.toHaveBeenCalled()
       expect(infoMock).toHaveBeenCalledWith(
-        `\n\nDatadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
+        `Datadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
           `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
@@ -213,7 +224,7 @@ describe('Run Github Action', () => {
 
       await run()
       expect(infoMock).toHaveBeenCalledWith(
-        `\n\nDatadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0\n` +
+        `Datadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0\n` +
           `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
