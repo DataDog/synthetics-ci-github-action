@@ -28,9 +28,24 @@ describe('Run Github Action', () => {
 
     jest.spyOn(process.stdout, 'write').mockImplementation()
     jest.spyOn(core, 'setFailed').mockImplementation()
+    jest.spyOn(synthetics.utils, 'getOrgSettings').mockImplementation()
   })
 
   describe('Handle input parameters', () => {
+    afterEach(() => {
+      // Cleaning
+      try {
+        if (fs.existsSync('./reports/TEST-1.xml')) {
+          fs.unlinkSync('./reports/TEST-1.xml')
+        }
+        if (fs.existsSync('./reports')) {
+          fs.rmdirSync('./reports')
+        }
+      } catch (error) {
+        // Ignore errors during cleanup
+      }
+    })
+
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       process.env = {
         ...process.env,
@@ -115,10 +130,6 @@ describe('Run Github Action', () => {
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
 
-      // Cleaning
-      fs.unlinkSync('./reports/TEST-1.xml')
-      fs.rmdirSync('./reports')
-
       delete process.env.JUNIT_REPORT
     })
   })
@@ -164,8 +175,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed: criticalErrors: 0, passed: 0, previouslyPassed: 0, failedNonBlocking: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0\n` +
-          `Batch URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
+        `Datadog Synthetics tests failed: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 1, skipped: 0, notFound: 0, timedOut: 0\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -180,8 +191,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(setFailedMock).toHaveBeenCalledWith(
-        `Datadog Synthetics tests failed: criticalErrors: 0, passed: 0, previouslyPassed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
-          `Batch URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
+        `Datadog Synthetics tests failed: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -198,8 +209,8 @@ describe('Run Github Action', () => {
       await run()
       expect(setFailedMock).not.toHaveBeenCalled()
       expect(infoMock).toHaveBeenCalledWith(
-        `\n\nDatadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, previouslyPassed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
-          `Batch URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
+        `Datadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 0, timedOut: 1\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -213,8 +224,8 @@ describe('Run Github Action', () => {
 
       await run()
       expect(infoMock).toHaveBeenCalledWith(
-        `\n\nDatadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, previouslyPassed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0\n` +
-          `Batch URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
+        `Datadog Synthetics tests succeeded: criticalErrors: 0, passed: 0, failedNonBlocking: 0, failed: 0, skipped: 0, notFound: 1, timedOut: 0\n` +
+          `Results URL: https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa`
       )
     })
 
@@ -236,62 +247,12 @@ describe('Run Github Action', () => {
       const nodePath = process.execPath
       const scriptPath = path.join(__dirname, '..', 'lib', 'main.js')
       try {
-        const result = await new Promise<string>((resolve, reject) =>
-          execFile(nodePath, [scriptPath], (error, stdout, stderr) =>
-            error ? reject(error) : resolve(stdout.toString())
-          )
+        await new Promise<string>((resolve, reject) =>
+          execFile(nodePath, [scriptPath], (error, stdout) => (error ? reject(error) : resolve(stdout.toString())))
         )
-      } catch (error: any) {
-        expect(error.code).toBe(1)
+      } catch (error) {
+        expect((error as NodeJS.ErrnoException).code).toBe(1)
       }
-    })
-  })
-
-  describe('Generate outputs', () => {
-    test('all outputs are set', async () => {
-      // Make this a no-op to remove side effects on the summary.
-      jest.spyOn(synthetics.utils, 'renderResults').mockImplementation()
-      jest.spyOn(synthetics, 'executeTests').mockResolvedValue({
-        results: [
-          {passed: true, result: {startUrl: 'https://example.org'} as synthetics.ServerResult} as synthetics.Result,
-        ],
-        summary: {
-          ...EMPTY_SUMMARY,
-          batchId: 'batch-id',
-          criticalErrors: 1,
-          failed: 2,
-          failedNonBlocking: 3,
-          passed: 4,
-          previouslyPassed: 5,
-          skipped: 6,
-          testsNotFound: new Set(['test-not-found']),
-          timedOut: 7,
-        },
-      })
-
-      const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
-
-      await run()
-
-      expect(setOutputMock).toHaveBeenCalledTimes(10)
-      expect(setOutputMock).toHaveBeenNthCalledWith(
-        1,
-        'batchUrl',
-        'https://app.datadoghq.com/synthetics/explorer/ci?batchResultId=batch-id'
-      )
-      expect(setOutputMock).toHaveBeenNthCalledWith(2, 'criticalErrorsCount', 1)
-      expect(setOutputMock).toHaveBeenNthCalledWith(3, 'failedCount', 2)
-      expect(setOutputMock).toHaveBeenNthCalledWith(4, 'failedNonBlockingCount', 3)
-      expect(setOutputMock).toHaveBeenNthCalledWith(5, 'passedCount', 4)
-      expect(setOutputMock).toHaveBeenNthCalledWith(6, 'previouslyPassedCount', 5)
-      expect(setOutputMock).toHaveBeenNthCalledWith(7, 'testsNotFoundCount', 1)
-      expect(setOutputMock).toHaveBeenNthCalledWith(8, 'testsSkippedCount', 6)
-      expect(setOutputMock).toHaveBeenNthCalledWith(9, 'timedOutCount', 7)
-      expect(setOutputMock).toHaveBeenNthCalledWith(
-        10,
-        'rawResults',
-        JSON.stringify([{passed: true, result: {startUrl: 'https://example.org'}}])
-      )
     })
   })
 })

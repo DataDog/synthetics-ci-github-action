@@ -33,7 +33,7 @@ const run = async (): Promise<void> => {
     if (exitReason !== 'passed') {
       core.setFailed(`Datadog Synthetics tests failed: ${getTextSummary(summary, batchUrl)}`)
     } else {
-      core.info(`\n\nDatadog Synthetics tests succeeded: ${getTextSummary(summary, batchUrl)}`)
+      core.info(`Datadog Synthetics tests succeeded: ${getTextSummary(summary, batchUrl)}`)
     }
   } catch (error) {
     synthetics.utils.reportExitLogs(reporter, config, {error})
@@ -69,7 +69,6 @@ if (require.main === module) {
 export default run
 
 // Force embed of version in build files from package.json for release check
-/* eslint-disable eslint-comments/no-unlimited-disable */
 /* eslint-disable */
 require('../package.json').name
 require('../package.json').version
