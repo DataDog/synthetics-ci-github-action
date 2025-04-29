@@ -50,16 +50,16 @@ const getTextSummary = (summary: synthetics.Summary, batchUrl: string): string =
   `Batch URL: ${batchUrl}`
 
 const setOutputs = (results: synthetics.Result[], summary: synthetics.Summary, batchUrl: string): void => {
-  core.setOutput('batchUrl', batchUrl)
-  core.setOutput('criticalErrorsCount', summary.criticalErrors)
-  core.setOutput('failedCount', summary.failed)
-  core.setOutput('failedNonBlockingCount', summary.failedNonBlocking)
-  core.setOutput('passedCount', summary.passed)
-  core.setOutput('previouslyPassedCount', summary.previouslyPassed)
-  core.setOutput('testsNotFoundCount', summary.testsNotFound.size)
-  core.setOutput('testsSkippedCount', summary.skipped)
-  core.setOutput('timedOutCount', summary.timedOut)
-  core.setOutput('rawResults', JSON.stringify(results))
+  core.setOutput('batch-url', batchUrl)
+  core.setOutput('critical-errors-count', summary.criticalErrors)
+  core.setOutput('failed-count', summary.failed)
+  core.setOutput('failed-non-blocking-count', summary.failedNonBlocking)
+  core.setOutput('passed-count', summary.passed)
+  core.setOutput('previously-passed-count', summary.previouslyPassed)
+  core.setOutput('tests-not-found-count', summary.testsNotFound.size)
+  core.setOutput('tests-skipped-count', summary.skipped)
+  core.setOutput('timed-out-count', summary.timedOut)
+  core.setOutput('raw-results', JSON.stringify(results))
 }
 
 if (require.main === module) {
