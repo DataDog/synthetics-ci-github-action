@@ -21,9 +21,9 @@ describe('Run Github Action', () => {
 
     process.env = {
       ...process.env,
-      INPUT_API_KEY: inputs.apiKey,
-      INPUT_APP_KEY: inputs.appKey,
-      INPUT_PUBLIC_IDS: inputs.publicIds.join(', '),
+      'INPUT_API-KEY': inputs.apiKey,
+      'INPUT_APP-KEY': inputs.appKey,
+      'INPUT_PUBLIC-IDS': inputs.publicIds.join(', '),
     }
 
     jest.spyOn(process.stdout, 'write').mockImplementation()
@@ -49,14 +49,14 @@ describe('Run Github Action', () => {
     test('Github Action called with dummy parameter fails with core.setFailed', async () => {
       process.env = {
         ...process.env,
-        INPUT_FAIL_ON_CRITICAL_ERRORS: 'true',
+        'INPUT_FAIL-ON-CRITICAL-ERRORS': 'true',
       }
 
       const setFailedMock = jest.spyOn(core, 'setFailed')
 
       await run()
 
-      delete process.env.INPUT_FAIL_ON_CRITICAL_ERRORS
+      delete process.env['INPUT_FAIL-ON-CRITICAL-ERRORS']
 
       expect(setFailedMock).toHaveBeenCalledWith('Running Datadog Synthetics tests failed.')
     })
@@ -75,7 +75,7 @@ describe('Run Github Action', () => {
       const publicIds = ['public_id1', 'public_id2', 'public_id3']
       process.env = {
         ...process.env,
-        INPUT_PUBLIC_IDS: publicIds.join(', '),
+        'INPUT_PUBLIC-IDS': publicIds.join(', '),
       }
       jest.spyOn(synthetics, 'executeTests').mockImplementation()
 
@@ -108,13 +108,13 @@ describe('Run Github Action', () => {
         },
       })
 
-      delete process.env.INPUT_VARIABLES
+      delete process.env['INPUT_VARIABLES']
     })
 
     test('Github Action generates a jUnit report', async () => {
       process.env = {
         ...process.env,
-        INPUT_JUNIT_REPORT: 'reports/TEST-1.xml',
+        'INPUT_JUNIT-REPORT': 'reports/TEST-1.xml',
       }
 
       jest.spyOn(synthetics, 'executeTests').mockResolvedValue({
@@ -130,7 +130,7 @@ describe('Run Github Action', () => {
 
       expect(fs.existsSync('./reports/TEST-1.xml')).toBe(true)
 
-      delete process.env.JUNIT_REPORT
+      delete process.env['INPUT_JUNIT-REPORT']
     })
   })
 
@@ -151,7 +151,7 @@ describe('Run Github Action', () => {
       const setFailedMock = jest.spyOn(core, 'setFailed')
       process.env = {
         ...process.env,
-        INPUT_CONFIG_PATH: 'foo',
+        'INPUT_CONFIG-PATH': 'foo',
       }
       await expect(run()).rejects.toThrow('Config file not found')
       expect(setFailedMock).toHaveBeenCalled()

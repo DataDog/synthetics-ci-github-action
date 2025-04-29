@@ -7,26 +7,26 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   let apiKey
   let appKey
   try {
-    apiKey = core.getInput('api_key', {required: true})
-    appKey = core.getInput('app_key', {required: true})
+    apiKey = core.getInput('api-key', {required: true})
+    appKey = core.getInput('app-key', {required: true})
   } catch (error) {
     core.setFailed('Missing API or APP keys to initialize datadog-ci!')
     throw error
   }
-  const batchTimeout = getDefinedInteger('batch_timeout')
-  const publicIds = parseMultiline(getDefinedInput('public_ids'))
-  const datadogSite = getDefinedInput('datadog_site')
-  const configPath = getDefinedInput('config_path')
+  const batchTimeout = getDefinedInteger('batch-timeout')
+  const publicIds = parseMultiline(getDefinedInput('public-ids'))
+  const datadogSite = getDefinedInput('datadog-site')
+  const configPath = getDefinedInput('config-path')
   const files = getDefinedInput('files')
     ?.split(',')
     .map((file: string) => file.trim())
-  const testSearchQuery = getDefinedInput('test_search_query')
+  const testSearchQuery = getDefinedInput('test-search-query')
   const subdomain = getDefinedInput('subdomain')
   const variableStrings = parseMultiline(getDefinedInput('variables'))
   const tunnel = getDefinedBoolean('tunnel')
-  const failOnCriticalErrors = getDefinedBoolean('fail_on_critical_errors')
-  const failOnMissingTests = getDefinedBoolean('fail_on_missing_tests')
-  const failOnTimeout = getDefinedBoolean('fail_on_timeout')
+  const failOnCriticalErrors = getDefinedBoolean('fail-on-critical-errors')
+  const failOnMissingTests = getDefinedBoolean('fail-on-missing-tests')
+  const failOnTimeout = getDefinedBoolean('fail-on-timeout')
 
   let config = JSON.parse(JSON.stringify(synthetics.DEFAULT_COMMAND_CONFIG))
   // Override with file config variables
@@ -109,7 +109,7 @@ export const getDefinedInteger = (name: string): number | undefined => {
 export const getReporter = (): synthetics.MainReporter => {
   const reporters: synthetics.Reporter[] = [new synthetics.DefaultReporter({context: process})]
 
-  const jUnitReportFilename = getDefinedInput('junit_report')
+  const jUnitReportFilename = getDefinedInput('junit-report')
   if (jUnitReportFilename) {
     reporters.push(new synthetics.JUnitReporter({context: process, jUnitReport: jUnitReportFilename}))
   }
