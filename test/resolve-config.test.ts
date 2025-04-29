@@ -30,8 +30,8 @@ describe('Resolves Config', () => {
 
     process.env = {
       ...process.env,
-      INPUT_API_KEY: requiredInputs.apiKey,
-      INPUT_APP_KEY: requiredInputs.appKey,
+      'INPUT_API-KEY': requiredInputs.apiKey,
+      'INPUT_APP-KEY': requiredInputs.appKey,
     }
 
     jest.spyOn(core, 'setFailed').mockImplementation()
@@ -80,7 +80,7 @@ describe('Resolves Config', () => {
       },
     })
 
-    delete process.env.INPUT_VARIABLES
+    delete process.env['INPUT_VARIABLES']
 
     await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
       ...config,
@@ -126,7 +126,7 @@ describe('Resolves Config', () => {
     test('falls back to default if input is an empty value', async () => {
       process.env = {
         ...process.env,
-        INPUT_BATCH_TIMEOUT: '',
+        'INPUT_BATCH-TIMEOUT': '',
       }
       expect(resolveConfig.getDefinedInteger('batch_timeout')).toBeUndefined()
       expect((await resolveConfig.resolveConfig(mockReporter)).batchTimeout).toStrictEqual(30 * 60 * 1000)
@@ -135,7 +135,7 @@ describe('Resolves Config', () => {
     test('throws if input is a float', async () => {
       process.env = {
         ...process.env,
-        INPUT_BATCH_TIMEOUT: '1.2',
+        'INPUT_BATCH-TIMEOUT': '1.2',
       }
       await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrow('1.2 is not an integer')
     })
@@ -143,7 +143,7 @@ describe('Resolves Config', () => {
     test('returns the value if input is an integer', async () => {
       process.env = {
         ...process.env,
-        INPUT_BATCH_TIMEOUT: '1',
+        'INPUT_BATCH-TIMEOUT': '1',
       }
       expect((await resolveConfig.resolveConfig(mockReporter)).batchTimeout).toStrictEqual(1)
     })
