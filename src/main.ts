@@ -24,11 +24,16 @@ const run = async (): Promise<void> => {
 
     synthetics.utils.reportExitLogs(reporter, config, {results})
 
+    const baseUrl = synthetics.utils.getAppBaseURL(config)
+    const batchUrl = synthetics.utils.getBatchUrl(baseUrl, summary.batchId)
+
+    setOutputs(results, summary, batchUrl)
+
     const exitReason = synthetics.utils.getExitReason(config, {results})
     if (exitReason !== 'passed') {
-      core.setFailed(`Datadog Synthetics tests failed: ${printSummary(summary, config)}`)
+      core.setFailed(`Datadog Synthetics tests failed: ${getTextSummary(summary, batchUrl)}`)
     } else {
-      core.info(`Datadog Synthetics tests succeeded: ${printSummary(summary, config)}`)
+      core.info(`Datadog Synthetics tests succeeded: ${getTextSummary(summary, batchUrl)}`)
     }
   } catch (error) {
     synthetics.utils.reportExitLogs(reporter, config, {error})
@@ -40,13 +45,21 @@ const run = async (): Promise<void> => {
   }
 }
 
-export const printSummary = (summary: synthetics.Summary, config: synthetics.RunTestsCommandConfig): string => {
-  const baseUrl = synthetics.utils.getAppBaseURL(config)
-  const batchUrl = synthetics.utils.getBatchUrl(baseUrl, summary.batchId)
-  return (
-    `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}\n` +
-    `Results URL: ${batchUrl}`
-  )
+const getTextSummary = (summary: synthetics.Summary, batchUrl: string): string =>
+  `criticalErrors: ${summary.criticalErrors}, passed: ${summary.passed}, previouslyPassed: ${summary.previouslyPassed}, failedNonBlocking: ${summary.failedNonBlocking}, failed: ${summary.failed}, skipped: ${summary.skipped}, notFound: ${summary.testsNotFound.size}, timedOut: ${summary.timedOut}\n` +
+  `Batch URL: ${batchUrl}`
+
+const setOutputs = (results: synthetics.Result[], summary: synthetics.Summary, batchUrl: string): void => {
+  core.setOutput('batchUrl', batchUrl)
+  core.setOutput('criticalErrorsCount', summary.criticalErrors)
+  core.setOutput('failedCount', summary.failed)
+  core.setOutput('failedNonBlockingCount', summary.failedNonBlocking)
+  core.setOutput('passedCount', summary.passed)
+  core.setOutput('previouslyPassedCount', summary.previouslyPassed)
+  core.setOutput('testsNotFoundCount', summary.testsNotFound.size)
+  core.setOutput('testsSkippedCount', summary.skipped)
+  core.setOutput('timedOutCount', summary.timedOut)
+  core.setOutput('rawResults', JSON.stringify(results))
 }
 
 if (require.main === module) {

@@ -137,6 +137,21 @@ For an example of a global configuration file, see this [`global.config.json` fi
 | `tunnel`                  | boolean | _optional_  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                                                     |
 | `variables`               | string  | _optional_  | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                                                   |
 
+## Outputs
+
+| Name                     | Type   | Description                                |
+| ------------------------ | ------ | ------------------------------------------ |
+| `batchUrl`               | string | The URL of the batch.                      |
+| `criticalErrorsCount`    | number | The number of critical errors.             |
+| `failedCount`            | number | The number of failed results.              |
+| `failedNonBlockingCount` | number | The number of failed non-blocking results. |
+| `passedCount`            | number | The number of passed results.              |
+| `previouslyPassedCount`  | number | The number of previously passed results.   |
+| `testsNotFoundCount`     | number | The number of not found tests.             |
+| `testsSkippedCount`      | number | The number of skipped tests.               |
+| `timedOutCount`          | number | The number of timed out results.           |
+| `rawResults`             | string | The list of results, as a raw JSON string. |
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md)

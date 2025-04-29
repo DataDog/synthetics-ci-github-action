@@ -19,6 +19,7 @@ jobs:
           yarn package
       - name: Run E2E Synthetic tests
         uses: ./
+        id: run-synthetics-tests
         env:
           FORCE_COLOR: 1
         with:
@@ -28,3 +29,16 @@ jobs:
           public_ids: |
             pwd-mwg-3p5
             2r9-q7u-4nn
+      - name: Example of using outputs
+        run: |
+          echo 'Batch URL: ${{ steps.run-synthetics-tests.outputs.batchUrl }}'
+          echo 'Raw Results:'
+          echo '${{ steps.run-synthetics-tests.outputs.rawResults }}' | jq '.'
+      - name: Example of parsing and using raw results with JS
+        uses: actions/github-script@v6
+        env:
+          RAW_RESULTS: ${{ steps.run-synthetics-tests.outputs.rawResults }}
+        with:
+          script: |
+            const rawResults = JSON.parse(process.env.RAW_RESULTS);
+            console.log('Parsed Raw Results:', rawResults);

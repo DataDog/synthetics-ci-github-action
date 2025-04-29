@@ -49,6 +49,28 @@ inputs:
     required: false
     description: 'Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
 
+outputs:
+  batchUrl:
+    description: 'The URL of the batch.'
+  criticalErrorsCount:
+    description: 'The number of critical errors.'
+  failedCount:
+    description: 'The number of failed results.'
+  failedNonBlockingCount:
+    description: 'The number of failed non-blocking results.'
+  passedCount:
+    description: 'The number of passed results.'
+  previouslyPassedCount:
+    description: 'The number of previously passed results.'
+  testsNotFoundCount:
+    description: 'The number of not found tests.'
+  testsSkippedCount:
+    description: 'The number of skipped tests.'
+  timedOutCount:
+    description: 'The number of timed out results.'
+  rawResults:
+    description: 'The list of results, as a raw JSON string.'
+
 runs:
   using: 'node20'
   main: 'dist/index.js'
