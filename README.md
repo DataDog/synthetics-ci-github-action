@@ -8,7 +8,8 @@ Trigger Synthetic tests from your GitHub workflows with the [Datadog CI Syntheti
 
 To get started:
 
-1. Add your Datadog API and Application Keys as secrets to your GitHub repository. For more information, see [API and Application Keys][2].
+1. Add your Datadog API and Application Keys as secrets to your GitHub repository.
+   - For more information, see [API and Application Keys][2].
 2. In your GitHub workflow, use `DataDog/synthetics-ci-github-action`.
 
 Your workflow can be [simple](#simple-workflows) or [complex](#complex-workflows).
