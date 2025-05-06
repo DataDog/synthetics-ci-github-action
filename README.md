@@ -136,7 +136,7 @@ For an example of a global configuration file, see this [`global.config.json` fi
 | `subdomain`               | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`.                                     |
 | `test-search-query`       | Trigger tests corresponding to a [search query][5]. **Default:** none.                                                                                                                                                                       |
 | `tunnel`                  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                                                     |
-| `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                                                   |
+| `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** none.                                                                   |
 
 ## Outputs
 
