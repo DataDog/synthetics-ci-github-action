@@ -140,18 +140,18 @@ For an example of a global configuration file, see this [`global.config.json` fi
 
 ## Outputs
 
-| Name                        | Type   | Description                                |
-| --------------------------- | ------ | ------------------------------------------ |
-| `batch-url`                 | string | The URL of the batch.                      |
-| `critical-errors-count`     | number | The number of critical errors.             |
-| `failed-count`              | number | The number of failed results.              |
-| `failed-non-blocking-count` | number | The number of failed non-blocking results. |
-| `passed-count`              | number | The number of passed results.              |
-| `previously-passed-count`   | number | The number of previously passed results.   |
-| `tests-not-found-count`     | number | The number of not found tests.             |
-| `tests-skipped-count`       | number | The number of skipped tests.               |
-| `timed-out-count`           | number | The number of timed out results.           |
-| `raw-results`               | string | The list of results, as a raw JSON string. |
+| Name                        | Description                                |
+| --------------------------- | ------------------------------------------ |
+| `batch-url`                 | The URL of the batch.                      |
+| `critical-errors-count`     | The number of critical errors.             |
+| `failed-count`              | The number of failed results.              |
+| `failed-non-blocking-count` | The number of failed non-blocking results. |
+| `passed-count`              | The number of passed results.              |
+| `previously-passed-count`   | The number of previously passed results.   |
+| `tests-not-found-count`     | The number of not found tests.             |
+| `tests-skipped-count`       | The number of skipped tests.               |
+| `timed-out-count`           | The number of timed out results.           |
+| `raw-results`               | The list of results, as a raw JSON string. |
 
 ## Contributing
 
