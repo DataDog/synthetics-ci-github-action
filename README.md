@@ -8,7 +8,8 @@ Trigger Synthetic tests from your GitHub workflows with the [Datadog CI Syntheti
 
 To get started:
 
-1. Add your Datadog API and Application Keys as secrets to your GitHub repository. For more information, see [API and Application Keys][2].
+1. Add your Datadog API and Application Keys as secrets to your GitHub repository.
+   - For more information, see [API and Application Keys][2].
 2. In your GitHub workflow, use `DataDog/synthetics-ci-github-action`.
 
 Your workflow can be [simple](#simple-workflows) or [complex](#complex-workflows).
@@ -119,38 +120,38 @@ For an example of a global configuration file, see this [`global.config.json` fi
 
 ## Inputs
 
-| Name                      | Type    | Requirement | Description                                                                                                                                                                                                                                  |
-| ------------------------- | ------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `api-key`                 | string  | _required_  | Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                                                                        |
-| `app-key`                 | string  | _required_  | Your Datadog Application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3]. **Default:** none.                                                                                                |
-| `batch-timeout`           | number  | _optional_  | The duration (in milliseconds) after which the batch fails as timed out. **Default:** 30 minutes.                                                                                                                                            |
-| `config-path`             | string  | _optional_  | The [global JSON configuration][4] to be used when launching tests. See the [example configuration file][13] for more details. **Default:** `datadog-ci.json`.                                                                               |
-| `datadog-site`            | string  | _optional_  | The [Datadog site][11] to send data to. **Default:** `datadoghq.com`.                                                                                                                                                                        |
-| `fail-on-critical-errors` | boolean | _optional_  | Fail the CI job if no tests were triggered, or results could not be fetched from Datadog. **Default:** `false`.                                                                                                                              |
-| `fail-on-missing-tests`   | boolean | _optional_  | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). **Default:** `false`. |
-| `fail-on-timeout`         | boolean | _optional_  | Fail the CI job if at least one test exceeds the default test timeout. **Default:** `true`.                                                                                                                                                  |
-| `files`                   | string  | _optional_  | Glob pattern to detect Synthetic test configuration files. **Default:** `{,!(node_modules)/**/}*.synthetics.json`.                                                                                                                           |
-| `junit-report`            | string  | _optional_  | The filename for a JUnit report if you want to generate one. **Default:** none.                                                                                                                                                              |
-| `public-ids`              | string  | _optional_  | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files. **Default:** none.                                                                       |
-| `subdomain`               | string  | _optional_  | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. **Default:** `app`.                                     |
-| `test-search-query`       | string  | _optional_  | Trigger tests corresponding to a [search query][5]. **Default:** none.                                                                                                                                                                       |
-| `tunnel`                  | boolean | _optional_  | Use the [Continuous Testing Tunnel][9] to execute your test batch. **Default:** `false`.                                                                                                                                                     |
-| `variables`               | string  | _optional_  | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. **Default:** `[]`.                                                                   |
+| Name                      | Description                                                                                                                                                                                                                                                |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api-key`                 | (**Required**) Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3].                                                                                                                          |
+| `app-key`                 | (**Required**) Your Datadog application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3].                                                                                                                  |
+| `batch-timeout`           | The duration (in milliseconds) after which the batch fails as timed out. <br><sub>**Default:** `1800000` (30 minutes)</sub>                                                                                                                                |
+| `config-path`             | The [global JSON configuration][4] to be used when launching tests. See the [example configuration file][13] for more details. <br><sub>**Default:** `datadog-ci.json`</sub>                                                                               |
+| `datadog-site`            | The [Datadog site][11] to send data to. <br><sub>**Default:** `datadoghq.com`</sub>                                                                                                                                                                        |
+| `fail-on-critical-errors` | Fail the CI job if no tests were triggered, or results could not be fetched from Datadog. <br><sub>**Default:** `false`</sub>                                                                                                                              |
+| `fail-on-missing-tests`   | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). <br><sub>**Default:** `false`</sub> |
+| `fail-on-timeout`         | Fail the CI job if at least one test exceeds the default test timeout. <br><sub>**Default:** `true`</sub>                                                                                                                                                  |
+| `files`                   | Glob pattern to detect Synthetic test configuration files. <br><sub>**Default:** `{,!(node_modules)/**/}*.synthetics.json`</sub>                                                                                                                           |
+| `junit-report`            | The filename for a JUnit report if you want to generate one. <br><sub>**Default:** none</sub>                                                                                                                                                              |
+| `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files. <br><sub>**Default:** none</sub>                                                                       |
+| `subdomain`               | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. <br><sub>**Default:** `app`</sub>                                     |
+| `test-search-query`       | Trigger tests corresponding to a [search query][5]. <br><sub>**Default:** none</sub>                                                                                                                                                                       |
+| `tunnel`                  | Use the [Continuous Testing Tunnel][9] to execute your test batch. <br><sub>**Default:** `false`</sub>                                                                                                                                                     |
+| `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. <br><sub>**Default:** none</sub>                                                                   |
 
 ## Outputs
 
-| Name                        | Type   | Description                                |
-| --------------------------- | ------ | ------------------------------------------ |
-| `batch-url`                 | string | The URL of the batch.                      |
-| `critical-errors-count`     | number | The number of critical errors.             |
-| `failed-count`              | number | The number of failed results.              |
-| `failed-non-blocking-count` | number | The number of failed non-blocking results. |
-| `passed-count`              | number | The number of passed results.              |
-| `previously-passed-count`   | number | The number of previously passed results.   |
-| `tests-not-found-count`     | number | The number of not found tests.             |
-| `tests-skipped-count`       | number | The number of skipped tests.               |
-| `timed-out-count`           | number | The number of timed out results.           |
-| `raw-results`               | string | The list of results, as a raw JSON string. |
+| Name                        | Description                                |
+| --------------------------- | ------------------------------------------ |
+| `batch-url`                 | The URL of the batch.                      |
+| `critical-errors-count`     | The number of critical errors.             |
+| `failed-count`              | The number of failed results.              |
+| `failed-non-blocking-count` | The number of failed non-blocking results. |
+| `passed-count`              | The number of passed results.              |
+| `previously-passed-count`   | The number of previously passed results.   |
+| `tests-not-found-count`     | The number of not found tests.             |
+| `tests-skipped-count`       | The number of skipped tests.               |
+| `timed-out-count`           | The number of timed out results.           |
+| `raw-results`               | The list of results, as a raw JSON string. |
 
 ## Contributing
 
