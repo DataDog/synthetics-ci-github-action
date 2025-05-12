@@ -22,7 +22,7 @@ inputs:
     description: 'Fail the CI job if a critical error that is typically transient occurs, such as rate limits, authentication failures, or Datadog infrastructure issues.'
   fail-on-missing-tests:
     required: false
-    description: 'Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a test file) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site).'
+    description: 'Fail the CI job if the list of tests to run is empty or if some explicitly listed tests are missing.'
   fail-on-timeout:
     required: false
     description: 'Fail the CI job if at least one test exceeds the default test timeout.'
