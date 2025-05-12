@@ -13,7 +13,7 @@ inputs:
     description: 'The duration in milliseconds after which the CI batch fails as timed out.'
   config-path:
     required: false
-    description: 'Path to global configuration JSON.'
+    description: 'The path to the global configuration file that configures datadog-ci.'
   datadog-site:
     required: false
     description: 'Datadog site.'
