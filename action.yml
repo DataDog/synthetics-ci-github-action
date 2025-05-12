@@ -43,7 +43,7 @@ inputs:
     description: 'Use a search query to select which Synthetic tests to run.'
   tunnel:
     required: false
-    description: 'Enable tunnel to interact with Datadog API.'
+    description: 'Use the Continuous Testing tunnel to launch tests against internal environments.'
     default: 'false'
   variables:
     required: false

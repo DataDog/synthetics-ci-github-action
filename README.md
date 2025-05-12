@@ -137,7 +137,7 @@ For more information on the available configuration, see the [`datadog-ci run-te
 | `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic [test configuration files][12]. <br><sub>**Default:** none</sub> |
 | `subdomain`               | The custom subdomain to access your Datadog organization. If your URL is `myorg.datadoghq.com`, the custom subdomain is `myorg`. <br><sub>**Default:** `app`</sub>                                  |
 | `test-search-query`       | Use a [search query][5] to select which Synthetic tests to run. Use the [Synthetic Tests list page's search bar][13] to craft your query, then copy and paste it. <br><sub>**Default:** none</sub>  |
-| `tunnel`                  | Use the [Continuous Testing Tunnel][9] to execute your test batch. <br><sub>**Default:** `false`</sub>                                                                                              |
+| `tunnel`                  | Use the [Continuous Testing tunnel][9] to launch tests against internal environments. <br><sub>**Default:** `false`</sub>                                                                           |
 | `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. <br><sub>**Default:** none</sub>            |
 
 ## Outputs
@@ -174,7 +174,7 @@ Additional helpful documentation, links, and articles:
 [6]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration
 [7]: https://semver.org/#summary
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
-[9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/
+[9]: https://docs.datadoghq.com/continuous_testing/environments/proxy_firewall_vpn#what-is-the-testing-tunnel
 [10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
 [11]: https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site
 [12]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#test-files
