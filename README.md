@@ -2,7 +2,9 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/DataDog/synthetics-ci-github-action)
 
-Trigger Synthetic tests from your GitHub workflows with the [Datadog CI Synthetics command][1].
+Trigger Synthetic tests from your GitHub workflows.
+
+For more information on the available configuration, see the [`datadog-ci run-tests` documentation][1].
 
 ## Setup
 
@@ -116,9 +118,9 @@ jobs:
           config-path: './global.config.json'
 ```
 
-For an example of a global configuration file, see this [`global.config.json` file][13].
-
 ## Inputs
+
+For more information on the available configuration, see the [`datadog-ci run-tests` documentation][1].
 
 | Name                      | Description                                                                                                                                                                                                                                                |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -164,7 +166,7 @@ Additional helpful documentation, links, and articles:
 - [Continuous Testing and CI/CD Configuration][6]
 - [Best practices for continuous testing with Datadog][10]
 
-[1]: https://github.com/DataDog/datadog-ci
+[1]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#run-tests-command
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
 [4]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#setup-the-client
