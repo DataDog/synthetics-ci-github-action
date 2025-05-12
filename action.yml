@@ -7,7 +7,7 @@ inputs:
     description: 'Your Datadog API key.'
   app-key:
     required: true
-    description: 'Datadog Application key.'
+    description: 'Your Datadog application key.'
   batch-timeout:
     required: false
     description: 'The duration (in milliseconds) after which the batch fails as timed out.'
