@@ -34,7 +34,7 @@ inputs:
     description: 'The filename for a JUnit report if you want to generate one.'
   public-ids:
     required: false
-    description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files.'
+    description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic test configuration files.'
   subdomain:
     required: false
     description: 'Name of your Datadog custom subdomain.'
