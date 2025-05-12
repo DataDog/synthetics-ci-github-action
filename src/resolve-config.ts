@@ -10,6 +10,13 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     apiKey = core.getInput('api-key', {required: true})
     appKey = core.getInput('app-key', {required: true})
   } catch (error) {
+    if (core.getInput('api_key') || core.getInput('app_key')) {
+      core.setFailed(
+        "We renamed all inputs from snake_case to kebab-case in version 3.0.0 to follow GitHub's convention. Please update your workflow to use the new inputs."
+      )
+      throw error
+    }
+
     core.setFailed('Missing API or APP keys to initialize datadog-ci!')
     throw error
   }
