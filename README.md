@@ -4,7 +4,7 @@
 
 Trigger Synthetic tests from your GitHub workflows.
 
-For more information on the available configuration, see the [`datadog-ci run-tests` documentation][1].
+For more information on the available configuration, see the [`datadog-ci synthetics run-tests` documentation][1].
 
 ## Setup
 
@@ -120,7 +120,7 @@ jobs:
 
 ## Inputs
 
-For more information on the available configuration, see the [`datadog-ci run-tests` documentation][1].
+For more information on the available configuration, see the [`datadog-ci synthetics run-tests` documentation][1].
 
 | Name                      | Description                                                                                                                                                                                                                                  |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
