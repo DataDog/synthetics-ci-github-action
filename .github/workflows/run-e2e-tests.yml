@@ -23,10 +23,10 @@ jobs:
         env:
           FORCE_COLOR: 1
         with:
-          api-key: ${{ secrets.datadog_api_key }}
-          app-key: ${{ secrets.datadog_app_key }}
-          config-path: './.github/workflows/e2e/global.config.json'
-          public-ids: |
+          api_key: ${{ secrets.datadog_api_key }}
+          app_key: ${{ secrets.datadog_app_key }}
+          config_path: './.github/workflows/e2e/global.config.json'
+          public_ids: |
             pwd-mwg-3p5
             2r9-q7u-4nn
       - name: Example of using outputs
