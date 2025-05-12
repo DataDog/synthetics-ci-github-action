@@ -136,7 +136,7 @@ For more information on the available configuration, see the [`datadog-ci run-te
 | `junit-report`            | The filename for a JUnit report if you want to generate one. <br><sub>**Default:** none</sub>                                                                                                       |
 | `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic [test configuration files][12]. <br><sub>**Default:** none</sub> |
 | `subdomain`               | The custom subdomain to access your Datadog organization. If your URL is `myorg.datadoghq.com`, the custom subdomain is `myorg`. <br><sub>**Default:** `app`</sub>                                  |
-| `test-search-query`       | Trigger tests corresponding to a [search query][5]. <br><sub>**Default:** none</sub>                                                                                                                |
+| `test-search-query`       | Use a [search query][5] to select which Synthetic tests to run. Use the [Synthetic Tests list page's search bar][13] to craft your query, then copy and paste it. <br><sub>**Default:** none</sub>  |
 | `tunnel`                  | Use the [Continuous Testing Tunnel][9] to execute your test batch. <br><sub>**Default:** `false`</sub>                                                                                              |
 | `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. <br><sub>**Default:** none</sub>            |
 
@@ -170,7 +170,7 @@ Additional helpful documentation, links, and articles:
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
 [4]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#global-configuration-file
-[5]: https://docs.datadoghq.com/synthetics/search/#search
+[5]: https://docs.datadoghq.com/synthetics/explore/#search
 [6]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration
 [7]: https://semver.org/#summary
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
@@ -178,4 +178,4 @@ Additional helpful documentation, links, and articles:
 [10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
 [11]: https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site
 [12]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#test-files
-[13]: https://github.com/DataDog/datadog-ci/blob/master/.github/workflows/e2e/global.config.json
+[13]: https://app.datadoghq.com/synthetics/tests

@@ -40,7 +40,7 @@ inputs:
     description: 'The custom subdomain to access your Datadog organization.'
   test-search-query:
     required: false
-    description: 'Search query to trigger tests.'
+    description: 'Use a search query to select which Synthetic tests to run.'
   tunnel:
     required: false
     description: 'Enable tunnel to interact with Datadog API.'
