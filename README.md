@@ -2,7 +2,7 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/DataDog/synthetics-ci-github-action)
 
-Trigger Synthetic tests from your GitHub workflows.
+Trigger Datadog Synthetic tests from your GitHub workflows.
 
 For more information on the available configuration, see the [`datadog-ci synthetics run-tests` documentation][1].
 
