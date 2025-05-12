@@ -163,6 +163,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 Additional helpful documentation, links, and articles:
 
+- [Getting Started with Continuous Testing][15]
 - [Continuous Testing and CI/CD Configuration][6]
 - [Best practices for continuous testing with Datadog][10]
 
@@ -180,3 +181,4 @@ Additional helpful documentation, links, and articles:
 [12]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#test-files
 [13]: https://app.datadoghq.com/synthetics/tests
 [14]: https://docs.datadoghq.com/synthetics/platform/settings/?tab=specifyvalue#global-variables
+[15]: https://docs.datadoghq.com/getting_started/continuous_testing/
