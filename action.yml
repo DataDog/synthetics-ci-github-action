@@ -28,7 +28,7 @@ inputs:
     description: 'Fail the CI job if the CI batch fails as timed out.'
   files:
     required: false
-    description: 'Glob pattern to detect Synthetic tests config.'
+    description: 'Glob patterns to detect Synthetic test configuration files.'
   junit-report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
