@@ -128,7 +128,7 @@ For more information on the available configuration, see the [`datadog-ci run-te
 | `app-key`                 | (**Required**) Your Datadog application key. This key is [created in your Datadog organization][2] and should be stored as a [secret][3].                                                                                                                  |
 | `batch-timeout`           | The duration in milliseconds after which the CI batch fails as timed out. This does not affect the outcome of a test run that already started. <br><sub>**Default:** `1800000` (30 minutes)</sub>                                                          |
 | `config-path`             | The path to the [global configuration file][4] that configures datadog-ci. <br><sub>**Default:** `datadog-ci.json`</sub>                                                                                                                                   |
-| `datadog-site`            | The [Datadog site][11] to send data to. <br><sub>**Default:** `datadoghq.com`</sub>                                                                                                                                                                        |
+| `datadog-site`            | Your Datadog site. The possible values are listed [in this table][11]. <br><sub>**Default:** `datadoghq.com`</sub>                                                                                                                                         |
 | `fail-on-critical-errors` | Fail the CI job if no tests were triggered, or results could not be fetched from Datadog. <br><sub>**Default:** `false`</sub>                                                                                                                              |
 | `fail-on-missing-tests`   | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). <br><sub>**Default:** `false`</sub> |
 | `fail-on-timeout`         | Fail the CI job if at least one test exceeds the default test timeout. <br><sub>**Default:** `true`</sub>                                                                                                                                                  |
@@ -176,6 +176,6 @@ Additional helpful documentation, links, and articles:
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
 [9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/
 [10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
-[11]: https://docs.datadoghq.com/getting_started/site
+[11]: https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site
 [12]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#test-files
 [13]: https://github.com/DataDog/datadog-ci/blob/master/.github/workflows/e2e/global.config.json

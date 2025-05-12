@@ -16,7 +16,7 @@ inputs:
     description: 'The path to the global configuration file that configures datadog-ci.'
   datadog-site:
     required: false
-    description: 'Datadog site.'
+    description: 'Your Datadog site.'
   fail-on-critical-errors:
     required: false
     description: 'Fail the CI job if no tests were triggered, or results could not be fetched from Datadog.'
