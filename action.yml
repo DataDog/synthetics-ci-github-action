@@ -4,7 +4,7 @@ author: 'Datadog'
 inputs:
   api-key:
     required: true
-    description: 'Datadog API key.'
+    description: 'Your Datadog API key.'
   app-key:
     required: true
     description: 'Datadog Application key.'
