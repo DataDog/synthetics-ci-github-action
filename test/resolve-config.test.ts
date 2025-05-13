@@ -88,6 +88,41 @@ describe('Resolves Config', () => {
     })
   })
 
+  describe('selectiveRerun', () => {
+    test('undefined when not set', async () => {
+      expect((await resolveConfig.resolveConfig(mockReporter)).selectiveRerun).toBeUndefined()
+    })
+
+    test('true when set to true', async () => {
+      process.env = {
+        ...process.env,
+        'INPUT_SELECTIVE-RERUN': 'true',
+      }
+      expect((await resolveConfig.resolveConfig(mockReporter)).selectiveRerun).toBe(true)
+      delete process.env['INPUT_SELECTIVE-RERUN']
+    })
+
+    test('false when set to false', async () => {
+      process.env = {
+        ...process.env,
+        'INPUT_SELECTIVE-RERUN': 'false',
+      }
+      expect((await resolveConfig.resolveConfig(mockReporter)).selectiveRerun).toBe(false)
+      delete process.env['INPUT_SELECTIVE-RERUN']
+    })
+
+    test('throws if incorrect value', async () => {
+      process.env = {
+        ...process.env,
+        'INPUT_SELECTIVE-RERUN': 'not_a_bool',
+      }
+      await expect(resolveConfig.resolveConfig(mockReporter)).rejects.toThrow(
+        /Input does not meet YAML 1.2 \"Core Schema\" specification: selective-rerun/
+      )
+      delete process.env['INPUT_SELECTIVE-RERUN']
+    })
+  })
+
   test('getDefinedInput returns undefined if Github Action input not set', async () => {
     expect(resolveConfig.getDefinedInput('foobar')).toBeUndefined()
   })
