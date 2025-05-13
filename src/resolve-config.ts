@@ -34,6 +34,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   const failOnCriticalErrors = getDefinedBoolean('fail-on-critical-errors')
   const failOnMissingTests = getDefinedBoolean('fail-on-missing-tests')
   const failOnTimeout = getDefinedBoolean('fail-on-timeout')
+  const selectiveRerun = getDefinedBoolean('selective-rerun')
 
   let config = JSON.parse(JSON.stringify(synthetics.DEFAULT_COMMAND_CONFIG))
   // Override with file config variables
@@ -70,6 +71,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       failOnTimeout,
       files,
       publicIds,
+      selectiveRerun,
       subdomain,
       testSearchQuery,
       tunnel,
