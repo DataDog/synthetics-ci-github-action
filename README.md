@@ -2,7 +2,9 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/DataDog/synthetics-ci-github-action)
 
-Trigger Synthetic tests from your GitHub workflows with the [Datadog CI Synthetics command][1].
+Trigger Datadog Synthetic tests from your GitHub workflows.
+
+For more information on the available configuration, see the [`datadog-ci synthetics run-tests` documentation][1].
 
 ## Setup
 
@@ -116,27 +118,27 @@ jobs:
           config-path: './global.config.json'
 ```
 
-For an example of a global configuration file, see this [`global.config.json` file][13].
-
 ## Inputs
 
-| Name                      | Description                                                                                                                                                                                                                                                |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `api-key`                 | (**Required**) Your Datadog API key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3].                                                                                                                          |
-| `app-key`                 | (**Required**) Your Datadog application key. This key is created by your [Datadog organization][2] and should be stored as a [secret][3].                                                                                                                  |
-| `batch-timeout`           | The duration (in milliseconds) after which the batch fails as timed out. <br><sub>**Default:** `1800000` (30 minutes)</sub>                                                                                                                                |
-| `config-path`             | The [global JSON configuration][4] to be used when launching tests. See the [example configuration file][13] for more details. <br><sub>**Default:** `datadog-ci.json`</sub>                                                                               |
-| `datadog-site`            | The [Datadog site][11] to send data to. <br><sub>**Default:** `datadoghq.com`</sub>                                                                                                                                                                        |
-| `fail-on-critical-errors` | Fail the CI job if no tests were triggered, or results could not be fetched from Datadog. <br><sub>**Default:** `false`</sub>                                                                                                                              |
-| `fail-on-missing-tests`   | Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a [test file][12]) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site). <br><sub>**Default:** `false`</sub> |
-| `fail-on-timeout`         | Fail the CI job if at least one test exceeds the default test timeout. <br><sub>**Default:** `true`</sub>                                                                                                                                                  |
-| `files`                   | Glob pattern to detect Synthetic test configuration files. <br><sub>**Default:** `{,!(node_modules)/**/}*.synthetics.json`</sub>                                                                                                                           |
-| `junit-report`            | The filename for a JUnit report if you want to generate one. <br><sub>**Default:** none</sub>                                                                                                                                                              |
-| `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files. <br><sub>**Default:** none</sub>                                                                       |
-| `subdomain`               | The name of the custom subdomain set to access your Datadog application. If the URL used to access Datadog is `myorg.datadoghq.com`, the subdomain value needs to be set to `myorg`. <br><sub>**Default:** `app`</sub>                                     |
-| `test-search-query`       | Trigger tests corresponding to a [search query][5]. <br><sub>**Default:** none</sub>                                                                                                                                                                       |
-| `tunnel`                  | Use the [Continuous Testing Tunnel][9] to execute your test batch. <br><sub>**Default:** `false`</sub>                                                                                                                                                     |
-| `variables`               | Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. <br><sub>**Default:** none</sub>                                                                   |
+For more information on the available configuration, see the [`datadog-ci synthetics run-tests` documentation][1].
+
+| Name                      | Description                                                                                                                                                                                                                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `api-key`                 | (**Required**) Your Datadog API key. This key is [created in your Datadog organization][2] and should be stored as a [secret][3].                                                                                                             |
+| `app-key`                 | (**Required**) Your Datadog application key. This key is [created in your Datadog organization][2] and should be stored as a [secret][3].                                                                                                     |
+| `batch-timeout`           | The duration in milliseconds after which the CI batch fails as timed out. This does not affect the outcome of a test run that already started. <br><sub>**Default:** `1800000` (30 minutes)</sub>                                             |
+| `config-path`             | The path to the [global configuration file][4] that configures datadog-ci. <br><sub>**Default:** `datadog-ci.json`</sub>                                                                                                                      |
+| `datadog-site`            | Your Datadog site. The possible values are listed [in this table][11]. <br><sub>**Default:** `datadoghq.com`</sub>                                                                                                                            |
+| `fail-on-critical-errors` | Fail the CI job if a critical error that is typically transient occurs, such as rate limits, authentication failures, or Datadog infrastructure issues. <br><sub>**Default:** `false`</sub>                                                   |
+| `fail-on-missing-tests`   | Fail the CI job if the list of tests to run is empty or if some explicitly listed tests are missing. <br><sub>**Default:** `false`</sub>                                                                                                      |
+| `fail-on-timeout`         | Fail the CI job if the CI batch fails as timed out. <br><sub>**Default:** `true`</sub>                                                                                                                                                        |
+| `files`                   | Glob patterns to detect Synthetic [test configuration files][12]. <br><sub>**Default:** `{,!(node_modules)/**/}*.synthetics.json`</sub>                                                                                                       |
+| `junit-report`            | The filename for a JUnit report if you want to generate one. <br><sub>**Default:** none</sub>                                                                                                                                                 |
+| `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic [test configuration files][12]. <br><sub>**Default:** none</sub>                                           |
+| `subdomain`               | The custom subdomain to access your Datadog organization. If your URL is `myorg.datadoghq.com`, the custom subdomain is `myorg`. <br><sub>**Default:** `app`</sub>                                                                            |
+| `test-search-query`       | Use a [search query][5] to select which Synthetic tests to run. Use the [Synthetic Tests list page's search bar][13] to craft your query, then copy and paste it. <br><sub>**Default:** none</sub>                                            |
+| `tunnel`                  | Use the [Continuous Testing tunnel][9] to launch tests against internal environments. <br><sub>**Default:** `false`</sub>                                                                                                                     |
+| `variables`               | Override existing or inject new local and [global variables][14] in Synthetic tests as key-value pairs, separated by new lines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`. <br><sub>**Default:** none</sub> |
 
 ## Outputs
 
@@ -161,19 +163,22 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 Additional helpful documentation, links, and articles:
 
+- [Getting Started with Continuous Testing][15]
 - [Continuous Testing and CI/CD Configuration][6]
 - [Best practices for continuous testing with Datadog][10]
 
-[1]: https://github.com/DataDog/datadog-ci
+[1]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#run-tests-command
 [2]: https://docs.datadoghq.com/account_management/api-app-keys/
 [3]: https://docs.github.com/en/actions/reference/encrypted-secrets
-[4]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#setup-the-client
-[5]: https://docs.datadoghq.com/synthetics/search/#search
+[4]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#global-configuration-file
+[5]: https://docs.datadoghq.com/synthetics/explore/#search
 [6]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration
 [7]: https://semver.org/#summary
 [8]: https://github.com/DataDog/synthetics-ci-github-action/tags
-[9]: https://docs.datadoghq.com/continuous_testing/testing_tunnel/
+[9]: https://docs.datadoghq.com/continuous_testing/environments/proxy_firewall_vpn#what-is-the-testing-tunnel
 [10]: https://www.datadoghq.com/blog/best-practices-datadog-continuous-testing/
-[11]: https://docs.datadoghq.com/getting_started/site
+[11]: https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site
 [12]: https://docs.datadoghq.com/continuous_testing/cicd_integrations/configuration/?tab=npm#test-files
-[13]: https://github.com/DataDog/datadog-ci/blob/master/.github/workflows/e2e/global.config.json
+[13]: https://app.datadoghq.com/synthetics/tests
+[14]: https://docs.datadoghq.com/synthetics/platform/settings/?tab=specifyvalue#global-variables
+[15]: https://docs.datadoghq.com/getting_started/continuous_testing/

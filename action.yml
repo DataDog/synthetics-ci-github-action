@@ -4,50 +4,50 @@ author: 'Datadog'
 inputs:
   api-key:
     required: true
-    description: 'Datadog API key.'
+    description: 'Your Datadog API key.'
   app-key:
     required: true
-    description: 'Datadog Application key.'
+    description: 'Your Datadog application key.'
   batch-timeout:
     required: false
-    description: 'The duration (in milliseconds) after which the batch fails as timed out.'
+    description: 'The duration in milliseconds after which the CI batch fails as timed out.'
   config-path:
     required: false
-    description: 'Path to global configuration JSON.'
+    description: 'The path to the global configuration file that configures datadog-ci.'
   datadog-site:
     required: false
-    description: 'Datadog site.'
+    description: 'Your Datadog site.'
   fail-on-critical-errors:
     required: false
-    description: 'Fail the CI job if no tests were triggered, or results could not be fetched from Datadog.'
+    description: 'Fail the CI job if a critical error that is typically transient occurs, such as rate limits, authentication failures, or Datadog infrastructure issues.'
   fail-on-missing-tests:
     required: false
-    description: 'Fail the CI job if at least one specified test with a public ID (using `public_ids` or listed in a test file) is missing in a run (for example, if it has been deleted programmatically or on the Datadog site).'
+    description: 'Fail the CI job if the list of tests to run is empty or if some explicitly listed tests are missing.'
   fail-on-timeout:
     required: false
-    description: 'Fail the CI job if at least one test exceeds the default test timeout.'
+    description: 'Fail the CI job if the CI batch fails as timed out.'
   files:
     required: false
-    description: 'Glob pattern to detect Synthetic tests config.'
+    description: 'Glob patterns to detect Synthetic test configuration files.'
   junit-report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
   public-ids:
     required: false
-    description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in `*.synthetics.json` files.'
+    description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic test configuration files.'
   subdomain:
     required: false
-    description: 'Name of your Datadog custom subdomain.'
+    description: 'The custom subdomain to access your Datadog organization.'
   test-search-query:
     required: false
-    description: 'Search query to trigger tests.'
+    description: 'Use a search query to select which Synthetic tests to run.'
   tunnel:
     required: false
-    description: 'Enable tunnel to interact with Datadog API.'
+    description: 'Use the Continuous Testing tunnel to launch tests against internal environments.'
     default: 'false'
   variables:
     required: false
-    description: 'Key-value pairs for injecting variables into tests, separated by newlines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
+    description: 'Override existing or inject new local and global variables in Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
 
 outputs:
   batch-url:
