@@ -10,7 +10,7 @@ inputs:
     description: 'Your Datadog application key.'
   batch-timeout:
     required: false
-    description: 'The duration in milliseconds after which the CI batch fails as timed out.'
+    description: 'Specifies the timeout duration in milliseconds for the CI batch.'
   config-path:
     required: false
     description: 'The path to the global configuration file that configures datadog-ci.'
