@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {parseMultiline, parseVariableStrings} from './utils'
+import {parseMultiple, parseVariableStrings} from './utils'
 import {synthetics, utils} from '@datadog/datadog-ci'
 import deepExtend from 'deep-extend'
 
@@ -21,20 +21,18 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
     throw error
   }
   const batchTimeout = getDefinedInteger('batch-timeout')
-  const publicIds = parseMultiline(getDefinedInput('public-ids'))
-  const datadogSite = getDefinedInput('datadog-site')
   const configPath = getDefinedInput('config-path')
-  const files = getDefinedInput('files')
-    ?.split(',')
-    .map((file: string) => file.trim())
-  const testSearchQuery = getDefinedInput('test-search-query')
-  const subdomain = getDefinedInput('subdomain')
-  const variableStrings = parseMultiline(getDefinedInput('variables'))
-  const tunnel = getDefinedBoolean('tunnel')
+  const datadogSite = getDefinedInput('datadog-site')
   const failOnCriticalErrors = getDefinedBoolean('fail-on-critical-errors')
   const failOnMissingTests = getDefinedBoolean('fail-on-missing-tests')
   const failOnTimeout = getDefinedBoolean('fail-on-timeout')
+  const files = parseMultiple(getDefinedInput('files'), {separator: 'newline'})
+  const publicIds = parseMultiple(getDefinedInput('public-ids'), {separator: 'newline-or-comma'})
   const selectiveRerun = getDefinedBoolean('selective-rerun')
+  const subdomain = getDefinedInput('subdomain')
+  const testSearchQuery = getDefinedInput('test-search-query')
+  const tunnel = getDefinedBoolean('tunnel')
+  const variableStrings = parseMultiple(getDefinedInput('variables'), {separator: 'newline-or-comma'})
 
   let config = JSON.parse(JSON.stringify(synthetics.DEFAULT_COMMAND_CONFIG))
   // Override with file config variables
