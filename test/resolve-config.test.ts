@@ -88,6 +88,29 @@ describe('Resolves Config', () => {
     })
   })
 
+  test('Locations input set in the config when defined', async () => {
+    process.env = {
+      ...process.env,
+      INPUT_LOCATIONS: 'aws:eu-central-1,aws:eu-west-1',
+    }
+
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+      defaultTestOverrides: {
+        ...config.defaultTestOverrides,
+        locations: ['aws:eu-central-1', 'aws:eu-west-1'],
+      },
+    })
+
+    delete process.env['INPUT_LOCATIONS']
+
+    await expect(resolveConfig.resolveConfig(mockReporter)).resolves.toStrictEqual({
+      ...config,
+      ...requiredInputs,
+    })
+  })
+
   describe('selectiveRerun', () => {
     test('undefined when not set', async () => {
       expect((await resolveConfig.resolveConfig(mockReporter)).selectiveRerun).toBeUndefined()

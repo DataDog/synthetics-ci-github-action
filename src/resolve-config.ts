@@ -27,6 +27,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
   const failOnMissingTests = getDefinedBoolean('fail-on-missing-tests')
   const failOnTimeout = getDefinedBoolean('fail-on-timeout')
   const files = parseMultiple(getDefinedInput('files'), {separator: 'newline'})
+  const locations = parseMultiple(getDefinedInput('locations'), {separator: 'newline-or-comma'})
   const publicIds = parseMultiple(getDefinedInput('public-ids'), {separator: 'newline-or-comma'})
   const selectiveRerun = getDefinedBoolean('selective-rerun')
   const subdomain = getDefinedInput('subdomain')
@@ -61,6 +62,7 @@ export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<
       defaultTestOverrides: deepExtend(
         config.defaultTestOverrides,
         utils.removeUndefinedValues({
+          locations,
           variables: parseVariableStrings(variableStrings, reporter.log.bind(reporter)),
         })
       ),

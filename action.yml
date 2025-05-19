@@ -32,6 +32,9 @@ inputs:
   junit-report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
+  locations:
+    required: false
+    description: 'Override the list of locations to run the test from, separated by new lines or commas.'
   public-ids:
     required: false
     description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic test configuration files.'
@@ -50,7 +53,7 @@ inputs:
     default: 'false'
   variables:
     required: false
-    description: 'Override existing or inject new local and global variables in Synthetic tests. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
+    description: 'Override existing or inject new local and global variables in Synthetic tests as key-value pairs, separated by new lines or commas. For example: `START_URL=https://example.org,MY_VARIABLE=My title`.'
 
 outputs:
   batch-url:
