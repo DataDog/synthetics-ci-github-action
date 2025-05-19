@@ -32,6 +32,9 @@ inputs:
   junit-report:
     required: false
     description: 'The filename for a JUnit report if you want to generate one.'
+  locations:
+    required: false
+    description: 'Override the list of locations to run the test from.'
   public-ids:
     required: false
     description: 'Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic test configuration files.'
