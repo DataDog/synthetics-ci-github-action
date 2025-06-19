@@ -57,25 +57,25 @@ inputs:
 
 outputs:
   batch-url:
-    description: 'The URL of the batch.'
+    description: 'The URL of the CI batch.'
   critical-errors-count:
-    description: 'The number of critical errors.'
+    description: 'The number of critical errors that occurred during the CI batch.'
   failed-count:
-    description: 'The number of failed results.'
+    description: 'The number of results that failed during the CI batch.'
   failed-non-blocking-count:
-    description: 'The number of failed non-blocking results.'
+    description: 'The number of results that failed during the CI batch without blocking the CI.'
   passed-count:
-    description: 'The number of passed results.'
+    description: 'The number of results that passed during the CI batch.'
   previously-passed-count:
-    description: 'The number of previously passed results.'
+    description: 'The number of results that already passed in previous CI batches on the same commit.'
   tests-not-found-count:
-    description: 'The number of not found tests.'
+    description: 'The number of tests that could not be found when starting the CI batch.'
   tests-skipped-count:
-    description: 'The number of skipped tests.'
+    description: 'The number of tests that were skipped when starting the CI batch.'
   timed-out-count:
-    description: 'The number of timed out results.'
+    description: 'The number of results that failed due to the CI batch timing out.'
   raw-results:
-    description: 'The list of results, as a raw JSON string.'
+    description: 'The `synthetics.Result[]` array, as a JSON-encoded string.'
 
 runs:
   using: 'node20'
