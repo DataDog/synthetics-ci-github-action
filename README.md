@@ -134,7 +134,7 @@ For more information on the available configuration, see the [`datadog-ci synthe
 | `fail-on-timeout`         | Fail the CI job if the CI batch fails as timed out. <br><sub>**Default:** `true`</sub>                                                                                                                                                                                                                             |
 | `files`                   | Glob patterns to detect Synthetic [test configuration files][12], separated by new lines. <br><sub>**Default:** `{,!(node_modules)/**/}*.synthetics.json`</sub>                                                                                                                                                    |
 | `junit-report`            | The filename for a JUnit report if you want to generate one. <br><sub>**Default:** none</sub>                                                                                                                                                                                                                      |
-| `locations`               | Override the list of locations to run the test from, separated by new lines or commas. The possible values are listed [in this API response](https://app.datadoghq.com/api/v1/synthetics/locations?only_public=true). <br><sub>**Default:** none</sub>                                                             |
+| `locations`               | Override the list of locations to run the test from, separated by new lines or commas. The possible values are listed [in this API response][17]. <br><sub>**Default:** none</sub>                                                                                                                                 |
 | `public-ids`              | Public IDs of Synthetic tests to run, separated by new lines or commas. If no value is provided, tests are discovered in Synthetic [test configuration files][12]. <br><sub>**Default:** none</sub>                                                                                                                |
 | `selective-rerun`         | Whether to only rerun failed tests. If a test has already passed for a given commit, it is not rerun in subsequent CI batches. By default, your [organization's default setting][16] is used. Set it to `false` to force full runs when your configuration enables it by default. <br><sub>**Default:** none</sub> |
 | `subdomain`               | The custom subdomain to access your Datadog organization. If your URL is `myorg.datadoghq.com`, the custom subdomain is `myorg`. <br><sub>**Default:** `app`</sub>                                                                                                                                                 |
@@ -144,18 +144,18 @@ For more information on the available configuration, see the [`datadog-ci synthe
 
 ## Outputs
 
-| Name                        | Description                                |
-| --------------------------- | ------------------------------------------ |
-| `batch-url`                 | The URL of the batch.                      |
-| `critical-errors-count`     | The number of critical errors.             |
-| `failed-count`              | The number of failed results.              |
-| `failed-non-blocking-count` | The number of failed non-blocking results. |
-| `passed-count`              | The number of passed results.              |
-| `previously-passed-count`   | The number of previously passed results.   |
-| `tests-not-found-count`     | The number of not found tests.             |
-| `tests-skipped-count`       | The number of skipped tests.               |
-| `timed-out-count`           | The number of timed out results.           |
-| `raw-results`               | The list of results, as a raw JSON string. |
+| Name                        | Description                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------------ |
+| `batch-url`                 | The URL of the CI batch.                                                             |
+| `critical-errors-count`     | The number of critical errors that occurred during the CI batch.                     |
+| `failed-count`              | The number of results that failed during the CI batch.                               |
+| `failed-non-blocking-count` | The number of results that failed during the CI batch without blocking the CI.       |
+| `passed-count`              | The number of results that passed during the CI batch.                               |
+| `previously-passed-count`   | The number of results that already passed in previous CI batches on the same commit. |
+| `tests-not-found-count`     | The number of tests that could not be found when starting the CI batch.              |
+| `tests-skipped-count`       | The number of tests that were skipped when starting the CI batch.                    |
+| `timed-out-count`           | The number of results that failed due to the CI batch timing out.                    |
+| `raw-results`               | The [`synthetics.Result[]`][18] array, as a JSON-encoded string.                     |
 
 ## Contributing
 
@@ -185,3 +185,5 @@ Additional helpful documentation, links, and articles:
 [14]: https://docs.datadoghq.com/synthetics/platform/settings/?tab=specifyvalue#global-variables
 [15]: https://docs.datadoghq.com/getting_started/continuous_testing/
 [16]: https://app.datadoghq.com/synthetics/settings/continuous-testing
+[17]: https://app.datadoghq.com/api/v1/synthetics/locations?only_public=true
+[18]: https://github.com/DataDog/datadog-ci/blob/251299775d28b0535d0e5557fcc494a8124d3b11/src/commands/synthetics/interfaces.ts#L196-L227
