@@ -9,7 +9,7 @@ jobs:
       - name: Run Datadog Synthetic tests
         uses: DataDog/synthetics-ci-github-action@68775f0d3317fe740c62f14e8c195de35ec74c52 # v3.3.0
         with:
-          app-key: ${{ secrets.datadog_app_key }}
+          app-key: ''
           api-key: ${{ secrets.datadog_api_key }}
           public-ids: 'pwd-mwg-3p5'
       - uses: actions/checkout@v4
