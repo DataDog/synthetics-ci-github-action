@@ -23,6 +23,7 @@ export const EMPTY_SUMMARY: synthetics.Summary = {
   failed: 0,
   failedNonBlocking: 0,
   skipped: 0,
+  testsNotAuthorized: new Set(),
   testsNotFound: new Set(),
   timedOut: 0,
   batchId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
