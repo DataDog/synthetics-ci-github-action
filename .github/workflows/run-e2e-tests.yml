@@ -30,10 +30,12 @@ jobs:
             pwd-mwg-3p5
             2r9-q7u-4nn
       - name: Example of using outputs
+        env:
+          RAW_RESULTS: ${{ steps.run-synthetics-tests.outputs.raw-results }}
         run: |
           echo 'Batch URL: ${{ steps.run-synthetics-tests.outputs.batch-url }}'
           echo 'Raw Results:'
-          echo '${{ steps.run-synthetics-tests.outputs.raw-results }}' | jq '.'
+          echo $RAW_RESULTS | jq '.'
       - name: Example of parsing and using raw results with JS
         uses: actions/github-script@v6
         env:
