@@ -889,9 +889,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/identity@npm:^4.10.0":
-  version: 4.10.1
-  resolution: "@azure/identity@npm:4.10.1"
+"@azure/identity@npm:^4.10.1":
+  version: 4.11.1
+  resolution: "@azure/identity@npm:4.11.1"
   dependencies:
     "@azure/abort-controller": ^2.0.0
     "@azure/core-auth": ^1.9.0
@@ -904,7 +904,7 @@ __metadata:
     "@azure/msal-node": ^3.5.0
     open: ^10.1.0
     tslib: ^2.2.0
-  checksum: 9ec058bd1f3aa21eab3d6d60611b665fa73879e044b1ae2c91af305fd3c8a36bd5d093e60fa2cc18a34281eac39ee28076942c7446f4733c3ccd23286138be31
+  checksum: 5f4c2b465a56bf7ae4d50d85db93387ad839a4db19b65a628ac80d179feb8b3956a5db6789f6f2f135f783b4994784e0490d1e28be0e2228fcabf0e16e499e48
   languageName: node
   linkType: hard
 
@@ -1623,9 +1623,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.13.0":
-  version: 3.13.0
-  resolution: "@datadog/datadog-ci@npm:3.13.0"
+"@datadog/datadog-ci@npm:^3.18.0":
+  version: 3.18.0
+  resolution: "@datadog/datadog-ci@npm:3.18.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
@@ -1636,25 +1636,26 @@ __metadata:
     "@aws-sdk/credential-providers": ^3.709.0
     "@azure/arm-appservice": ^16.0.0
     "@azure/arm-resources": ^6.1.0
-    "@azure/identity": ^4.10.0
-    "@google-cloud/logging": ^11.1.0
-    "@google-cloud/run": ^2.1.0
+    "@azure/identity": ^4.10.1
+    "@google-cloud/logging": ^11.2.0
+    "@google-cloud/run": ^2.3.0
     "@smithy/property-provider": ^2.0.12
     "@smithy/util-retry": ^2.0.4
     "@types/datadog-metrics": 0.6.1
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
     async-retry: 1.3.1
-    axios: ^1.8.4
+    axios: ^1.11.0
     chalk: 3.0.0
     clipanion: ^3.2.1
     datadog-metrics: 0.9.3
+    debug: ^4.4.1
     deep-extend: 0.6.0
     deep-object-diff: ^1.1.9
     fast-deep-equal: ^3.1.3
     fast-levenshtein: ^3.0.0
     fast-xml-parser: ^4.4.1
-    form-data: ^4.0.3
+    form-data: ^4.0.4
     fuzzy: ^0.1.3
     get-value: ^4.0.1
     glob: ^10.4.5
@@ -1670,7 +1671,7 @@ __metadata:
     semver: ^7.5.3
     set-value: ^4.1.0
     simple-git: 3.16.0
-    ssh2: ^1.15.0
+    ssh2: ^1.16.0
     ssh2-streams: 0.4.10
     sshpk: 1.16.1
     terminal-link: 2.1.1
@@ -1683,7 +1684,7 @@ __metadata:
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: 7621c931e58ab8cf70a89f5276018d2a9b84cb20adc42470b6e880e7c23b6511f15d59b4cb69e0250eca0313ee24823223ad1922e9d83a025045c72cdc7c0215
+  checksum: 36b3985a27a3722ff3c7ea0660d360e8823b81a8f89eec64e151668eefc5f22d504dcbdb978f6dd146a9606fd109acbc8e40643e6dde23dd5fd01d9dafc489fe
   languageName: node
   linkType: hard
 
@@ -1746,7 +1747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/logging@npm:^11.1.0":
+"@google-cloud/logging@npm:^11.2.0":
   version: 11.2.0
   resolution: "@google-cloud/logging@npm:11.2.0"
   dependencies:
@@ -1794,12 +1795,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/run@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@google-cloud/run@npm:2.1.0"
+"@google-cloud/run@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@google-cloud/run@npm:2.3.0"
   dependencies:
-    google-gax: ^5.0.1-rc.0
-  checksum: 2eaa3bc2081ddfb3f7026bf54b6ae32e202622c5fe645c0e40f1de687b98da3352d92026875203590278303899ce4b25606fdde58b3819ede8e0972915040824
+    google-gax: ^5.0.0
+  checksum: fa060a3cd1eb74f86d316ffa9146f7325f063a5953d2a6a1ec61279b4110254c7aea88673f0c5884afc70f495fa77b7520258646239cf8e69b0cf8b7dbd35328
   languageName: node
   linkType: hard
 
@@ -1834,6 +1835,20 @@ __metadata:
   bin:
     proto-loader-gen-types: build/bin/proto-loader-gen-types.js
   checksum: 9f19f4c611a17cd33aec0d6e3686a76696495f40593f7c284933c4b7877f58dfa5a225ddc20705860a632311f4dc0d143cb6a0da7b51b6f5ffd7de26938df308
+  languageName: node
+  linkType: hard
+
+"@grpc/proto-loader@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@grpc/proto-loader@npm:0.8.0"
+  dependencies:
+    lodash.camelcase: ^4.3.0
+    long: ^5.0.0
+    protobufjs: ^7.5.3
+    yargs: ^17.7.2
+  bin:
+    proto-loader-gen-types: build/bin/proto-loader-gen-types.js
+  checksum: 97570e2e8c29a35b999fa929acad506765e6752d3219764825fecc0ab632492b1ac2e4dd4c0a96cc2e01754d99bfa838dff0729c6608a02f7b027fd19bc1d1e4
   languageName: node
   linkType: hard
 
@@ -3652,14 +3667,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.8.4":
-  version: 1.8.4
-  resolution: "axios@npm:1.8.4"
+"axios@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "axios@npm:1.11.0"
   dependencies:
     follow-redirects: ^1.15.6
-    form-data: ^4.0.0
+    form-data: ^4.0.4
     proxy-from-env: ^1.1.0
-  checksum: e901dc1730bdcd769839b3d93ae6d6457a53d79b19a0eb623ebfea333441259ab51e63ca118baa47a5156567401466ac739f31087b4ee5e6770ab2e227484538
+  checksum: 0a33dc600b588bfd3111b198d5985527ed89f722817455d7cdb66c1d055e5f8859cc2bebb7320888957fc8458ebe77d5f83af02af9cd260217c91c4e92b6dfb6
   languageName: node
   linkType: hard
 
@@ -4184,14 +4199,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cpu-features@npm:~0.0.9":
-  version: 0.0.9
-  resolution: "cpu-features@npm:0.0.9"
+"cpu-features@npm:~0.0.10":
+  version: 0.0.10
+  resolution: "cpu-features@npm:0.0.10"
   dependencies:
     buildcheck: ~0.0.6
-    nan: ^2.17.0
+    nan: ^2.19.0
     node-gyp: latest
-  checksum: 1ff6045a16d32d9667d5dd69c7d485944494d3378ac9381c52bca772bd0c948812eaeda55a76ef09212b0c0e0c575e5d53221899ce51692b1196089452c5aef1
+  checksum: ab17e25cea0b642bdcfd163d3d872be4cc7d821e854d41048557799e990d672ee1cc7bd1d4e7c4de0309b1683d4c001d36ba8569b5035d1e7e2ff2d681f681d7
   languageName: node
   linkType: hard
 
@@ -4261,7 +4276,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^3.13.0
+    "@datadog/datadog-ci": ^3.18.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
@@ -4308,6 +4323,18 @@ __metadata:
     supports-color:
       optional: true
   checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
+  languageName: node
+  linkType: hard
+
+"debug@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "debug@npm:4.4.1"
+  dependencies:
+    ms: ^2.1.3
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: a43826a01cda685ee4cec00fb2d3322eaa90ccadbef60d9287debc2a886be3e835d9199c80070ede75a409ee57828c4c6cd80e4b154f2843f0dc95a570dc0729
   languageName: node
   linkType: hard
 
@@ -5142,27 +5169,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "form-data@npm:4.0.0"
-  dependencies:
-    asynckit: ^0.4.0
-    combined-stream: ^1.0.8
-    mime-types: ^2.1.12
-  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "form-data@npm:4.0.3"
+"form-data@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "form-data@npm:4.0.4"
   dependencies:
     asynckit: ^0.4.0
     combined-stream: ^1.0.8
     es-set-tostringtag: ^2.1.0
     hasown: ^2.0.2
     mime-types: ^2.1.12
-  checksum: b8e2568c0853ce167b2b9c9c4b81fe563f9ade647178baf6b6381cf8a11e3c01dd2b78a63ba367e6f5eab59afab8284a9438bb5ae768133f9d9fce6567fbc26a
+  checksum: 9b7788836df9fa5a6999e0c02515b001946b2a868cfe53f026c69e2c537a2ff9fbfb8e9d2b678744628f3dc7a2d6e14e4e45dfaf68aa6239727f0bdb8ce0abf2
   languageName: node
   linkType: hard
 
@@ -5563,12 +5579,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-gax@npm:^5.0.1-rc.0":
-  version: 5.0.1
-  resolution: "google-gax@npm:5.0.1"
+"google-gax@npm:^5.0.0":
+  version: 5.0.3
+  resolution: "google-gax@npm:5.0.3"
   dependencies:
     "@grpc/grpc-js": ^1.12.6
-    "@grpc/proto-loader": ^0.7.13
+    "@grpc/proto-loader": ^0.8.0
     abort-controller: ^3.0.0
     duplexify: ^4.1.3
     google-auth-library: ^10.1.0
@@ -5578,7 +5594,7 @@ __metadata:
     proto3-json-serializer: ^3.0.0
     protobufjs: ^7.5.3
     retry-request: ^8.0.0
-  checksum: 0e876061b67ef79c4e7a2dd4d9bddd36ce7dff2017801951a939cc5d0191d2f2f2ea31569df6af02ac84795e5a19b875c72b37c596178b6b629f546696ef357d
+  checksum: 7cf2825c8ee503c5013d1ecd9cb0039e3704211bb03bebd990ab83de93c065d68a286165ef03e5c83a7b7a14bb70f5a9ba6710f8d6277eea99d2f0458a6a1e08
   languageName: node
   linkType: hard
 
@@ -7297,7 +7313,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ms@npm:^2.1.1":
+"ms@npm:^2.1.1, ms@npm:^2.1.3":
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
@@ -7311,21 +7327,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.17.0":
-  version: 2.17.0
-  resolution: "nan@npm:2.17.0"
+"nan@npm:^2.19.0, nan@npm:^2.20.0":
+  version: 2.23.0
+  resolution: "nan@npm:2.23.0"
   dependencies:
     node-gyp: latest
-  checksum: ec609aeaf7e68b76592a3ba96b372aa7f5df5b056c1e37410b0f1deefbab5a57a922061e2c5b369bae9c7c6b5e6eecf4ad2dac8833a1a7d3a751e0a7c7f849ed
-  languageName: node
-  linkType: hard
-
-"nan@npm:^2.18.0":
-  version: 2.18.0
-  resolution: "nan@npm:2.18.0"
-  dependencies:
-    node-gyp: latest
-  checksum: 4fe42f58456504eab3105c04a5cffb72066b5f22bd45decf33523cb17e7d6abc33cca2a19829407b9000539c5cb25f410312d4dc5b30220167a3594896ea6a0a
+  checksum: 2d1fd612d69d4cf4dd63c8ce61ee6aa36ace2caf5363c98b3232833fc24ab761fb96742682997716dea5fb9abf57e2fe7e94e76e0c4c302ed1fcde5b908f3e8f
   languageName: node
   linkType: hard
 
@@ -8389,20 +8396,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ssh2@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "ssh2@npm:1.15.0"
+"ssh2@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "ssh2@npm:1.16.0"
   dependencies:
     asn1: ^0.2.6
     bcrypt-pbkdf: ^1.0.2
-    cpu-features: ~0.0.9
-    nan: ^2.18.0
+    cpu-features: ~0.0.10
+    nan: ^2.20.0
   dependenciesMeta:
     cpu-features:
       optional: true
     nan:
       optional: true
-  checksum: 56baa07dc0dd8d97aefa05033b8a95d220a34b2f203aa9116173d7adc5e9fd46be22d7cfed99cdd9f5548862ae44abd1ec136e20ea856d5c470a0df0e5aea9d1
+  checksum: c024c4a432aae2457852037f31c0d9bec323fb062ace3a31e4a6dd6c55842246c80e7d20ff93ffed22dde1e523250d8438bc2f7d4a1450cf4fa4887818176f0e
   languageName: node
   linkType: hard
 
