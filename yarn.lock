@@ -1623,9 +1623,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.18.0":
-  version: 3.18.0
-  resolution: "@datadog/datadog-ci@npm:3.18.0"
+"@datadog/datadog-ci@npm:^3.19.0":
+  version: 3.19.0
+  resolution: "@datadog/datadog-ci@npm:3.19.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
@@ -1638,7 +1638,7 @@ __metadata:
     "@azure/arm-resources": ^6.1.0
     "@azure/identity": ^4.10.1
     "@google-cloud/logging": ^11.2.0
-    "@google-cloud/run": ^2.3.0
+    "@google-cloud/run": ^3.0.0
     "@smithy/property-provider": ^2.0.12
     "@smithy/util-retry": ^2.0.4
     "@types/datadog-metrics": 0.6.1
@@ -1659,7 +1659,7 @@ __metadata:
     fuzzy: ^0.1.3
     get-value: ^4.0.1
     glob: ^10.4.5
-    google-auth-library: ^9.12.0
+    google-auth-library: ^10.2.1
     inquirer: ^8.2.5
     inquirer-checkbox-plus-prompt: ^1.4.2
     jest-diff: ^30.0.4
@@ -1684,7 +1684,7 @@ __metadata:
     yamux-js: 0.1.2
   bin:
     datadog-ci: dist/cli.js
-  checksum: 36b3985a27a3722ff3c7ea0660d360e8823b81a8f89eec64e151668eefc5f22d504dcbdb978f6dd146a9606fd109acbc8e40643e6dde23dd5fd01d9dafc489fe
+  checksum: 1e109d6d80b5f3d88bfcff11557bc82ad95606f7419e3e78fd24c3e5bc4cc2e8f75d8525d6a42cabfa9101d935d1bf072ce505a567d79ede65482bf02e36f526
   languageName: node
   linkType: hard
 
@@ -1795,12 +1795,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/run@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@google-cloud/run@npm:2.3.0"
+"@google-cloud/run@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@google-cloud/run@npm:3.0.0"
   dependencies:
     google-gax: ^5.0.0
-  checksum: fa060a3cd1eb74f86d316ffa9146f7325f063a5953d2a6a1ec61279b4110254c7aea88673f0c5884afc70f495fa77b7520258646239cf8e69b0cf8b7dbd35328
+  checksum: 6b7423fa2fbf31c9588fefa27d251bd772a11b7abac30ee1558220811aa84d039b84bc7bb2ebcf46593f2df99b861048dd29913885bbfaf779da9e76cbc065ee
   languageName: node
   linkType: hard
 
@@ -4276,7 +4276,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^3.18.0
+    "@datadog/datadog-ci": ^3.19.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
@@ -5517,6 +5517,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"google-auth-library@npm:^10.2.1":
+  version: 10.2.1
+  resolution: "google-auth-library@npm:10.2.1"
+  dependencies:
+    base64-js: ^1.3.0
+    ecdsa-sig-formatter: ^1.0.11
+    gaxios: ^7.0.0
+    gcp-metadata: ^7.0.0
+    google-logging-utils: ^1.0.0
+    gtoken: ^8.0.0
+    jws: ^4.0.0
+  checksum: 07320917304e9b36f3a6b52b5a28fbebdf8b9619085f65c195f31fa3c54984a62a328905d5fa415d3f0054a63003e818bb84f50cce7e11d7947a61c83c3a40e5
+  languageName: node
+  linkType: hard
+
 "google-auth-library@npm:^9.0.0":
   version: 9.4.1
   resolution: "google-auth-library@npm:9.4.1"
@@ -5528,20 +5543,6 @@ __metadata:
     gtoken: ^7.0.0
     jws: ^4.0.0
   checksum: c7d2d40ab704e0412db71e505a50b8b149233b9714db20b75c522e43c2a02033de52d4fc37787a8907875c93ff895a0a9582ed1217a990dfbf7389b1d7e2b3d0
-  languageName: node
-  linkType: hard
-
-"google-auth-library@npm:^9.12.0":
-  version: 9.13.0
-  resolution: "google-auth-library@npm:9.13.0"
-  dependencies:
-    base64-js: ^1.3.0
-    ecdsa-sig-formatter: ^1.0.11
-    gaxios: ^6.1.1
-    gcp-metadata: ^6.1.0
-    gtoken: ^7.0.0
-    jws: ^4.0.0
-  checksum: 1ccedc9b6ef6a274e78256aa602b3fb6dd44b3df41d5514058518775f3990a95e7ab0ebad74fe8a3e4f10c23dc8e6a8074bf132f3cc338f335d0e9a6095f8fd4
   languageName: node
   linkType: hard
 
