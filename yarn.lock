@@ -401,7 +401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/core@npm:3.750.0, @aws-sdk/core@npm:^3.709.0":
+"@aws-sdk/core@npm:3.750.0":
   version: 3.750.0
   resolution: "@aws-sdk/core@npm:3.750.0"
   dependencies:
@@ -714,6 +714,16 @@ __metadata:
   dependencies:
     tslib: ^2.5.0
   checksum: b11a91899614e14d40081ceab39cd3702254a5658c7b5e8862ef0d66dbffaa41c9a0f0d31e415d22f31c791b507699ba3a5fc7d87a540273386eb779be3807e4
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/types@npm:^3.887.0":
+  version: 3.893.0
+  resolution: "@aws-sdk/types@npm:3.893.0"
+  dependencies:
+    "@smithy/types": ^4.5.0
+    tslib: ^2.6.2
+  checksum: edd970b0b32648bfd57d7215a61402c755852dc71bba584ee61cd091c8cebbb037c44df73cc4b6f1e6100f163287838b11c7407b7e463ad6643bb1e40ff28a84
   languageName: node
   linkType: hard
 
@@ -1623,68 +1633,278 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.20.0":
-  version: 3.20.0
-  resolution: "@datadog/datadog-ci@npm:3.20.0"
+"@datadog/datadog-ci-base@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-base@npm:3.21.1"
   dependencies:
-    "@aws-sdk/client-cloudwatch-logs": ^3.709.0
-    "@aws-sdk/client-iam": ^3.709.0
-    "@aws-sdk/client-lambda": ^3.709.0
-    "@aws-sdk/client-sfn": ^3.709.0
-    "@aws-sdk/core": ^3.709.0
-    "@aws-sdk/credential-provider-ini": ^3.709.0
-    "@aws-sdk/credential-providers": ^3.709.0
-    "@azure/arm-appservice": ^16.0.0
-    "@azure/arm-resources": ^6.1.0
-    "@azure/identity": ^4.10.1
-    "@google-cloud/logging": ^11.2.0
-    "@google-cloud/run": ^3.0.0
-    "@smithy/property-provider": ^2.0.12
-    "@smithy/util-retry": ^2.0.4
     "@types/datadog-metrics": 0.6.1
-    ajv: ^8.12.0
-    ajv-formats: ^2.1.1
     async-retry: 1.3.1
-    axios: ^1.11.0
+    axios: ^1.12.1
     chalk: 3.0.0
     clipanion: ^3.2.1
     datadog-metrics: 0.9.3
-    debug: ^4.4.1
     deep-extend: 0.6.0
-    deep-object-diff: ^1.1.9
-    fast-deep-equal: ^3.1.3
-    fast-levenshtein: ^3.0.0
     fast-xml-parser: ^4.4.1
     form-data: ^4.0.4
-    fuzzy: ^0.1.3
-    get-value: ^4.0.1
     glob: ^10.4.5
-    google-auth-library: ^10.2.1
     inquirer: ^8.2.5
-    inquirer-checkbox-plus-prompt: ^1.4.2
-    jest-diff: ^30.0.4
-    js-yaml: 3.13.1
     jszip: ^3.10.1
-    ora: 5.4.1
-    packageurl-js: ^2.0.1
     proxy-agent: ^6.4.0
     semver: ^7.5.3
-    set-value: ^4.1.0
     simple-git: 3.16.0
-    ssh2: ^1.16.0
-    ssh2-streams: 0.4.10
-    sshpk: 1.16.1
     terminal-link: 2.1.1
     tiny-async-pool: ^2.1.0
     typanion: ^3.14.0
     upath: ^2.0.1
+  peerDependencies:
+    "@datadog/datadog-ci-plugin-aas": 3.21.1
+    "@datadog/datadog-ci-plugin-cloud-run": 3.21.1
+    "@datadog/datadog-ci-plugin-deployment": 3.20.1
+    "@datadog/datadog-ci-plugin-dora": 3.21.1
+    "@datadog/datadog-ci-plugin-gate": 0.1.1
+    "@datadog/datadog-ci-plugin-lambda": 3.21.1
+    "@datadog/datadog-ci-plugin-sarif": 3.21.1
+    "@datadog/datadog-ci-plugin-sbom": 3.21.1
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.1
+    "@datadog/datadog-ci-plugin-synthetics": 3.21.1
+  peerDependenciesMeta:
+    "@datadog/datadog-ci-plugin-aas":
+      optional: true
+    "@datadog/datadog-ci-plugin-cloud-run":
+      optional: true
+    "@datadog/datadog-ci-plugin-deployment":
+      optional: true
+    "@datadog/datadog-ci-plugin-dora":
+      optional: true
+    "@datadog/datadog-ci-plugin-gate":
+      optional: true
+    "@datadog/datadog-ci-plugin-lambda":
+      optional: true
+    "@datadog/datadog-ci-plugin-sarif":
+      optional: true
+    "@datadog/datadog-ci-plugin-sbom":
+      optional: true
+    "@datadog/datadog-ci-plugin-stepfunctions":
+      optional: true
+    "@datadog/datadog-ci-plugin-synthetics":
+      optional: true
+  checksum: 3a084d8cc04a26f18405aa6adb49cd26d0738dde239ab322e9e6e16ef0e61bb72d81717df36bc240e48094f63f1ef9ec12517ec21290b55e86e5bb4ec3b9ac15
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-aas@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-aas@npm:3.21.1"
+  dependencies:
+    "@azure/arm-appservice": ^16.0.0
+    "@azure/arm-resources": ^6.1.0
+    "@azure/identity": ^4.10.1
+    "@datadog/datadog-ci-base": 3.21.1
+    chalk: 3.0.0
+    fast-deep-equal: ^3.1.3
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 5a64bbc65e4185ed4b14b384aa46eb111941443ffcf2f41cfaec235c5459d7e27bdd906ee4938ed69aae111e3eb58f712e056bb14536d1a016836c2f5aac7b19
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-cloud-run@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-cloud-run@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    "@google-cloud/logging": ^11.2.0
+    "@google-cloud/run": ^3.0.0
+    chalk: 3.0.0
+    google-auth-library: ^10.2.1
+    inquirer: ^8.2.5
+    inquirer-checkbox-plus-prompt: ^1.4.2
+    jest-diff: ^30.0.4
+    ora: 5.4.1
+    upath: ^2.0.1
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 55627596dd5c30612d571505035d02ff545bb3c475c85d6fb709d3339ec6c7eadb5c1745a6aefee4ef629ff711edb291cea3e64762d53f7ee8fecd1155c90a3b
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-deployment@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-deployment@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    axios: ^1.11.0
+    chalk: 3.0.0
+    clipanion: ^3.2.1
+    simple-git: 3.16.0
+    typanion: ^3.14.0
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 194aaa7dac14383513e896cc717e1a5ec05e0d4137a2204b1ed1da1573f4250b61b06b4203bd22f01237fac13c5b0e283b52a593cec7a7b4af60dffa5fe321d3
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-dora@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-dora@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    axios: ^1.11.0
+    chalk: 3.0.0
+    simple-git: 3.16.0
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: ede2ce35e820e626b6cdb1a6d35127b062518280a69ffcb61f1d41cb3838cbf65d73dc25d92c0c6c5cc21c59375fd237c224c1d4a48f16e7a0b9223bd090b694
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-gate@npm:0.1.1":
+  version: 0.1.1
+  resolution: "@datadog/datadog-ci-plugin-gate@npm:0.1.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    "@types/uuid": ^9.0.2
+    axios: ^1.12.1
+    chalk: 3.0.0
     uuid: ^9.0.0
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: ba458aff378fd49b53dfefcbab3b061c0ad34fe675811284e5bf7b2d07dce75ef7231e8910423dfb7f53bace6089022d3f4dcff79454df6283d5a94d9cdd1af5
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-lambda@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-lambda@npm:3.21.1"
+  dependencies:
+    "@aws-sdk/client-cloudwatch-logs": ^3.709.0
+    "@aws-sdk/client-lambda": ^3.709.0
+    "@aws-sdk/credential-provider-ini": ^3.709.0
+    "@aws-sdk/credential-providers": ^3.709.0
+    "@aws-sdk/types": ^3.887.0
+    "@datadog/datadog-ci-base": 3.21.1
+    "@smithy/property-provider": ^2.0.12
+    "@smithy/util-retry": ^2.0.4
+    chalk: 3.0.0
+    fuzzy: ^0.1.3
+    inquirer: ^8.2.5
+    inquirer-checkbox-plus-prompt: ^1.4.2
+    ora: 5.4.1
+    typanion: ^3.14.0
+    upath: ^2.0.1
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 20be8655ff0681e6ac1c6f2932fc58bda5e24d2f58cbf263f4ba6879fdc84dd499a88eed1a3bd5ebef7f9475d7b3c144d7414e02ce7128c7c6fb429977b3697a
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-sarif@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-sarif@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    ajv: ^8.12.0
+    ajv-formats: ^2.1.1
+    axios: ^1.11.0
+    chalk: 3.0.0
+    form-data: ^4.0.4
+    simple-git: 3.16.0
+    upath: ^2.0.1
+    uuid: ^9.0.0
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 2ba1f2e97b31da26630b9185ce1ccb9f910eb1fb588eb8db3fba1c3cf9b66d61f5f9b2fee95962685864452be72d4dd1b9bf936e6d06f6e88ee56f63ef631e79
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-sbom@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-sbom@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    ajv: ^8.12.0
+    ajv-formats: ^2.1.1
+    axios: ^1.11.0
+    chalk: 3.0.0
+    packageurl-js: ^2.0.1
+    simple-git: 3.16.0
+    upath: ^2.0.1
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: e4428c0da19709e1effa1d732d5b787401de6378412a8c8f4967a57e327d4ff10799bc83c716068dfab1e9735730fc2f39c4a850f283f9b0385f5757c23108ef
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.1"
+  dependencies:
+    "@aws-sdk/client-cloudwatch-logs": ^3.709.0
+    "@aws-sdk/client-iam": ^3.709.0
+    "@aws-sdk/client-sfn": ^3.709.0
+    "@datadog/datadog-ci-base": 3.21.1
+    deep-object-diff: ^1.1.9
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: d7af28651acafbe8a6da49f5f429d37e3b234666b67a2c911960beeb5176cb9af8685880babeb4786e40c1b6954efaa3253685ca31295ab308e787ff1253c982
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci-plugin-synthetics@npm:3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    axios: ^1.12.1
+    chalk: 3.0.0
+    debug: ^4.4.1
+    deep-extend: 0.6.0
+    fast-levenshtein: ^3.0.0
+    get-value: ^4.0.1
+    ora: 5.4.1
+    set-value: ^4.1.0
+    ssh2: ^1.16.0
+    sshpk: 1.16.1
+    upath: ^2.0.1
     ws: ^7.5.10
     xml2js: 0.5.0
     yamux-js: 0.1.2
+  peerDependencies:
+    "@datadog/datadog-ci": 3.21.1
+  checksum: 197f12ae6ac4f62ad7d49dd0d0657125c153ef463228946f5d340dc947ca0acd12f24cce606992fe623fea3e0341b7d83dc9098f3ef67a8f8b8179c48023af83
+  languageName: node
+  linkType: hard
+
+"@datadog/datadog-ci@npm:^3.21.1":
+  version: 3.21.1
+  resolution: "@datadog/datadog-ci@npm:3.21.1"
+  dependencies:
+    "@datadog/datadog-ci-base": 3.21.1
+    "@datadog/datadog-ci-plugin-aas": 3.21.1
+    "@datadog/datadog-ci-plugin-cloud-run": 3.21.1
+    "@datadog/datadog-ci-plugin-deployment": 3.21.1
+    "@datadog/datadog-ci-plugin-dora": 3.21.1
+    "@datadog/datadog-ci-plugin-gate": 0.1.1
+    "@datadog/datadog-ci-plugin-lambda": 3.21.1
+    "@datadog/datadog-ci-plugin-sarif": 3.21.1
+    "@datadog/datadog-ci-plugin-sbom": 3.21.1
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.1
+    "@datadog/datadog-ci-plugin-synthetics": 3.21.1
+    axios: ^1.12.1
+    chalk: 3.0.0
+    clipanion: ^3.2.1
+    fast-xml-parser: ^4.4.1
+    form-data: ^4.0.4
+    inquirer: ^8.2.5
+    js-yaml: 3.13.1
+    semver: ^7.5.3
+    simple-git: 3.16.0
+    typanion: ^3.14.0
+    upath: ^2.0.1
+    uuid: ^9.0.0
   bin:
     datadog-ci: dist/cli.js
-  checksum: 6f2f664c4f3f744644e7b0fdf744da5c0dfcc56ca464d2ae9da093dfde772a7aab677eb20e11cd830f20e0ac62aac8c8fabdb1892ee6b5d5268bf2d9930304c4
+  checksum: 18bbd1ab02a36c6cdfa39dd1d8adcc0d4ce1db176c2fd1a653372da667615f76e272e06e8fe175b907ddf11b3f1532acbeb370f2ae5bb340112622b137845050
   languageName: node
   linkType: hard
 
@@ -2793,6 +3013,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/types@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@smithy/types@npm:4.5.0"
+  dependencies:
+    tslib: ^2.6.2
+  checksum: 5fb38dcf554e8ecf3654cbcc295fffcf35517f7e792ed158f4119223982f57d4e3ec79ad56e8e9a590c8843990bef217da8a88e02e197ee7f6d4737abcc9c075
+  languageName: node
+  linkType: hard
+
 "@smithy/url-parser@npm:^4.0.1":
   version: 4.0.1
   resolution: "@smithy/url-parser@npm:4.0.1"
@@ -3188,7 +3417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^9.0.1":
+"@types/uuid@npm:^9.0.1, @types/uuid@npm:^9.0.2":
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
   checksum: b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
@@ -3626,7 +3855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:~0.2.0, asn1@npm:~0.2.3":
+"asn1@npm:~0.2.3":
   version: 0.2.4
   resolution: "asn1@npm:0.2.4"
   dependencies:
@@ -3675,6 +3904,17 @@ __metadata:
     form-data: ^4.0.4
     proxy-from-env: ^1.1.0
   checksum: 0a33dc600b588bfd3111b198d5985527ed89f722817455d7cdb66c1d055e5f8859cc2bebb7320888957fc8458ebe77d5f83af02af9cd260217c91c4e92b6dfb6
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.12.1":
+  version: 1.12.2
+  resolution: "axios@npm:1.12.2"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.4
+    proxy-from-env: ^1.1.0
+  checksum: f0331594fe053a4bbff04104edb073973a3aabfad2e56b0aa18de82428aa63f6f0839ca3d837258ec739cb4528014121793b1649a21e5115ffb2bf8237eadca3
   languageName: node
   linkType: hard
 
@@ -4276,7 +4516,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^3.20.0
+    "@datadog/datadog-ci": ^3.21.1
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^20.11.13
@@ -8386,17 +8626,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ssh2-streams@npm:0.4.10":
-  version: 0.4.10
-  resolution: "ssh2-streams@npm:0.4.10"
-  dependencies:
-    asn1: ~0.2.0
-    bcrypt-pbkdf: ^1.0.2
-    streamsearch: ~0.1.2
-  checksum: dad86d7aa83c08a8f57feedfda26f4032a3f5e605a1d2018da835ced4ebb003739962aa416066f374a006d941067e4215f8b84a8ec81e888156c9274445ae5db
-  languageName: node
-  linkType: hard
-
 "ssh2@npm:^1.16.0":
   version: 1.16.0
   resolution: "ssh2@npm:1.16.0"
@@ -8473,13 +8702,6 @@ __metadata:
   version: 1.0.3
   resolution: "stream-shift@npm:1.0.3"
   checksum: a24c0a3f66a8f9024bd1d579a533a53be283b4475d4e6b4b3211b964031447bdf6532dd1f3c2b0ad66752554391b7c62bd7ca4559193381f766534e723d50242
-  languageName: node
-  linkType: hard
-
-"streamsearch@npm:~0.1.2":
-  version: 0.1.2
-  resolution: "streamsearch@npm:0.1.2"
-  checksum: d2db57cbfbf7947ab9c75a7b4c80a8ef8d24850cf0a1a24258bb6956c97317ce1eab7dbcbf9c5aba3e6198611af1053b02411057bbedb99bf9c64b8275248997
   languageName: node
   linkType: hard
 
