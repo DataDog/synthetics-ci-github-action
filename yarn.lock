@@ -50,6 +50,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@antfu/install-pkg@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@antfu/install-pkg@npm:1.1.0"
+  dependencies:
+    package-manager-detector: ^1.3.0
+    tinyexec: ^1.0.1
+  checksum: e20b7cd1c37eff832cc878cddd794f8c3779175681cf6d75c4cc1ae1475526126a4c1f71fa027161aa1ee35a8850782be9ca0ec01b621893defebe97ba9dc70e
+  languageName: node
+  linkType: hard
+
 "@aws-crypto/crc32@npm:5.2.0":
   version: 5.2.0
   resolution: "@aws-crypto/crc32@npm:5.2.0"
@@ -1633,10 +1643,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-base@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-base@npm:3.21.4"
+"@datadog/datadog-ci-base@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-base@npm:3.22.0"
   dependencies:
+    "@antfu/install-pkg": ^1.1.0
     "@types/datadog-metrics": 0.6.1
     async-retry: 1.3.1
     axios: ^1.12.1
@@ -1658,16 +1669,16 @@ __metadata:
     typanion: ^3.14.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-plugin-aas": 3.21.4
-    "@datadog/datadog-ci-plugin-cloud-run": 3.21.4
-    "@datadog/datadog-ci-plugin-deployment": 3.21.4
-    "@datadog/datadog-ci-plugin-dora": 3.21.4
-    "@datadog/datadog-ci-plugin-gate": 3.21.4
-    "@datadog/datadog-ci-plugin-lambda": 3.21.4
-    "@datadog/datadog-ci-plugin-sarif": 3.21.4
-    "@datadog/datadog-ci-plugin-sbom": 3.21.4
-    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.4
-    "@datadog/datadog-ci-plugin-synthetics": 3.21.4
+    "@datadog/datadog-ci-plugin-aas": 3.22.0
+    "@datadog/datadog-ci-plugin-cloud-run": 3.22.0
+    "@datadog/datadog-ci-plugin-deployment": 3.22.0
+    "@datadog/datadog-ci-plugin-dora": 3.22.0
+    "@datadog/datadog-ci-plugin-gate": 3.22.0
+    "@datadog/datadog-ci-plugin-lambda": 3.22.0
+    "@datadog/datadog-ci-plugin-sarif": 3.22.0
+    "@datadog/datadog-ci-plugin-sbom": 3.22.0
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.22.0
+    "@datadog/datadog-ci-plugin-synthetics": 3.22.0
   peerDependenciesMeta:
     "@datadog/datadog-ci-plugin-aas":
       optional: true
@@ -1689,13 +1700,13 @@ __metadata:
       optional: true
     "@datadog/datadog-ci-plugin-synthetics":
       optional: true
-  checksum: d26dc081aaf905175534f9c2ae8572d89bc78e86104b83ac2dada82975e4a5d38bfece652824a622db70c00324c892644ef2fc2e5dd35365df3abcd617c9b239
+  checksum: ef2335c11cccc302211451f1f8a4d9f62f9d6d9d685041774da51b4ab53901f2953bee29fa188725c784aaa1c5c741248a9f97dd6eeb97266d02e07d62a314e9
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-aas@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-aas@npm:3.21.4"
+"@datadog/datadog-ci-plugin-aas@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-aas@npm:3.22.0"
   dependencies:
     "@azure/arm-appservice": ^16.0.0
     "@azure/arm-resources": ^6.1.0
@@ -1703,14 +1714,14 @@ __metadata:
     chalk: 3.0.0
     fast-deep-equal: ^3.1.3
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 4a5e4e6f62976751c5851814e6506d9367a24316e58b74bf4023230573a2002f6839a0c0c645afb079aafee8003150e0315b09bee20aa1c52ea91ed9874d0daa
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 503012bbb1458d1aa7414e7f5f5bff2ee63040401d6934dbba5a77f0ffa371c58709fbf470d5c8fb880519c41ab574a399f0acb8c973602e86436b6efddddff4
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-cloud-run@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-cloud-run@npm:3.21.4"
+"@datadog/datadog-ci-plugin-cloud-run@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-cloud-run@npm:3.22.0"
   dependencies:
     "@google-cloud/logging": ^11.2.0
     "@google-cloud/run": ^3.0.0
@@ -1722,54 +1733,54 @@ __metadata:
     ora: 5.4.1
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: b61c43251c2b467255ce0972d4f8c455d93f8acaabe599bd568213aaaee8feab0c7ecf965c891f38facb3c02c8aafde32ebf6d2458ae658bb5da39d8639bb391
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 37dab893842aec451dc923dedc1e58ba9491fd0908ac29e690dc01ba7a618f04627b08f17adf7fda6d4b87601ad7b7eb04c1db089f7a42fa94f5269b937884d0
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-deployment@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-deployment@npm:3.21.4"
+"@datadog/datadog-ci-plugin-deployment@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-deployment@npm:3.22.0"
   dependencies:
     axios: ^1.11.0
     chalk: 3.0.0
     simple-git: 3.16.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 977b3c2c71225630055574d1d38c6a897f5376c2e54c3b39c0185b825f0ee8c1ab45a97e2abb98175d22270bed8ec250f56d911492b1e8e68e1d04486af66509
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 53d3a828cceeb369db76753aa04ac4e7b189c2e7f95a486c3c82829aa3820c2ab2625c8910399dc8ef8bfd801775b145495551454d15695990be003f172a2c4b
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-dora@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-dora@npm:3.21.4"
+"@datadog/datadog-ci-plugin-dora@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-dora@npm:3.22.0"
   dependencies:
     axios: ^1.11.0
     chalk: 3.0.0
     simple-git: 3.16.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 94aeae4176cfacba32719514eaa2afc0d1097ba767b1c73a40d2ee21b0d15a42c2dcbbb85fbca0b444a053b47e2bc242437092581117c6f33b95f264007444d2
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 597261da0a05269c7a3a33faf7fcc21499b3c3fa552ab93c499f1122f9b1f4dadfb6ee85ec0c78d19d6b7949f6083716ec063d7939b7176ea54fd40499df1b19
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-gate@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-gate@npm:3.21.4"
+"@datadog/datadog-ci-plugin-gate@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-gate@npm:3.22.0"
   dependencies:
     "@types/uuid": ^9.0.2
     axios: ^1.12.1
     chalk: 3.0.0
     uuid: ^9.0.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: a9ad1331a873a7139331342824c2182f74af58f7b558873f78a753918fb1047ba33f2cb0d6e83de08af28f1f2ecb8270816ffbdea1e5f98418c4dd05f838b53e
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 925d04c9ad13025a8dfa11f5048564370d42c619abd63198fd7e9652265ea0e2c33cfdb1b1bc0cfa4a484b5cb0951211e8780f20eafef4d55e46bc0188e88619
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-lambda@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-lambda@npm:3.21.4"
+"@datadog/datadog-ci-plugin-lambda@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-lambda@npm:3.22.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-lambda": ^3.709.0
@@ -1786,14 +1797,14 @@ __metadata:
     typanion: ^3.14.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 9d8fa15a082589c436064b5c771dc19414efee6cc596325e515ec548312f55a7e58211e10082f9c21f48949e3cb16de35eac74a4a48ccc2cd453fdbf41bc3df6
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 259b23b97826c85d67d195e89782cc0c427235f00a8ba5b80b42c0584a499afa0bfbf38ab035eb3cfc0155ddfea5a8287f2d77b220a115fb21cc085445980964
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-sarif@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-sarif@npm:3.21.4"
+"@datadog/datadog-ci-plugin-sarif@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-sarif@npm:3.22.0"
   dependencies:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
@@ -1804,14 +1815,14 @@ __metadata:
     upath: ^2.0.1
     uuid: ^9.0.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 5ee8640cf39901ac4638a7f5eb6c5207e33e240daf1eadd8ffa552aa8317ecadfb6e480cebe1456843e442bf88fa07821f7dd7c9f67cd594d744f30a03e87e29
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 7982000a695c1228269ff8e5ec538ffe5891e73d51cffb3a1bb222d0b7eb6f3c99f0336eb5f964fbd25faf9206a8d952aa9ad924d1dcb143d84b731b2b451fca
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-sbom@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-sbom@npm:3.21.4"
+"@datadog/datadog-ci-plugin-sbom@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-sbom@npm:3.22.0"
   dependencies:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
@@ -1821,28 +1832,28 @@ __metadata:
     simple-git: 3.16.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 72bd34eeb1833ab2b06f5e99013b2406fe48473f3ab5f290d47b872afac7bf55a7b97e06519d84f5075eedb219fb2cc520b5232c0850cfc7b0c74bb9033fd6bd
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: a8240a541ab4c8ef04c52f0a9d8c0c1dc944ffc4aec145a28ec89ce75d6a0c203c6794704c5d632703f1cbee24451c810b180a2df96f5bdbd502444b46facd35
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.4"
+"@datadog/datadog-ci-plugin-stepfunctions@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-stepfunctions@npm:3.22.0"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
     "@aws-sdk/client-sfn": ^3.709.0
     deep-object-diff: ^1.1.9
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 5e4b689b191d74625e227bae98bef8a5fd0816f57890c76bc4cb8e2b5dac1be5a5c2cc20f23dca21b0299af7050dc281e29e6b33565f5ade2856038eecfeb678
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 6254fde5d63fb24c6f634a53ed272bef808d4bd9b53159fca314af7f69c25acbd1fa0f1e5b3b78ffdb8d0999c77a930f0570d25b501e81f47f2baf056cbb2b21
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-synthetics@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:3.21.4"
+"@datadog/datadog-ci-plugin-synthetics@npm:3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:3.22.0"
   dependencies:
     axios: ^1.12.1
     chalk: 3.0.0
@@ -1859,32 +1870,31 @@ __metadata:
     xml2js: 0.5.0
     yamux-js: 0.1.2
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 3ece8aeead49f153398cc6dee53c30ab51fe6cb275f3de02b0f869de2523c0e7407788855c8fba86a89584f3a9bcf50af3b88af026cd32216a3f311082428da2
+    "@datadog/datadog-ci-base": 3.22.0
+  checksum: 962abd27247761d7a75ff3d08d4dcf3076066317fe0cfaeabef7ad739d1c40b01170acca2c956f07df4eff2e7e0ad456c310914fd82529a8935d87ba4e344041
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci@npm:3.21.4"
+"@datadog/datadog-ci@npm:^3.22.0":
+  version: 3.22.0
+  resolution: "@datadog/datadog-ci@npm:3.22.0"
   dependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-    "@datadog/datadog-ci-plugin-aas": 3.21.4
-    "@datadog/datadog-ci-plugin-cloud-run": 3.21.4
-    "@datadog/datadog-ci-plugin-deployment": 3.21.4
-    "@datadog/datadog-ci-plugin-dora": 3.21.4
-    "@datadog/datadog-ci-plugin-gate": 3.21.4
-    "@datadog/datadog-ci-plugin-lambda": 3.21.4
-    "@datadog/datadog-ci-plugin-sarif": 3.21.4
-    "@datadog/datadog-ci-plugin-sbom": 3.21.4
-    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.4
-    "@datadog/datadog-ci-plugin-synthetics": 3.21.4
+    "@datadog/datadog-ci-base": 3.22.0
+    "@datadog/datadog-ci-plugin-aas": 3.22.0
+    "@datadog/datadog-ci-plugin-cloud-run": 3.22.0
+    "@datadog/datadog-ci-plugin-deployment": 3.22.0
+    "@datadog/datadog-ci-plugin-dora": 3.22.0
+    "@datadog/datadog-ci-plugin-gate": 3.22.0
+    "@datadog/datadog-ci-plugin-lambda": 3.22.0
+    "@datadog/datadog-ci-plugin-sarif": 3.22.0
+    "@datadog/datadog-ci-plugin-sbom": 3.22.0
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.22.0
+    "@datadog/datadog-ci-plugin-synthetics": 3.22.0
     axios: ^1.12.1
     chalk: 3.0.0
     clipanion: ^3.2.1
     fast-xml-parser: ^4.4.1
     form-data: ^4.0.4
-    inquirer: ^8.2.5
     js-yaml: 3.13.1
     semver: ^7.5.3
     simple-git: 3.16.0
@@ -1893,7 +1903,7 @@ __metadata:
     uuid: ^9.0.0
   bin:
     datadog-ci: dist/cli.js
-  checksum: 3fae02d021e21ee9e83665a2affc6b496f2d8d8970aaf629bae9ecd739607038dd4f56367cbd223f7e17b4e0672b06042895c43e34eb9e9fa126f545d66e4183
+  checksum: 16c5fe8d5a828220d075041b7e3acd60cae9e590126c53856a06f1acc1f08f231581a8be9782be115145709f0571505a17af87632b78eefff5c4195854d5873c
   languageName: node
   linkType: hard
 
@@ -4505,7 +4515,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^3.21.4
+    "@datadog/datadog-ci": ^3.22.0
     "@types/deep-extend": 0.4.32
     "@types/jest": ^29.5.8
     "@types/node": ^24.5.2
@@ -7863,6 +7873,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"package-manager-detector@npm:^1.3.0":
+  version: 1.4.0
+  resolution: "package-manager-detector@npm:1.4.0"
+  checksum: 0f3cf6ff005b20e14a517e8b6b76a6c91837c276332c2713e703e40c92effa059ce5f0531deb8f264a959bf88116b3ed1397a120fc5ebd22f6481e4a045eafc3
+  languageName: node
+  linkType: hard
+
 "packageurl-js@npm:^2.0.1":
   version: 2.0.1
   resolution: "packageurl-js@npm:2.0.1"
@@ -8919,6 +8936,13 @@ __metadata:
   version: 2.1.0
   resolution: "tiny-async-pool@npm:2.1.0"
   checksum: 8891326f30e587590f94c5e1f8cab59c9aa305e442fc5b9f7ea997f8611d805a797aae2ea93cd00b42b494ef749353df38b4555e2a769d6fff31a3db7add7208
+  languageName: node
+  linkType: hard
+
+"tinyexec@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "tinyexec@npm:1.0.1"
+  checksum: 40f5219abf891884863b085ebe5e8c8bf95bde802f6480f279588b355835ad1604fa01eada2afe90063b48b53cd4b0be5c37393980e23f06fd10689d92fb9586
   languageName: node
   linkType: hard
 
