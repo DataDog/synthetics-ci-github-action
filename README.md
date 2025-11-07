@@ -1,5 +1,5 @@
 ## Overview
-
+ 
 ![GitHub Release](https://img.shields.io/github/v/release/DataDog/synthetics-ci-github-action)
 
 Trigger Datadog Synthetic tests from your GitHub workflows.
