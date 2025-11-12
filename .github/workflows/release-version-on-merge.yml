@@ -10,17 +10,19 @@ jobs:
   release-version-on-merge:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '[release:')
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Needed to federate tokens.
     steps:
-      - name: Get GitHub App token
-        id: get-token
-        uses: actions/create-github-app-token@v1
+      - name: Get GitHub token via dd-octo-sts
+        id: octo-sts
+        uses: DataDog/dd-octo-sts-action@acaa02eee7e3bb0839e4272dacb37b8f3b58ba80 # v1.0.3
         with:
-          app-id: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_ID }}
-          private-key: ${{ secrets.RELEASE_AUTOMATION_GITHUB_APP_PRIVATE_KEY }}
+          scope: DataDog/synthetics-ci-github-action
+          policy: self.release-version-on-merge.create-release
       - name: Create GitHub release
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.get-token.outputs.token }}
+          github-token: ${{ steps.octo-sts.outputs.token }}
           script: |
             const tagName = '${{ github.event.pull_request.head.ref }}'.replace('release/', '')
 
