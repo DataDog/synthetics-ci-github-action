@@ -1,10 +1,11 @@
 issuer: https://token.actions.githubusercontent.com
 
-subject: repo:DataDog/synthetics-ci-github-action:ref:refs/heads/main
+subject: repo:DataDog/synthetics-ci-github-action:pull_request
 claim_pattern:
   event_name: pull_request
   ref: refs/heads/main
-  job_workflow_ref: DataDog/synthetics-ci-github-action/\.github/workflows/release-version-on-merge\.yml@.*
+  ref_protected: "true"
+  job_workflow_ref: DataDog/synthetics-ci-github-action/\.github/workflows/release-version-on-merge\.yml@refs/heads/main
 
 permissions:
   contents: write
