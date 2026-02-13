@@ -50,6 +50,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@antfu/install-pkg@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@antfu/install-pkg@npm:1.1.0"
+  dependencies:
+    package-manager-detector: ^1.3.0
+    tinyexec: ^1.0.1
+  checksum: e20b7cd1c37eff832cc878cddd794f8c3779175681cf6d75c4cc1ae1475526126a4c1f71fa027161aa1ee35a8850782be9ca0ec01b621893defebe97ba9dc70e
+  languageName: node
+  linkType: hard
+
 "@aws-crypto/crc32@npm:5.2.0":
   version: 5.2.0
   resolution: "@aws-crypto/crc32@npm:5.2.0"
@@ -1633,10 +1643,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-base@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-base@npm:3.21.4"
+"@datadog/datadog-ci-base@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-base@npm:3.22.2"
   dependencies:
+    "@antfu/install-pkg": ^1.1.0
     "@types/datadog-metrics": 0.6.1
     async-retry: 1.3.1
     axios: ^1.12.1
@@ -1658,16 +1669,16 @@ __metadata:
     typanion: ^3.14.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-plugin-aas": 3.21.4
-    "@datadog/datadog-ci-plugin-cloud-run": 3.21.4
-    "@datadog/datadog-ci-plugin-deployment": 3.21.4
-    "@datadog/datadog-ci-plugin-dora": 3.21.4
-    "@datadog/datadog-ci-plugin-gate": 3.21.4
-    "@datadog/datadog-ci-plugin-lambda": 3.21.4
-    "@datadog/datadog-ci-plugin-sarif": 3.21.4
-    "@datadog/datadog-ci-plugin-sbom": 3.21.4
-    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.4
-    "@datadog/datadog-ci-plugin-synthetics": 3.21.4
+    "@datadog/datadog-ci-plugin-aas": 3.22.2
+    "@datadog/datadog-ci-plugin-cloud-run": 3.22.2
+    "@datadog/datadog-ci-plugin-deployment": 3.22.2
+    "@datadog/datadog-ci-plugin-dora": 3.22.2
+    "@datadog/datadog-ci-plugin-gate": 3.22.2
+    "@datadog/datadog-ci-plugin-lambda": 3.22.2
+    "@datadog/datadog-ci-plugin-sarif": 3.22.2
+    "@datadog/datadog-ci-plugin-sbom": 3.22.2
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.22.2
+    "@datadog/datadog-ci-plugin-synthetics": 3.22.2
   peerDependenciesMeta:
     "@datadog/datadog-ci-plugin-aas":
       optional: true
@@ -1689,13 +1700,13 @@ __metadata:
       optional: true
     "@datadog/datadog-ci-plugin-synthetics":
       optional: true
-  checksum: d26dc081aaf905175534f9c2ae8572d89bc78e86104b83ac2dada82975e4a5d38bfece652824a622db70c00324c892644ef2fc2e5dd35365df3abcd617c9b239
+  checksum: 37b9dd1cc4cc1c74adb86a5bfed8bdb5c03dcd729b9555e86f09e0bb749fa7fc32a144105050b4a6ac3ebcf2fa135825f80082b0cba91edbfaf8e8682b271675
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-aas@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-aas@npm:3.21.4"
+"@datadog/datadog-ci-plugin-aas@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-aas@npm:3.22.2"
   dependencies:
     "@azure/arm-appservice": ^16.0.0
     "@azure/arm-resources": ^6.1.0
@@ -1703,14 +1714,14 @@ __metadata:
     chalk: 3.0.0
     fast-deep-equal: ^3.1.3
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 4a5e4e6f62976751c5851814e6506d9367a24316e58b74bf4023230573a2002f6839a0c0c645afb079aafee8003150e0315b09bee20aa1c52ea91ed9874d0daa
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: b1ebb65be2d3ffc4723ed1fcb8e828be201b052a1974cf947ec94dd8d5652c65c4c61f7cbee9856cb22107176f56612fe4f4ccae6b0a7f56f3416bc7b45395e5
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-cloud-run@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-cloud-run@npm:3.21.4"
+"@datadog/datadog-ci-plugin-cloud-run@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-cloud-run@npm:3.22.2"
   dependencies:
     "@google-cloud/logging": ^11.2.0
     "@google-cloud/run": ^3.0.0
@@ -1722,54 +1733,54 @@ __metadata:
     ora: 5.4.1
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: b61c43251c2b467255ce0972d4f8c455d93f8acaabe599bd568213aaaee8feab0c7ecf965c891f38facb3c02c8aafde32ebf6d2458ae658bb5da39d8639bb391
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 4a3501f27a08cd3b336ad501f5e04876711b6c70ac0e2148751ebf43d585d9c2f28379d9c0f9af83d0440b525ac70eb4381123313677ef38d21e480c119eaef8
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-deployment@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-deployment@npm:3.21.4"
+"@datadog/datadog-ci-plugin-deployment@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-deployment@npm:3.22.2"
   dependencies:
     axios: ^1.11.0
     chalk: 3.0.0
     simple-git: 3.16.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 977b3c2c71225630055574d1d38c6a897f5376c2e54c3b39c0185b825f0ee8c1ab45a97e2abb98175d22270bed8ec250f56d911492b1e8e68e1d04486af66509
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 989610b5a7a3276641e690f58f4d2bc543291b8185642b5e36351de590ae3abdc7fab491846dccfc2dc6fd4ba57104c9f7977e8bb37eff3b1441faa2c5f263c5
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-dora@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-dora@npm:3.21.4"
+"@datadog/datadog-ci-plugin-dora@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-dora@npm:3.22.2"
   dependencies:
     axios: ^1.11.0
     chalk: 3.0.0
     simple-git: 3.16.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 94aeae4176cfacba32719514eaa2afc0d1097ba767b1c73a40d2ee21b0d15a42c2dcbbb85fbca0b444a053b47e2bc242437092581117c6f33b95f264007444d2
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 4a08cde9f92fa0bbe7e5a31be0af6cbb0e766105e9f3e58e9096589949e8d5a3a4fa57ed721fd4d72a96cef7de1d9dc6b8b16721e0f397672178ae64cf721f8b
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-gate@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-gate@npm:3.21.4"
+"@datadog/datadog-ci-plugin-gate@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-gate@npm:3.22.2"
   dependencies:
     "@types/uuid": ^9.0.2
     axios: ^1.12.1
     chalk: 3.0.0
     uuid: ^9.0.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: a9ad1331a873a7139331342824c2182f74af58f7b558873f78a753918fb1047ba33f2cb0d6e83de08af28f1f2ecb8270816ffbdea1e5f98418c4dd05f838b53e
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 795188c673e0d4299d90b765d9d23379da2505a2341d610296223e9757bce383b0a447ad5e2c02eb1898437559d90251f249865555271b02263a4e8387f9e9f0
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-lambda@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-lambda@npm:3.21.4"
+"@datadog/datadog-ci-plugin-lambda@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-lambda@npm:3.22.2"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-lambda": ^3.709.0
@@ -1786,14 +1797,14 @@ __metadata:
     typanion: ^3.14.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 9d8fa15a082589c436064b5c771dc19414efee6cc596325e515ec548312f55a7e58211e10082f9c21f48949e3cb16de35eac74a4a48ccc2cd453fdbf41bc3df6
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 0a069881de7a745a8be91f8470d7d375a0123b4fe6d77db49423da208a063587a188cdcf51e93ee86316f11ce66fc713b2a0803311d5402d962d3767373349c0
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-sarif@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-sarif@npm:3.21.4"
+"@datadog/datadog-ci-plugin-sarif@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-sarif@npm:3.22.2"
   dependencies:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
@@ -1804,14 +1815,14 @@ __metadata:
     upath: ^2.0.1
     uuid: ^9.0.0
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 5ee8640cf39901ac4638a7f5eb6c5207e33e240daf1eadd8ffa552aa8317ecadfb6e480cebe1456843e442bf88fa07821f7dd7c9f67cd594d744f30a03e87e29
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 9884a7bd49b52a534e0cffaab203472af01caa55d2ff82997185f50dd878bc7d3d0ef61513023896841bd9316967d1a470e7c414cefd52d7b56ff7dabdc653e2
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-sbom@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-sbom@npm:3.21.4"
+"@datadog/datadog-ci-plugin-sbom@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-sbom@npm:3.22.2"
   dependencies:
     ajv: ^8.12.0
     ajv-formats: ^2.1.1
@@ -1821,28 +1832,28 @@ __metadata:
     simple-git: 3.16.0
     upath: ^2.0.1
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 72bd34eeb1833ab2b06f5e99013b2406fe48473f3ab5f290d47b872afac7bf55a7b97e06519d84f5075eedb219fb2cc520b5232c0850cfc7b0c74bb9033fd6bd
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: 780eeb602a27723b56cc60e8f0b42cb11eacb1c3b6d472120cbd37240c4f001069d1cef30ecbe90ba6f36bbd7152cfc59edbb668641c77dbee0f17b417fae8a1
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-stepfunctions@npm:3.21.4"
+"@datadog/datadog-ci-plugin-stepfunctions@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-stepfunctions@npm:3.22.2"
   dependencies:
     "@aws-sdk/client-cloudwatch-logs": ^3.709.0
     "@aws-sdk/client-iam": ^3.709.0
     "@aws-sdk/client-sfn": ^3.709.0
     deep-object-diff: ^1.1.9
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 5e4b689b191d74625e227bae98bef8a5fd0816f57890c76bc4cb8e2b5dac1be5a5c2cc20f23dca21b0299af7050dc281e29e6b33565f5ade2856038eecfeb678
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: d91c3ceabdbabfb485a9f866e4e06a9c529a1918ec8c03c4480d13c982fe2532159388f5cea1301d4fac2cd214b62db97e4c0f05e91b3f0dc3cb081b66521b3e
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-synthetics@npm:3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:3.21.4"
+"@datadog/datadog-ci-plugin-synthetics@npm:3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:3.22.2"
   dependencies:
     axios: ^1.12.1
     chalk: 3.0.0
@@ -1859,32 +1870,31 @@ __metadata:
     xml2js: 0.5.0
     yamux-js: 0.1.2
   peerDependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-  checksum: 3ece8aeead49f153398cc6dee53c30ab51fe6cb275f3de02b0f869de2523c0e7407788855c8fba86a89584f3a9bcf50af3b88af026cd32216a3f311082428da2
+    "@datadog/datadog-ci-base": 3.22.2
+  checksum: c8c77b6c95c41fa2367abe02da40bc4e6dfe64c155402a15c10b4d56891332c018c11f6566e9c6be18ca27bc18d3db7652e819e29c07e57d0d9ac30e04cbdfdf
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^3.21.4":
-  version: 3.21.4
-  resolution: "@datadog/datadog-ci@npm:3.21.4"
+"@datadog/datadog-ci@npm:^3.22.2":
+  version: 3.22.2
+  resolution: "@datadog/datadog-ci@npm:3.22.2"
   dependencies:
-    "@datadog/datadog-ci-base": 3.21.4
-    "@datadog/datadog-ci-plugin-aas": 3.21.4
-    "@datadog/datadog-ci-plugin-cloud-run": 3.21.4
-    "@datadog/datadog-ci-plugin-deployment": 3.21.4
-    "@datadog/datadog-ci-plugin-dora": 3.21.4
-    "@datadog/datadog-ci-plugin-gate": 3.21.4
-    "@datadog/datadog-ci-plugin-lambda": 3.21.4
-    "@datadog/datadog-ci-plugin-sarif": 3.21.4
-    "@datadog/datadog-ci-plugin-sbom": 3.21.4
-    "@datadog/datadog-ci-plugin-stepfunctions": 3.21.4
-    "@datadog/datadog-ci-plugin-synthetics": 3.21.4
+    "@datadog/datadog-ci-base": 3.22.2
+    "@datadog/datadog-ci-plugin-aas": 3.22.2
+    "@datadog/datadog-ci-plugin-cloud-run": 3.22.2
+    "@datadog/datadog-ci-plugin-deployment": 3.22.2
+    "@datadog/datadog-ci-plugin-dora": 3.22.2
+    "@datadog/datadog-ci-plugin-gate": 3.22.2
+    "@datadog/datadog-ci-plugin-lambda": 3.22.2
+    "@datadog/datadog-ci-plugin-sarif": 3.22.2
+    "@datadog/datadog-ci-plugin-sbom": 3.22.2
+    "@datadog/datadog-ci-plugin-stepfunctions": 3.22.2
+    "@datadog/datadog-ci-plugin-synthetics": 3.22.2
     axios: ^1.12.1
     chalk: 3.0.0
     clipanion: ^3.2.1
     fast-xml-parser: ^4.4.1
     form-data: ^4.0.4
-    inquirer: ^8.2.5
     js-yaml: 3.13.1
     semver: ^7.5.3
     simple-git: 3.16.0
@@ -1893,7 +1903,7 @@ __metadata:
     uuid: ^9.0.0
   bin:
     datadog-ci: dist/cli.js
-  checksum: 3fae02d021e21ee9e83665a2affc6b496f2d8d8970aaf629bae9ecd739607038dd4f56367cbd223f7e17b4e0672b06042895c43e34eb9e9fa126f545d66e4183
+  checksum: 76c3a83250d404e008a2aeb5dd5373b2cbfe83c1b7f15079cf1b269b19166af4041c4741e7024803bac6f7089681ec27fb2af8f1f864bdea9b08d1761bb4a620
   languageName: node
   linkType: hard
 
@@ -3326,13 +3336,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.8":
-  version: 29.5.8
-  resolution: "@types/jest@npm:29.5.8"
+"@types/jest@npm:^29.5.14":
+  version: 29.5.14
+  resolution: "@types/jest@npm:29.5.14"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: ca8438a5b4c098c8c023e9d5b279ea306494a1d0b5291cfb498100fa780377145f068b2a021d545b0398bbe0328dcc37044dd3aaf3c6c0fe9b0bef7b46a63453
+  checksum: 18dba4623f26661641d757c63da2db45e9524c9be96a29ef713c703a9a53792df9ecee9f7365a0858ddbd6440d98fe6b65ca67895ca5884b73cbc7ffc11f3838
   languageName: node
   linkType: hard
 
@@ -3622,14 +3632,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/ncc@npm:^0.38.1":
-  version: 0.38.1
-  resolution: "@vercel/ncc@npm:0.38.1"
+"@vercel/ncc@npm:^0.38.4":
+  version: 0.38.4
+  resolution: "@vercel/ncc@npm:0.38.4"
   dependencies:
     node-gyp: latest
   bin:
     ncc: dist/ncc/cli.js
-  checksum: a522bb44c25a65db89941b08ca5817794b6920052f09a9cbd202cc987b81c13dd48cad9aa3b06793fc47ef70ae87fa0b85caf5b6a73e95de8091818049ed6194
+  checksum: 3d6b9997ad3fbcbb8f7548d640e724ea74db15b8dafec6a41e839b5c31b7f26e6977a8ca0e1510f6670d2a51a5f875b59b22fae4deca5ae40b6ce7a97129c3af
   languageName: node
   linkType: hard
 
@@ -4095,7 +4105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bs-logger@npm:0.x":
+"bs-logger@npm:^0.2.6":
   version: 0.2.6
   resolution: "bs-logger@npm:0.2.6"
   dependencies:
@@ -4505,19 +4515,19 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^3.21.4
+    "@datadog/datadog-ci": ^3.22.2
     "@types/deep-extend": 0.4.32
-    "@types/jest": ^29.5.8
+    "@types/jest": ^29.5.14
     "@types/node": ^24.5.2
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.3.0
-    "@vercel/ncc": ^0.38.1
+    "@vercel/ncc": ^0.38.4
     deep-extend: 0.6.0
     eslint: ^8.39.0
-    eslint-plugin-jest: ^25.2.2
+    eslint-plugin-jest: ^25.2.4
     jest: ^29.7.0
-    prettier: 2.4.1
-    ts-jest: ^29.1.1
+    prettier: 2.8.8
+    ts-jest: ^29.1.5
     typescript: ^5.9.2
   languageName: unknown
   linkType: soft
@@ -4946,9 +4956,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^25.2.2":
-  version: 25.2.2
-  resolution: "eslint-plugin-jest@npm:25.2.2"
+"eslint-plugin-jest@npm:^25.2.4":
+  version: 25.7.0
+  resolution: "eslint-plugin-jest@npm:25.7.0"
   dependencies:
     "@typescript-eslint/experimental-utils": ^5.0.0
   peerDependencies:
@@ -4957,7 +4967,9 @@ __metadata:
   peerDependenciesMeta:
     "@typescript-eslint/eslint-plugin":
       optional: true
-  checksum: ba78bf20625f017b47f2dc0fe12226f461e7b289fd7e3314421f51a993b142dd51017404524950a95978b3b86850a64931f0615f274cdfeeafea078abf594d73
+    jest:
+      optional: true
+  checksum: fc6da96131f4cbf33d15ef911ec8e600ccd71deb97d73c0ca340427cef7b01ff41a797e2e7d1e351abf97321a46ed0c0acff5ee8eeedac94961dd6dad1f718a9
   languageName: node
   linkType: hard
 
@@ -5890,6 +5902,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"handlebars@npm:^4.7.8":
+  version: 4.7.8
+  resolution: "handlebars@npm:4.7.8"
+  dependencies:
+    minimist: ^1.2.5
+    neo-async: ^2.6.2
+    source-map: ^0.6.1
+    uglify-js: ^3.1.4
+    wordwrap: ^1.0.0
+  dependenciesMeta:
+    uglify-js:
+      optional: true
+  bin:
+    handlebars: bin/handlebars
+  checksum: 00e68bb5c183fd7b8b63322e6234b5ac8fbb960d712cb3f25587d559c2951d9642df83c04a1172c918c41bcfc81bfbd7a7718bbce93b893e0135fc99edea93ff
+  languageName: node
+  linkType: hard
+
 "has-flag@npm:^3.0.0":
   version: 3.0.0
   resolution: "has-flag@npm:3.0.0"
@@ -6819,7 +6849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-util@npm:^29.0.0, jest-util@npm:^29.7.0":
+"jest-util@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-util@npm:29.7.0"
   dependencies:
@@ -7203,7 +7233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:4.x":
+"lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: 9ff3942feeccffa4f1fafa88d32f0d24fdc62fd15ded5a74a5f950ff5f0c6f61916157246744c620173dddf38d37095a92327d5fd3861e2063e736a5c207d089
@@ -7296,7 +7326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-error@npm:1.x":
+"make-error@npm:^1.3.6":
   version: 1.3.6
   resolution: "make-error@npm:1.3.6"
   checksum: b86e5e0e25f7f777b77fabd8e2cbf15737972869d852a22b7e73c17623928fccb826d8e46b9951501d3f20e51ad74ba8c59ed584f610526a48f8ccf88aaec402
@@ -7587,6 +7617,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"neo-async@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "neo-async@npm:2.6.2"
+  checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
 "netmask@npm:^2.0.2":
   version: 2.0.2
   resolution: "netmask@npm:2.0.2"
@@ -7863,6 +7900,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"package-manager-detector@npm:^1.3.0":
+  version: 1.6.0
+  resolution: "package-manager-detector@npm:1.6.0"
+  checksum: 154d55225e70e32582f59b5d4a46d25716f0730a14d7e4b6f0fd76c870c720cc6f448d2becca06a15f2042492f0293cf26e5ad8fcd85d0eab0af3b9b46c0b43a
+  languageName: node
+  linkType: hard
+
 "packageurl-js@npm:^2.0.1":
   version: 2.0.1
   resolution: "packageurl-js@npm:2.0.1"
@@ -7997,12 +8041,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.4.1":
-  version: 2.4.1
-  resolution: "prettier@npm:2.4.1"
+"prettier@npm:2.8.8":
+  version: 2.8.8
+  resolution: "prettier@npm:2.8.8"
   bin:
     prettier: bin-prettier.js
-  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
+  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
   languageName: node
   linkType: hard
 
@@ -8470,6 +8514,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.7.3":
+  version: 7.7.4
+  resolution: "semver@npm:7.7.4"
+  bin:
+    semver: bin/semver.js
+  checksum: 9b4a6a58e98b9723fafcafa393c9d4e8edefaa60b8dfbe39e30892a3604cf1f45f52df9cfb1ae1a22b44c8b3d57fec8a9bb7b3e1645431587cb272399ede152e
+  languageName: node
+  linkType: hard
+
 "set-value@npm:^4.1.0":
   version: 4.1.0
   resolution: "set-value@npm:4.1.0"
@@ -8922,6 +8975,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tinyexec@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "tinyexec@npm:1.0.2"
+  checksum: af22de2191cc70bb782eef29bbba7cf6ac16664e550b547b0db68804f988eeb2c70e12fbb7d2d688ee994b28ba831d746e9eded98c3d10042fd3a9b8de208514
+  languageName: node
+  linkType: hard
+
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
@@ -8961,26 +9021,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.1.1":
-  version: 29.1.1
-  resolution: "ts-jest@npm:29.1.1"
+"ts-jest@npm:^29.1.5":
+  version: 29.4.6
+  resolution: "ts-jest@npm:29.4.6"
   dependencies:
-    bs-logger: 0.x
-    fast-json-stable-stringify: 2.x
-    jest-util: ^29.0.0
+    bs-logger: ^0.2.6
+    fast-json-stable-stringify: ^2.1.0
+    handlebars: ^4.7.8
     json5: ^2.2.3
-    lodash.memoize: 4.x
-    make-error: 1.x
-    semver: ^7.5.3
-    yargs-parser: ^21.0.1
+    lodash.memoize: ^4.1.2
+    make-error: ^1.3.6
+    semver: ^7.7.3
+    type-fest: ^4.41.0
+    yargs-parser: ^21.1.1
   peerDependencies:
     "@babel/core": ">=7.0.0-beta.0 <8"
-    "@jest/types": ^29.0.0
-    babel-jest: ^29.0.0
-    jest: ^29.0.0
+    "@jest/transform": ^29.0.0 || ^30.0.0
+    "@jest/types": ^29.0.0 || ^30.0.0
+    babel-jest: ^29.0.0 || ^30.0.0
+    jest: ^29.0.0 || ^30.0.0
+    jest-util: ^29.0.0 || ^30.0.0
     typescript: ">=4.3 <6"
   peerDependenciesMeta:
     "@babel/core":
+      optional: true
+    "@jest/transform":
       optional: true
     "@jest/types":
       optional: true
@@ -8988,9 +9053,11 @@ __metadata:
       optional: true
     esbuild:
       optional: true
+    jest-util:
+      optional: true
   bin:
     ts-jest: cli.js
-  checksum: a8c9e284ed4f819526749f6e4dc6421ec666f20ab44d31b0f02b4ed979975f7580b18aea4813172d43e39b29464a71899f8893dd29b06b4a351a3af8ba47b402
+  checksum: 07ae4102569565ab57036f095152ea75c85032edf15379043ffc8da2dd0e6e93e84d0c50a24e10a5cddacb5ab773df0f3170f02db6c178edd22a5e485bc57dc7
   languageName: node
   linkType: hard
 
@@ -9098,6 +9165,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"type-fest@npm:^4.41.0":
+  version: 4.41.0
+  resolution: "type-fest@npm:4.41.0"
+  checksum: 7055c0e3eb188425d07403f1d5dc175ca4c4f093556f26871fe22041bc93d137d54bef5851afa320638ca1379106c594f5aa153caa654ac1a7f22c71588a4e80
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^5.9.2":
   version: 5.9.2
   resolution: "typescript@npm:5.9.2"
@@ -9115,6 +9189,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: e42a701947325500008334622321a6ad073f842f5e7d5e7b588a6346b31fdf51d56082b9ce5cef24312ecd3e48d6c0d4d44da7555f65e2feec18cf62ec540385
+  languageName: node
+  linkType: hard
+
+"uglify-js@npm:^3.1.4":
+  version: 3.19.3
+  resolution: "uglify-js@npm:3.19.3"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 7ed6272fba562eb6a3149cfd13cda662f115847865c03099e3995a0e7a910eba37b82d4fccf9e88271bb2bcbe505bb374967450f433c17fa27aa36d94a8d0553
   languageName: node
   linkType: hard
 
@@ -9296,6 +9379,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wordwrap@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "wordwrap@npm:1.0.0"
+  checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
+  languageName: node
+  linkType: hard
+
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0, wrap-ansi@npm:^7.0.0":
   version: 7.0.0
   resolution: "wrap-ansi@npm:7.0.0"
@@ -9395,7 +9485,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^21.0.1, yargs-parser@npm:^21.1.1":
+"yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
   checksum: ed2d96a616a9e3e1cc7d204c62ecc61f7aaab633dcbfab2c6df50f7f87b393993fe6640d017759fe112d0cb1e0119f2b4150a87305cc873fd90831c6a58ccf1c
