@@ -2,7 +2,7 @@
   "name": "datadog-synthetics-github-action",
   "version": "3.8.2",
   "author": "Datadog",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow",
   "main": "lib/main.js",
   "scripts": {
