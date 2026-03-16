@@ -6,9 +6,9 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - name: Install node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 'lts/*'
           cache: yarn
@@ -37,7 +37,7 @@ jobs:
           echo 'Raw Results:'
           echo $RAW_RESULTS | jq '.'
       - name: Example of parsing and using raw results with JS
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         env:
           RAW_RESULTS: ${{ steps.run-synthetics-tests.outputs.raw-results }}
         with:

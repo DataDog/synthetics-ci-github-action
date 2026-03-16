@@ -20,7 +20,7 @@ jobs:
           scope: DataDog/synthetics-ci-github-action
           policy: self.release-version-on-merge.create-release
       - name: Create GitHub release
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ steps.octo-sts.outputs.token }}
           script: |
