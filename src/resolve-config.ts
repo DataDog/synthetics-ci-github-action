@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import {parseMultiple, parseVariableStrings} from './utils'
-import {synthetics, utils} from '@datadog/datadog-ci'
+import {utils} from '@datadog/datadog-ci'
+import * as synthetics from '@datadog/datadog-ci-plugin-synthetics'
 import deepExtend from 'deep-extend'
 
 export const resolveConfig = async (reporter: synthetics.MainReporter): Promise<synthetics.RunTestsCommandConfig> => {

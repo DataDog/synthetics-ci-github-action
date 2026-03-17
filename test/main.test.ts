@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {synthetics} from '@datadog/datadog-ci'
+import * as synthetics from '@datadog/datadog-ci-plugin-synthetics'
 import {expect, test} from '@jest/globals'
 
 import {execFile} from 'child_process'

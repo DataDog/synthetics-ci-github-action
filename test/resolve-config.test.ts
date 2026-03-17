@@ -3,7 +3,7 @@ import fs from 'fs'
 import {expect, test} from '@jest/globals'
 import * as resolveConfig from '../src/resolve-config'
 import {config} from '../src/fixtures'
-import type {synthetics} from '@datadog/datadog-ci'
+import type * as synthetics from '@datadog/datadog-ci-plugin-synthetics'
 import * as core from '@actions/core'
 
 const requiredInputs = {
