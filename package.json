@@ -35,6 +35,7 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@datadog/datadog-ci": "^5.9.1",
+    "@datadog/datadog-ci-plugin-synthetics": "^5.9.1",
     "deep-extend": "0.6.0"
   },
   "devDependencies": {

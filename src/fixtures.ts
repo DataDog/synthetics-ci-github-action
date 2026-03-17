@@ -1,4 +1,4 @@
-import {synthetics} from '@datadog/datadog-ci'
+import * as synthetics from '@datadog/datadog-ci-plugin-synthetics'
 
 export const config = synthetics.DEFAULT_COMMAND_CONFIG
 
