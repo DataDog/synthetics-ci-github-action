@@ -1,6 +1,6 @@
 {
   "name": "datadog-synthetics-github-action",
-  "version": "3.8.2",
+  "version": "4.0.0",
   "author": "Datadog",
   "license": "Apache-2.0",
   "description": "Run Datadog Synthetics CI tests as part of your Github Actions workflow",
