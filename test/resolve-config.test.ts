@@ -22,6 +22,7 @@ const mockReporter: synthetics.MainReporter = {
   testTrigger: jest.fn(),
   testWait: jest.fn(),
   testsWait: jest.fn(),
+  dryRunEnd: jest.fn(),
 }
 
 describe('Resolves Config', () => {
