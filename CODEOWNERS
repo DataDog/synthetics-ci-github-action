@@ -1,5 +1,5 @@
 # Global Code Owners
-* @DataDog/synthetics-ct
+* @DataDog/synthetics-orchestrating-managing
 
 # Documentation
-*README.md @DataDog/documentation @DataDog/synthetics-ct
+*README.md @DataDog/documentation @DataDog/synthetics-orchestrating-managing
