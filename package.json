@@ -51,5 +51,11 @@
     "prettier": "2.4.1",
     "ts-jest": "^29.1.1",
     "typescript": "^5.9.2"
+  },
+  "resolutions": {
+    "glob": "^10.5.0",
+    "brace-expansion": "^2.0.3",
+    "js-yaml": "^3.14.2",
+    "minimatch": "^9.0.9"
   }
 }
