@@ -29,6 +29,7 @@ jobs:
           public-ids: |
             pwd-mwg-3p5
             2r9-q7u-4nn
+            2b8-fns-a5a
       - name: Example of using outputs
         env:
           RAW_RESULTS: ${{ steps.run-synthetics-tests.outputs.raw-results }}
