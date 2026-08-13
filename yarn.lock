@@ -443,10 +443,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci-plugin-synthetics@npm:^5.13.1":
-  version: 5.13.1
-  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:5.13.1"
-  checksum: 469689e175a713fb92f243650ee24ec1d386ab2548253e6db09a3cc1af26db95cc5230778f8f3fe28c0dac18aacd34808a9713a667dc0254e112e1c60de6b02d
+"@datadog/datadog-ci-plugin-synthetics@npm:^5.22.1":
+  version: 5.22.1
+  resolution: "@datadog/datadog-ci-plugin-synthetics@npm:5.22.1"
+  checksum: 9e3a3554731a735c64c9c22557c10dcd88dd23df93636a6f8e7278a1ed2a4b772712ca1f0a1eb2f34f456fce5df8bfb477d34ce9ba003ecd220d36d2aef54e7f
   languageName: node
   linkType: hard
 
@@ -1747,7 +1747,7 @@ __metadata:
   dependencies:
     "@actions/core": ^1.11.1
     "@datadog/datadog-ci": ^5.22.1
-    "@datadog/datadog-ci-plugin-synthetics": ^5.13.1
+    "@datadog/datadog-ci-plugin-synthetics": ^5.22.1
     "@types/deep-extend": 0.6.2
     "@types/jest": ^29.5.8
     "@types/node": ^24.5.2
