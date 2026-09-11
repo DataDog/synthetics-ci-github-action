@@ -450,12 +450,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/datadog-ci@npm:^5.22.1":
-  version: 5.22.1
-  resolution: "@datadog/datadog-ci@npm:5.22.1"
+"@datadog/datadog-ci@npm:^5.23.0":
+  version: 5.23.0
+  resolution: "@datadog/datadog-ci@npm:5.23.0"
   bin:
     datadog-ci: dist/bundle.js
-  checksum: f730dbfd9a4b4815e57ab4963b1d2121381a792e40cbf440f43ed7433e57a2dd8a5d07b59c341209f200248ebd9ffa19681d8f7771ec423b15cbe40442f09e1a
+  checksum: a5d6fdd0aae4906b9f4836fa92f4f576aac5261f1406f433124dfdb74a4eddbba0e293fab45451a8420aa373262342e5978b6973ca3f6e79cf90e169a1978e57
   languageName: node
   linkType: hard
 
@@ -1746,7 +1746,7 @@ __metadata:
   resolution: "datadog-synthetics-github-action@workspace:."
   dependencies:
     "@actions/core": ^1.11.1
-    "@datadog/datadog-ci": ^5.22.1
+    "@datadog/datadog-ci": ^5.23.0
     "@datadog/datadog-ci-plugin-synthetics": ^5.22.1
     "@types/deep-extend": 0.6.2
     "@types/jest": ^29.5.8
