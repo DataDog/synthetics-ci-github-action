@@ -72,6 +72,6 @@
     "picomatch@npm:^2.0.4": "npm:^2.3.2",
     "picomatch@npm:^2.2.3": "npm:^2.3.2",
     "picomatch@npm:^2.3.1": "npm:^2.3.2",
-    "browserslist@npm:^4.21.9": "npm:^4.29.1"
+    "browserslist@npm:^4.21.9": "npm:^4.29.3"
   }
 }
